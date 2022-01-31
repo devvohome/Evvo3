@@ -1,0 +1,243 @@
+{% assign lavado_content = false %}
+{% assign rpm_content = false %}
+{% assign energy_content = false %}
+{% assign cubiertos_content = false %}
+{% assign programas_content = false %}
+{% assign media_content = false %}
+{% assign hora_content = false %}
+{% assign zonewash_content = false %}
+{% assign led_content = false %}
+{% assign bandeja_content = false %}
+{% assign diferido_content = false %}
+{% assign auto_content = false %}
+{% assign autodoor_content = false %}
+{% assign innowash_content = false %}
+{% assign extradrying_content = false %}
+
+
+{%- capture lavado -%}{% include 'tag-prefixer' prefix: 'lavado2:' %}{%- endcapture -%}
+{%- capture rpm -%}{% include 'tag-prefixer' prefix: 'rpm2:' %}{%- endcapture -%}
+{%- capture energy -%}{% include 'tag-prefixer' prefix: 'eficiencia2:' %}{%- endcapture -%}
+{%- capture cubiertos -%}{% include 'tag-prefixer' prefix: 'cubiertos2:' %}{%- endcapture -%}
+{%- capture programas -%}{% include 'tag-prefixer' prefix: 'programas2:' %}{%- endcapture -%}
+{%- capture media -%}{% include 'tag-prefixer' prefix: 'media2:' %}{%- endcapture -%}
+{%- capture hora -%}{% include 'tag-prefixer' prefix: 'hora2:' %}{%- endcapture -%}
+{%- capture zonewash -%}{% include 'tag-prefixer' prefix: 'zonewash2:' %}{%- endcapture -%}
+{%- capture led -%}{% include 'tag-prefixer' prefix: 'led2:' %}{%- endcapture -%}
+{%- capture bandeja -%}{% include 'tag-prefixer' prefix: 'bandeja2:' %}{%- endcapture -%}
+{%- capture diferido -%}{% include 'tag-prefixer' prefix: 'diferido2:' %}{%- endcapture -%}
+{%- capture auto -%}{% include 'tag-prefixer' prefix: 'auto2:' %}{%- endcapture -%}
+{%- capture autodoor -%}{% include 'tag-prefixer' prefix: 'autodoor2:' %}{%- endcapture -%}
+{%- capture innowash -%}{% include 'tag-prefixer' prefix: 'innowash2:' %}{%- endcapture -%}
+{%- capture extradrying -%}{% include 'tag-prefixer' prefix: 'extradrying2:' %}{%- endcapture -%}
+
+
+{% if lavado != blank %}
+  {% assign lavado_content = true %}
+{% endif %}
+{% if rpm != blank %}
+  {% assign rpm_content = true %}
+{% endif %}
+{% if energy != blank %}
+  {% assign energy_content = true %}
+{% endif %}
+{% if cubiertos != blank %}
+  {% assign cubiertos_content = true %}
+{% endif %}
+{% if programas != blank %}
+  {% assign programas_content = true %}
+{% endif %}
+{% if media != blank %}
+  {% assign media_content = true %}
+{% endif %}
+{% if hora != blank %}
+  {% assign hora_content = true %}
+{% endif %}
+{% if zonewash != blank %}
+  {% assign zonewash_content = true %}
+{% endif %}
+{% if led != blank %}
+  {% assign led_content = true %}
+{% endif %}
+{% if bandeja != blank %}
+  {% assign bandeja_content = true %}
+{% endif %}
+{% if diferido != blank %}
+  {% assign diferido_content = true %}
+{% endif %}
+{% if auto != blank %}
+  {% assign auto_content = true %}
+{% endif %}
+{% if autodoor != blank %}
+  {% assign autodoor_content = true %}
+{% endif %}
+{% if innowash != blank %}
+  {% assign innowash_content = true %}
+{% endif %}
+{% if extradrying != blank %}
+  {% assign extradrying_content = true %}
+{% endif %}
+
+
+
+{% unless energy_content == false and rpm_content == false and lavado_content == false and cubiertos_content == false and programas_content == false and media_content == false and zonewash_content == false and led_content == false and bandeja_content == false and diferido_content == false and auto_content == false and autodoor_content == false and innowash_content == false and extradrying_content == false %}
+
+<section class="Section Section--spacingNormal" id="section-{{ section.id }}" data-section-type="product-collage" data-section-id="{{ section.id }}">
+ <div class="Container main-icons__container">
+   <div class="Grid Grid--m Grid--center">
+
+     {% if lavado_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign lavado_img = lavado | append: '.png' %}
+       <img src="{{ lavado_img | asset_url  }}" alt="{{ lavado }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.lavado' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if rpm_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign rpm_img = rpm | append: '.png' %}
+       <img src="{{ rpm_img | asset_url  }}" alt="{{ rpm }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.rpm' | t }}
+       </h3>
+     </div>
+    {% endif %}
+
+     
+      {% if cubiertos_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign cubiertos_img = cubiertos | append: '.png' %}
+       <img src="{{ cubiertos_img | asset_url  }}" alt="{{ cubiertos }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.cubiertos' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+      {% if programas_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign programas_img = programas | append: '.png' %}
+       <img src="{{ programas_img | asset_url  }}" alt="{{ programas }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.programas' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+          {% if energy_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign energy_img = energy | append: '.png' %}
+       <img src="{{ energy_img | asset_url  }}" alt="{{ energy }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.eficiencia' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+          {% if media_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign media_img = media | append: '.png' %}
+       <img src="{{ media_img | asset_url  }}" alt="{{ media }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.media' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+        {% if hora_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign hora_img = hora | append: '.png' %}
+       <img src="{{ hora_img | asset_url  }}" alt="{{ hora }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.hora' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+               {% if zonewash_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign zonewash_img = zonewash | append: '.png' %}
+       <img src="{{ zonewash_img | asset_url  }}" alt="{{ zonewash }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.zonewash' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if led_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign led_img = led | append: '.png' %}
+       <img src="{{ led_img | asset_url  }}" alt="{{ led }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.led' | t }}
+       </h3>
+     </div>
+    {% endif %}
+
+   {% if bandeja_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign bandeja_img = bandeja | append: '.png' %}
+       <img src="{{ bandeja_img | asset_url  }}" alt="{{ bandeja }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.bandeja' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if diferido_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign diferido_img = diferido | append: '.png' %}
+       <img src="{{ diferido_img | asset_url  }}" alt="{{ diferido }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.diferido' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if auto_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign auto_img = auto | append: '.png' %}
+       <img src="{{ auto_img | asset_url  }}" alt="{{ auto }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.auto' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if autodoor_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign autodoor_img = autodoor | append: '.png' %}
+       <img src="{{ autodoor_img | asset_url  }}" alt="{{ autodoor }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.autodoor' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if innowash_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign innowash_img = innowash | append: '.png' %}
+       <img src="{{ innowash_img | asset_url  }}" alt="{{ innowash }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.innowash' | t }}
+       </h3>
+     </div>
+    {% endif %}
+          
+   {% if extradrying_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign extradrying_img = extradrying | append: '.png' %}
+       <img src="{{ extradrying_img | asset_url  }}" alt="{{ extradrying }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.extradrying' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+
+   </div>
+ </div>
+</section>
+{% endunless %}

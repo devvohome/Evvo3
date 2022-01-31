@@ -1,0 +1,64 @@
+{%- capture youtube -%}{%- for tag in product.tags -%}{%- if tag contains 'youtube:' -%}{{  tag | split: 'youtube:' | last }}{% endif %}{%- endfor -%}{%- endcapture -%}
+{%- capture vimeo -%}{%- for tag in product.tags -%}{%- if tag contains 'vimeo:' -%}{{  tag | split: 'vimeo:' | last }}{% endif %}{%- endfor -%}{%- endcapture -%}
+{% assign video_enable = false %}
+{% if youtube != blank %}
+  {% assign video_enable = true %}
+  {%- capture section_settings -%}
+    {
+    "videoType": "youtube",
+    "videoId": "{{ youtube }}",
+    "requestHost": {{ request.host | json }}
+    }
+  {%- endcapture -%}
+{% elsif vimeo != blank %}
+  {% assign video_enable = true %}
+  {%- capture section_settings -%}
+    {
+    "videoType": "vimeo",
+    "videoId": "{{ vimeo }}",
+    "requestHost": {{ request.host | json }}
+    }
+  {%- endcapture -%}
+{% endif %}
+{% if video_enable %}
+<section class="Section" id="section-{{ section.id }}" data-section-id="{{ section.id }}" data-section-type="background-video" data-section-settings='{{ section_settings }}'>
+  <div class="ImageHero {% if section.settings.section_size != 'normal' %}ImageHero--{{ section.settings.section_size }}{% endif %}">
+    <div class="ImageHero__VideoHolder"></div>
+  </div>
+</section>
+{% endif %}
+{% schema %}
+{
+  "name": "Product video",
+  "settings": [
+    {
+      "type": "paragraph",
+      "content": "Video id comes from tags like youtube:xxxxxxx or vimeo:xxxxxxxx"
+    },
+    {
+      "type": "select",
+      "id": "section_size",
+      "label": "Section size",
+      "options": [
+        {
+          "value": "small",
+          "label": "Small"
+        },
+        {
+          "value": "normal",
+          "label": "Normal"
+        },
+        {
+          "value": "large",
+          "label": "Large"
+        },
+        {
+          "value": "full",
+          "label": "Full"
+        }
+      ],
+      "default": "full"
+    }
+  ]
+}
+{% endschema %}

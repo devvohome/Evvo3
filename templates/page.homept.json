@@ -1,0 +1,98 @@
+{
+  "sections": {
+    "main": {
+      "type": "page",
+      "disabled": true,
+      "settings": {
+      }
+    },
+    "164060859008b402fc": {
+      "type": "slideshow",
+      "blocks": {
+        "16406085908d1106c0-0": {
+          "type": "image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/banner-navidad-WEB.jpg",
+            "mobile_image": "shopify:\/\/shop_images\/Banner_navidad_MVL.jpg",
+            "apply_overlay": false,
+            "content_position": "bottomLeft",
+            "subheading": "",
+            "title": "",
+            "button_1_text": "",
+            "button_1_link": "",
+            "button_2_text": "",
+            "button_2_link": ""
+          }
+        }
+      },
+      "block_order": [
+        "16406085908d1106c0-0"
+      ],
+      "settings": {
+        "show_fullscreen": true,
+        "show_arrow": false,
+        "autoplay": true,
+        "cycle_speed": 5,
+        "text_color": "#ffffff",
+        "button_color": "#363636"
+      }
+    },
+    "16388805167981aa8f": {
+      "type": "featured-collections-pt",
+      "blocks": {
+        "163888051633deea01-0": {
+          "type": "collection",
+          "settings": {
+            "collection": "aire-acondicionado",
+            "title": "",
+            "grid_items_count": 8,
+            "button_text": "View all products",
+            "is_customInit": false,
+            "custom_title": "",
+            "custom_label": "",
+            "custom_url": ""
+          }
+        }
+      },
+      "block_order": [
+        "163888051633deea01-0"
+      ],
+      "settings": {
+        "title": "Featured collection",
+        "layout_mode": "grid",
+        "show_product_info": true,
+        "show_vendor": false,
+        "show_color_swatch": false,
+        "grid_mobile_items_per_row": "2",
+        "grid_desktop_items_per_row": 4
+      }
+    },
+    "1640608593d8917bdf": {
+      "type": "icons-block-pt",
+      "blocks": {
+        "e6a39047-51c5-4b85-baa5-c55ec3d6263c": {
+          "type": "icon_block_custom",
+          "settings": {
+            "title": "",
+            "content": "Icon copy",
+            "icon_link": "",
+            "icon_svg": "",
+            "height": 140
+          }
+        }
+      },
+      "block_order": [
+        "e6a39047-51c5-4b85-baa5-c55ec3d6263c"
+      ],
+      "settings": {
+        "title": "A MARCA ESPANHOLA DE ELECTRODOMÉSTICOS"
+      }
+    }
+  },
+  "order": [
+    "main",
+    "164060859008b402fc",
+    "16388805167981aa8f",
+    "1640608593d8917bdf"
+  ]
+}

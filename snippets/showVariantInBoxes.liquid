@@ -1,0 +1,876 @@
+{% assign garant_id = '' %}
+{% assign garant_prod = null %}
+{% if product.tags.size > 0 %}
+  {% for tag in product.tags %}
+	{% if tag contains 'GPNG_GARAN_' %}
+		{% assign garant_id = tag | replace: 'GPNG_GARAN_', '' %}
+	{% endif %}
+  {% endfor %}
+{% endif %}
+{% if collections['garantias'].products.size > 0 %}
+	{% for gprod in collections['garantias'].products %}
+		{% assign gprod_id = gprod.id | append: '' %}
+		{% if gprod_id == garant_id %}
+			{% assign garant_prod = gprod %}
+		{% endif %}
+	{% endfor %}
+{% endif %}
+
+<div class="as-productdecision-selectionarea">
+    <input type="hidden" id="status_steps_all" value="0"/>
+    <input type="hidden" id="variant_a_to_cart" value="" data-productid=""/>
+    <input type="hidden" id="variant_b_to_cart" value="" data-productid=""/>
+	<hero-selector id="grouping_blocks"></hero-selector>
+  	<summary-builder id="summary_blocks">
+      <div class="as-purchaseinfo as-purchaseinfo-product-form" id="DATA_PURCHASE_PROD_NONE" data-productid="" data-variantid="" data-price="">
+        <div class="as-purchaseinfo-details as-purchaseinfo-background">
+          <div class="as-purchaseinfo-actioninfo as-purchaseinfo-submit">
+            <div class="as-purchaseinfo-section as-purchaseinfo-disabled">
+              <button class="button button-block disabled" type="button" disabled="disabled" data-available="0">
+                <span>Continuar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="as-purchaseinfo as-purchaseinfo-product-form product-selected hide" id="DATA_PURCHASE_PROD_{{ product.id }}" data-productid="{{ product.id }}" data-variantid="{{ product.selected_or_first_available_variant.id }}" data-price="{{ product.selected_or_first_available_variant.price }}">
+        <div class="as-purchaseinfo-details as-purchaseinfo-background">
+          <div class="as-purchaseinfo-actionform as-purchaseinfo-price-section as-l-container-full-small as-price-visible">
+            <div class="as-price as-purchaseinfo-price as-purchaseinfo-price-enabled">
+              <div class="ase-materializer as-price-animation ase-materializer-show">
+                <div id="contprod_{{ product.id }}" class="as-price-form-product as-icondetails-detail ProductMeta__PriceList Heading">
+                  {%- if product.selected_or_first_available_variant.compare_at_price > product.selected_or_first_available_variant.price -%}
+                  <span class="compare-at-money hide">{{ product.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</span>
+                  <span id="prod_{{ product.id }}" class="as-price-form-product-price ProductMeta__Price Price current_price" data-money-convertible>{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+                  {%- else -%}
+                  <span id="prod_{{ product.id }}" class="as-price-form-product-price ProductMeta__Price Price current_price" data-money-convertible>{{ product.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+            <div class="as-buyflow-messaging-sectionlink"></div>
+          </div>
+          <div class="as-purchaseinfo-actioninfo as-purchaseinfo-submit">
+            <div class="as-purchaseinfo-section as-purchaseinfo-disabled">
+              <button id="btnAddToCartJS" class="button button-block button-add-to-cart disabled" type="button" disabled="disabled" onclick="grouping.addToCartJS()" data-available="{% if product.available %}1{% else %}0{% endif %}">
+                <span>{% if product.available %}Añadir al carrito{% else %}Agotado{% endif %}</span>
+              </button>
+              <button id="btnShowGarantiaJS" data-garantid="" style="display:none;" class="button button-block button-show-garantia disabled" type="button" disabled="disabled" onclick="grouping.preguntarGarantia(this)" data-available="{% if product.available %}1{% else %}0{% endif %}">
+                <span>{% if product.available %}Añadir al carrito{% else %}Agotado{% endif %}</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+  	</summary-builder>
+</div>
+<select id="product_variants" class="hide" data-productid="{{ product.id }}">
+  <option value="" data-option1="" data-option2="" data-option3="" data-imageid=""></option>
+  {% for var in product.variants %}
+  <option 
+          value="{{ var.id }}" 
+          data-option1="{{ var.option1 }}" 
+          data-option2="{{ var.option2 }}" 
+          data-option3="{{ var.option3 }}" 
+          data-price="{{ var.price | money }}" 
+          data-priceor="{{ var.price }}" 
+          data-qty="{{ var.inventory_quantity }}"
+          data-imageid="{{ var.image.id }}"
+          >{{ var.id }}</option>
+  {% endfor %}
+</select>
+{% for t in product.tags %}
+	{% if t == 'VARIANT_IMAGES' %}
+		<select id="product_option_colors" class="hide" data-productid="{{ product.id }}">
+          {% for product_option in product.options_with_values %}
+          		{% assign valueCommas = '' %}
+          		{% for value in product_option.values %}
+          			{% assign valueCommas = valueCommas | append: ',' | append: value %}
+          		{% endfor %}
+          		<option value="{{ product_option.name }}" data-values="{{ valueCommas }}" >{{ product_option.name }}</option>
+          {% endfor %}
+        </select>
+	{% endif %}
+{% endfor %}
+
+<link rel="stylesheet" href="{{ 'collection-grouping.scss.css' | asset_url }}" />
+<script>   
+  
+  var grouping = {
+    config_url: '{{ 'formatoFiltroGrupo.json' | asset_url }}',
+    handleize: function(str){
+      str = str.toLowerCase();
+      var toReplace = ['"', "'", "\\", "(", ")", "[", "]"];
+      // For the old browsers
+      for (var i = 0; i < toReplace.length; ++i) {
+        str = str.replace(toReplace[i], "");
+      }
+      str = str.replace(/\W+/g, "-");
+      if (str.charAt(str.length - 1) == "-") {
+        str = str.replace(/-+\z/, "");
+      }
+      if (str.charAt(0) == "-") {
+        str = str.replace(/\A-+/, "");
+      }
+      return str
+    }, 
+    formatMoney: function(number, decPlaces=2, decSep=",", thouSep="."){
+      decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+        decSep = typeof decSep === "undefined" ? "." : decSep;
+      thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+      var sign = number < 0 ? "-" : "";
+      var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+      var j = (j = i.length) > 3 ? j % 3 : 0;
+
+      return sign +
+        (j ? i.substr(0, j) + thouSep : "") +
+        i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+        (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "") + 
+        "€";
+    },
+    getJSON: function(url, callback, options, garantia){
+      var xhr = new XMLHttpRequest();
+      xhr.open('GET', url, true);
+      xhr.responseType = 'json';
+      xhr.onload = function() {
+        var status = xhr.status;
+        if (status === 200) {
+          callback(xhr.response, options, garantia);
+        } else {
+          console.log("Error getJSON: "+ status);
+          console.log(xhr.response);Attribute()
+        }
+      };
+      xhr.send();
+    }, 
+    renderizarFiltros: function(filtroConfig, options, garantia){      
+      
+      var _htmlGpng = '';
+      for(var n=0; n<options.length; n++){
+        var bloqueId = 'Item'+n;
+        var nextId = 'Item'+(n+1);
+        var valuesOpt = options[n].values;
+        var optionName = options[n].name;
+        var isFiltroColor = false;
+        var filtroTitulo = options[n].name;
+        var filtroDescripcion = "";
+        var filtroBloque = grouping.handleize(optionName).toUpperCase();
+        var filtroListadoId = "GPNG_"+grouping.handleize(optionName).toUpperCase()+"_";
+        var filtroListadoAlias = "";
+        var filtroListadoNombre = "";
+        var filtroListadoCodigo = "";
+        var filtroListado = [];        		   
+        
+        for(var m=0; m<filtroConfig.length; m++){
+          if(filtroConfig[m].nombre === optionName){
+            filtroTitulo = filtroConfig[m].titulo;
+            filtroBloque = filtroConfig[m].bloque;
+            if(filtroConfig[m].tipo==="color"){
+              isFiltroColor = true;
+              filtroListado = filtroConfig[m].listado;
+            }
+          }
+        }//endfor
+
+        _htmlGpng += '<div class="step as-dimension-'+bloqueId+'" id="'+bloqueId+'" data-step="'+n+'" data-next="'+nextId+'" data-bloque="'+filtroBloque+'">';
+        _htmlGpng += '<div class="as-dimension as-dimension-ishidden as-dimension-count-'+valuesOpt.length+' as-dimension-'+grouping.handleize(optionName)+' '+(n>0?'disabled':'')+'">';
+        _htmlGpng += '<fieldset>';
+        _htmlGpng += '<legend><h2 class="as-dimension-header">'+filtroTitulo+'</h2></legend>';
+        if(filtroDescripcion!==""){
+          _htmlGpng += '<div class="rs-accessory-tile-subheading">'+filtroDescripcion+'</div>';
+        }
+        _htmlGpng += '<div class="form-selector form-selector-rowwithgutters as-dimension-choices row">';
+        for(var l=0; l<valuesOpt.length; l++){
+          filtroListadoAlias = grouping.handleize(valuesOpt[l]).toUpperCase();
+          filtroListadoId = filtroListadoId+filtroListadoAlias;
+          filtroListadoNombre = valuesOpt[l];
+          filtroListadoCodigo = 'border:1px solid #ececec;background-color:#f9f6ef;';
+
+          for(var k=0; k<filtroListado.length; k++){
+            if(filtroListado[k].nombre === valuesOpt[l]){
+              filtroListadoAlias = filtroListado[k].alias;
+              filtroListadoId = filtroListado[k].id;
+              filtroListadoNombre = filtroListado[k].nombre;
+              filtroListadoCodigo = filtroListado[k].codigo;
+            }
+          }
+
+          _htmlGpng += '<div class="form-selector-singlecolumn column large-6 small-6 selector-container__filter" data-step="'+n+'" data-id="'+filtroListadoId+'">';
+          _htmlGpng += '<div class="form-element form-element-option">';
+          _htmlGpng += '<div class="form-choice-selector-label as-dimension-label" onclick="grouping.selectOption(\''+filtroListadoId+'\')" data-bloque="'+filtroBloque+'" data-item="'+filtroListadoAlias+'" data-step="'+bloqueId+'" data-valueopt="'+valuesOpt[l]+'" id="'+filtroListadoId+'" >';
+          _htmlGpng += '<label id="'+bloqueId+'_'+filtroListadoAlias.toLowerCase()+'_label" class="form-label">';
+          if(isFiltroColor){
+            _htmlGpng += '<span>';
+            _htmlGpng += '<em class="click-layer"></em>';
+            _htmlGpng += '<div class="effect">';
+            _htmlGpng += '<div class="color-ball" style="'+filtroListadoCodigo+'"></div>';
+            _htmlGpng += '</div>';
+            _htmlGpng += '</span>';
+            _htmlGpng += '<span>'+filtroListadoNombre+'</span>';
+          }else{
+            _htmlGpng += '<span class="form-selector-title">';
+            _htmlGpng += filtroListadoNombre;
+            _htmlGpng += '</span>';
+          }
+          _htmlGpng += '</label>';
+          _htmlGpng += '</div>';
+          _htmlGpng += '</div>';
+          _htmlGpng += '</div>';
+        }
+        _htmlGpng += '</fieldset>';
+        _htmlGpng += '</div>';
+        _htmlGpng += '</div>';
+      }//end for
+
+      for(var z=0; z<filtroConfig.length; z++){
+        if(filtroConfig[z].bloque==="GARAN"){
+          var gn = options.length;
+          var gbloqueId = 'Item'+gn;
+          var gnextId = 'Item'+(gn+1);
+          var gselect = filtroConfig[z];
+          _htmlGpng += '<div class="step as-dimension-'+gbloqueId+' garantia-step-filtro '+(filtroConfig[z].mostrarEnLinea?'':'garantia-step-filtro-hide')+'" id="'+gbloqueId+'" data-step="'+gn+'" data-next="'+gnextId+'" data-bloque="'+gselect.bloque+'">';
+          _htmlGpng += '<div class="as-dimension as-dimension-ishidden as-dimension-count-'+(gselect.listado.length)+' as-dimension-'+gselect.bloque.toLowerCase()+' disabled">';
+          _htmlGpng += '<fieldset>';
+          	_htmlGpng += '<legend><h2 class="as-dimension-header">'+gselect.titulo+'</h2></legend>';
+            if(gselect.descripcion!==""){
+              _htmlGpng += '<div class="rs-accessory-tile-subheading">'+gselect.descripcion+'</div>';
+            }
+          	_htmlGpng += '<div class="row rs-accessory-option rs-accessory-noneoption" id="GARANTIA_NONE" data-productid="" data-variantid="">';
+          		_htmlGpng += '<div class="column large-12 small-12 form-selector">';
+          			_htmlGpng += '<div class="form-element ">';
+          				_htmlGpng += '<div class="form-choice-selector-label" onclick="grouping.selectGarantia(\'GARANTIA_OPTION_NONE\')" data-bloque="'+gselect.bloque+'" data-item="" data-step="'+gbloqueId+'" id="GARANTIA_OPTION_NONE">';
+                          _htmlGpng += '<label class="form-label">';
+                            _htmlGpng += '<span class="rs-accessory-option-details">';
+                                _htmlGpng += '<span class="form-selector-title">Sin '+gselect.nombre+'</span>';
+                            _htmlGpng += '</span>';
+                          _htmlGpng += '</label>';
+          				_htmlGpng += '</div>';
+          			_htmlGpng += '</div>';
+          		_htmlGpng += '</div>';
+          	_htmlGpng += '</div>';
+          
+          if(garantia){
+            if(!filtroConfig[z].mostrarEnLinea){
+              document.getElementById("btnAddToCartJS").setAttribute("style", "display:none;");
+              document.getElementById("btnShowGarantiaJS").removeAttribute("style");
+              document.getElementById("btnShowGarantiaJS").setAttribute("data-garantid", "GPNG_GARAN_"+garantia.id);
+            }
+            _htmlGpng += '<div class="row rs-accessory-option hide" id="GARANTIA_GPNG_GARAN_'+garantia.id+'" data-productid="'+garantia.id+'" data-variantid="'+garantia.variants[0].id+'" data-price="'+garantia.price+'">';
+              _htmlGpng += '<div class="column large-12 small-12 form-selector-twocolumns">';
+                _htmlGpng += '<div class="form-element ">';
+                  _htmlGpng += '<div class="form-choice-selector-label form-choice-selector-label-list" onclick="grouping.selectGarantia(\'GPNG_GARAN_'+garantia.id+'\')" data-bloque="'+gselect.bloque+'" data-item="'+garantia.id+'" data-step="'+gbloqueId+'" id="GPNG_GARAN_'+garantia.id+'">';
+                    _htmlGpng += '<label class="form-label">';
+                      _htmlGpng += '<span class="form-choiceselectorlabel-twocol">';
+                        _htmlGpng += '<span class="form-choiceselectorlabel-twocolleft column large-6">';
+                            _htmlGpng += '<span class="form-selector-title">'+gselect.nombre+'</span>';
+                        _htmlGpng += '</span>';
+                        _htmlGpng += '<span class="form-choiceselectorlabel-twocolright column large-6 rs-accessory-option-price">';
+                            _htmlGpng += '<span class="as-icondetails-detail"><span class="compare-at-money">'+grouping.formatMoney(garantia.compare_at_price/100)+'</span><span class="current_price">'+grouping.formatMoney(garantia.price/100)+'</span></span>';
+                        _htmlGpng += '</span>';
+                      _htmlGpng += '</span>';
+                      _htmlGpng += '<span class="as-form-choiseselectordesc form-choiceselectorlabel-list form-label">';
+                        _htmlGpng += '<span class="as-form-choiceselectordesc-list">';
+                            _htmlGpng += '<span class="as-form-choiceselectordesc-listitem">'+garantia.description+'</span>';
+                        _htmlGpng += '</span>';
+                      _htmlGpng += '</span>';
+                    _htmlGpng += '</label>';
+                  _htmlGpng += '</div>';
+                _htmlGpng += '</div>';
+              _htmlGpng += '</div>';
+          
+              //popup-container-care
+              _htmlGpng += '<div class="hide popup-container-care">';
+                _htmlGpng += '<div class="row as-accessoryoverlay-container">';
+                  _htmlGpng += '<div class="row">';
+                    _htmlGpng += '<div class="column large-centered small-12 as-accessoryoverlay-image">';
+                        _htmlGpng += '<img src="'+garantia.featured_image+'" class="ir" alt="'+garantia.title+'" />';
+                    _htmlGpng += '</div>';
+                  _htmlGpng += '</div>';
+                  _htmlGpng += '<div class="row">';
+                    _htmlGpng += '<div class="column large-12 small-12">';
+                        _htmlGpng += '<h2 class="as-accessoryoverlay-heading">'+garantia.title+'</h2>';
+                    _htmlGpng += '</div>';
+                    _htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-price">';
+                        _htmlGpng += '<span class="as-icondetails-detail"><span class="compare-at-money">'+grouping.formatMoney(garantia.compare_at_price/100)+'</span><span class="current_price">'+grouping.formatMoney(garantia.price/100)+'</span></span>';
+                    _htmlGpng += '</div>';
+                    _htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-ipttext">'+garantia.description+'</div>';
+                  _htmlGpng += '</div>';
+                  _htmlGpng += '<div class="row as-accessoryoverlay-button">';
+                    _htmlGpng += '<div class="column large-12 large-centered small-12 as-purchaseinfo custom-purchase-popup '+(!filtroConfig[z].mostrarEnLinea?'garantia-popup-v2':'')+'">';
+                    if(filtroConfig[z].mostrarEnLinea){
+                      _htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-variantid="'+garantia.variants[0].id+'" onclick="grouping.addGarantiaCart(\'GARANTIA_GPNG_GARAN_'+garantia.id+'\')">';
+                      _htmlGpng += '<span class="as-addondetails-label">Añadir</span>';
+                      _htmlGpng += '</button>';
+                    }else{
+                      _htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-addgarantia="1" data-variantid="'+garantia.variants[0].id+'" onclick="grouping.addGarantiaCartV2(\'GARANTIA_GPNG_GARAN_'+garantia.id+'\',1)">';
+                      _htmlGpng += '<span class="as-addondetails-label">Añadir Garantía</span>';
+                      _htmlGpng += '</button>';
+                      
+                      _htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-addgarantia="0" data-variantid="'+garantia.variants[0].id+'" onclick="grouping.addGarantiaCartV2(\'GARANTIA_GPNG_GARAN_'+garantia.id+'\',0)">';
+                      _htmlGpng += '<span class="as-addondetails-label">No, gracias</span>';
+                      _htmlGpng += '</button>';
+                    }
+                    _htmlGpng += '</div>';
+                  _htmlGpng += '</div>';
+                _htmlGpng += '<div class="row ">';
+                  _htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-description">';
+                    _htmlGpng += '<div class="pd-overlay-201508-applecare pd-font-16-400 text-center">';
+                        _htmlGpng += '<p class="pd-overlay-subcopy">Amplía la garantía de tu electrodoméstico para tenerlo cubierto durante 4 años, incluyendo mano de obra, transporte del servicio técnico y recambios de piezas. Con la ampliación de garantía EVVOCARE contarás con un asesor personalizado y acceso a servicios exclusivos solo para EVVOLOVERS.</p><p class="pd-overlay-subcopy">Sin compromisos ni cuotas, un solo pago y cuatro años de tranquilidad.</p><p class="pd-overlay-subcopy"><br><a href="/products/garantia-evvocare" title="EVVO CARE 2+2">Ver&nbsp;garantía EvvoCare</a></p>';
+                    _htmlGpng += '</div>';
+                  _htmlGpng += '</div>';
+                  _htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-learnmore hide">';
+                    _htmlGpng += '<p class="pd-overlay-link">';
+                        _htmlGpng += '<a href="https://www.apple.com/es/support/products/iphone" class="more" target="_blank">Más información sobre AppleCare+<span class="visuallyhidden">(Se abre en una ventana nueva)</span></a>';
+                    _htmlGpng += '</p>';
+                  _htmlGpng += '</div>';
+                _htmlGpng += '</div>';
+              _htmlGpng += '</div>';
+              //./popup-container-care
+            _htmlGpng += '</div>';
+            _htmlGpng += '<div class="rs-modularaccessory-learnmore hide">';
+            _htmlGpng += '<button type="button" class="as-buttonlink rs-modular-learnmorelink" id="garantia_mas_info" data-garantiaid="GPNG_GARAN_'+garantia.id+'" onclick="grouping.glearnmorelink()"><span>Más información</span></button>';
+            _htmlGpng += '</div>';
+          }
+		  
+          _htmlGpng += '</fieldset>';
+		  _htmlGpng += '</div>';
+          _htmlGpng += '</div>';
+          
+        }//endif
+      }//endfor
+      
+      document.getElementById("grouping_blocks").innerHTML = _htmlGpng;
+    }, 
+    selectVariantImageByStep: function(currStep, valueSetpSelcted){
+      const _variants = document.querySelectorAll("#product_variants > option");              
+      let selOption1 = "";
+      let selOption2 = "";
+      let selOption3 = "";
+      let imageIdSelected = "";
+      //let imageAlt = "";      
+      
+      for(var k=0; k<_variants.length; k++){
+        var _option1 = _variants[k].getAttribute("data-option1");
+        var _option2 = _variants[k].getAttribute("data-option2");
+        var _option3 = _variants[k].getAttribute("data-option3");        
+        var _imageid = _variants[k].getAttribute("data-imageid");        
+        
+        switch(currStep.toString()){
+          case "0": 
+            if(_option1 === valueSetpSelcted && imageIdSelected===""){
+              imageIdSelected = _imageid;              
+            }
+            break;
+          case "1": 
+            if(_option2 === valueSetpSelcted && imageIdSelected===""){
+              imageIdSelected = _imageid;
+            }
+            break;
+          case "2": 
+            if(_option3 === valueSetpSelcted && imageIdSelected===""){
+              imageIdSelected = _imageid;
+            }
+            break;
+        }
+      }//endfor  
+      
+      if(imageIdSelected!==""){
+        if($("#slideShowMainProduct #Image"+imageIdSelected).length){
+			const imgThumbnail = $('.Product__SlideshowNav--thumbnails span[data-image-id="'+imageIdSelected+'"]');
+        	imgThumbnail.click();
+        }else if($('#product_option_colors').length){
+          	let isFirstThumb = false;
+          	let imagesToShowIds = [];
+          	const allThumbnails = $('.Product__SlideshowNav--thumbnails .Product__SlideshowNavImage');
+            allThumbnails.each(function(){
+              let thumAlt = $(this).attr("data-img-alt").toString();
+              if(thumAlt === valueSetpSelcted){
+                $(this).addClass("show");
+                $(this).removeClass("hide");
+                imagesToShowIds.push($(this).attr("data-image-id"));
+                if(!isFirstThumb){
+                  isFirstThumb = true;
+                  $(this).addClass("is-selected");
+                }
+              }else{
+                $(this).addClass("hide");
+                $(this).removeClass("show");
+              }
+            });
+          	const mainFlkty = new Flickity('#slideShowMainProduct');
+          	const contentSlider = $("#slideShowMainProduct > .flickity-viewport > .flickity-slider");
+            contentSlider.find(".Product__SlideItem").each(function(){
+              if(!imagesToShowIds.includes($(this).attr("data-image-id"))){
+                mainFlkty.remove($(this));
+              }
+            });
+          	$("#slideShowMainProductClone .Product__SlideItem").each(function(){
+              if(imagesToShowIds.includes($(this).attr("data-image-id"))){
+                mainFlkty.insert($(this).clone());
+              }
+            });
+            setTimeout(function(){
+              mainFlkty.selectCell(0);
+            }, 500);
+        }
+      }//endif 
+    },
+    selectOption: function(id){
+      var stepId = document.getElementById(id).getAttribute("data-step");
+      var valueOpt = document.getElementById(id).getAttribute("data-valueopt");
+      var currStep = document.getElementById(stepId).getAttribute("data-step");
+      var nextId = document.getElementById(stepId).getAttribute("data-next");
+      var selecteds = document.querySelectorAll("#"+stepId+" .selected");
+      var productId = document.getElementById("product_variants").getAttribute("data-productid");
+      var _variants = document.querySelectorAll("#product_variants > option");
+      var variant_id = "", garant_id = "", selOption1="", selOption2="", selOption3="", selPrice="", selPriceOr="", selQty="";
+      for(var i=0; i<selecteds.length; i++){
+        selecteds[i].classList.remove("selected");
+      }
+      document.getElementById(id).classList.add("selected");
+      
+      grouping.selectVariantImageByStep(currStep, valueOpt);
+      /*
+      JULIOM. COMENTADO EL 03/10/2020
+      if(document.getElementById(id).getAttribute("data-bloque")==="COLOR"){
+        var _selectedImage = "";
+        for(var c=0; c<_variants.length; c++){
+          var _optionSearch = _variants[c].getAttribute("data-option"+(parseInt(currStep)+1));
+          var _imageId = _variants[c].getAttribute("data-imageid");               
+          
+          if(_imageId!=="" && _optionSearch===valueOpt){
+            if(document.querySelector(".Product__SlideshowNav--thumbnails")){
+              var thumbNailItem = document.querySelector('.Product__SlideshowNav--thumbnails [data-image-id="'+_imageId+'"]');              
+              if(thumbNailItem){
+                var allThumbnails = document.querySelectorAll('.Product__SlideshowNav--thumbnails .Product__SlideshowNavImage');                
+                for(var d=0; d<allThumbnails.length; d++){
+                 if(allThumbnails[d].getAttribute("data-image-id")===_imageId){
+                    allThumbnails[d].click();
+                  }                                 
+                }//end for                
+              }//end if
+            }//end if
+          }//end if
+        }//end for
+      }
+      */
+      
+      if(document.getElementById(nextId)){
+        grouping.activarFiltrosVisuales(id, stepId, nextId);
+        if(document.querySelector("#"+nextId+" > .disabled"))
+          document.querySelector("#"+nextId+" > .disabled").classList.remove("disabled");
+
+        $('html, body').animate({
+          scrollTop: $("#"+nextId).offset().top-100
+        }, 800);
+      }
+      var allSteps = document.querySelectorAll("#grouping_blocks > .step");
+      var maxStep = allSteps.length-1;
+      if(document.querySelector('div[data-step="'+(allSteps.length-1)+'"]')){
+        if(document.querySelector('div[data-step="'+(allSteps.length-1)+'"]').getAttribute("data-bloque")==="GARAN")
+          maxStep = allSteps.length-2;
+      }
+      if(parseInt(currStep)===maxStep){
+        document.getElementById("status_steps_all").value = "1";
+      }
+      if(document.getElementById("status_steps_all").value==="1"){
+        document.getElementById("variant_a_to_cart").value = "";
+        document.getElementById("variant_a_to_cart").setAttribute("data-productid", "");
+        document.getElementById("variant_b_to_cart").value = "";
+        document.getElementById("variant_b_to_cart").setAttribute("data-productid", "");
+        
+        var allHiddenDivs = document.querySelectorAll(".show-on-filter-product");
+        for(var m=0; m<allHiddenDivs.length; m++){
+          if(!allHiddenDivs[m].className.includes("product-filtered"))
+          	allHiddenDivs[m].classList.add("product-filtered");
+        }//end for
+        for(var j=0; j<allSteps.length; j++){
+          var _stepId = allSteps[j].id;
+          var selOptNum = allSteps[j].getAttribute("data-step");
+          if(document.querySelector("#"+_stepId+" .selected")){
+            var _selected = document.querySelector("#"+_stepId+" .selected");
+            var _valueOpt = _selected.getAttribute("data-valueopt");
+            switch(selOptNum){
+              case "0": 
+                selOption1 = _valueOpt!==null?_valueOpt:"";
+                break;
+              case "1": 
+                selOption2 = _valueOpt!==null?_valueOpt:"";
+                break;
+              case "2": 
+                selOption3 = _valueOpt!==null?_valueOpt:"";
+                break;
+            }
+          }
+        }//end for
+        for(var k=0; k<_variants.length; k++){
+          var _optValu = _variants[k].getAttribute("value");
+          var _option1 = _variants[k].getAttribute("data-option1");
+          var _option2 = _variants[k].getAttribute("data-option2");
+          var _option3 = _variants[k].getAttribute("data-option3");
+          var _price = _variants[k].getAttribute("data-price");
+          var _priceOr = _variants[k].getAttribute("data-priceor");
+          var _qty = _variants[k].getAttribute("data-qty");
+          //console.log(selOption1+" === "+_option1+" // "+selOption2+" === "+_option2+" // "+selOption3+" === "+_option3);
+          if(selOption1===_option1 && selOption2===_option2 && selOption3===_option3){
+            variant_id = _optValu;
+            selPrice = _price;
+            selQty = _qty;
+      		selPriceOr = _priceOr;
+          }
+        }//endfor                
+      }//endif
+      
+      // RESETEAR GARANTÍAS
+      if(document.querySelector("#"+nextId+" #GARANTIA_NONE")){
+        var garantiasDiv = document.querySelectorAll("#"+nextId+" fieldset > .hide");
+        for(var y=0; y<garantiasDiv.length; y++){
+          garantiasDiv[y].classList.remove("hide");
+        }
+        var selecteds = document.querySelectorAll(".as-dimension-garan .selected");
+        for(var i=0; i<selecteds.length; i++){
+          selecteds[i].classList.remove("selected");
+        }
+      }
+      var garantia_selecteds = document.querySelectorAll(".garantia-selected");
+      for(var z=0; z<garantia_selecteds.length; z++){
+        var garanId = garantia_selecteds[z].getAttribute("id");
+        document.querySelector("#"+garanId.replace("GARANTIA_", "")).classList.remove("selected");
+        garantia_selecteds[z].classList.remove("garantia-selected");
+      }
+      document.querySelector("#GARANTIA_NONE .form-choice-selector-label").classList.add("selected");
+      document.getElementById("DATA_PURCHASE_PROD_NONE").classList.add("hide");
+      document.getElementById("DATA_PURCHASE_PROD_"+productId).classList.remove("hide");
+      if(document.querySelector(".Product__Wrapper")){
+        var productWrapper = document.querySelector(".Product__Wrapper");
+        if(!productWrapper.getAttribute("reload")){
+          var currStyle = productWrapper.getAttribute("style");
+          if(currStyle){
+            var currHeight = currStyle.replace(" ","").replace("min-height:","").replace("px;","");
+            var newHeight = parseInt(currHeight)+400;
+            productWrapper.setAttribute("reload", "1");
+            productWrapper.setAttribute("style", "min-height: "+newHeight+"px;");
+          }
+        }
+      }
+      
+      var proAv = document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").getAttribute("data-available");
+      console.log(proAv+" => "+variant_id);
+      if(proAv==="1" && variant_id!==""){
+        document.getElementById("prod_"+productId).innerHTML = selPrice;
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId).setAttribute("data-variantid", variant_id);
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId).setAttribute("data-price", selPriceOr);
+        if(parseInt(selQty)<=0){
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart span").innerHTML = "Sin stock";
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").setAttribute("disabled", "disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").classList.add("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia span").innerHTML = "Sin stock";
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").setAttribute("disabled", "disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").classList.add("disabled");
+          document.getElementById("variant_b_to_cart").value = variant_id;
+          document.getElementById("variant_b_to_cart").setAttribute("data-productid", productId);
+        }else{
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart span").innerHTML = "Añadir al carrito";
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").removeAttribute("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").classList.remove("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia span").innerHTML = "Añadir al carrito";
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").removeAttribute("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").classList.remove("disabled");
+          document.getElementById("variant_b_to_cart").value = variant_id;
+          document.getElementById("variant_b_to_cart").setAttribute("data-productid", productId);
+        }
+      }else{
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart span").innerHTML = "Añadir al carrito";
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").setAttribute("disabled", "disabled");
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-add-to-cart").classList.add("disabled");
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia span").innerHTML = "Añadir al carrito";
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").setAttribute("disabled", "disabled");
+        document.querySelector("#DATA_PURCHASE_PROD_"+productId+" .button-show-garantia").classList.add("disabled");
+        document.getElementById("variant_b_to_cart").value = "";
+        document.getElementById("variant_b_to_cart").setAttribute("data-productid", "");
+      }
+    }, 
+    selectGarantia: function(id){
+      var stepId = document.getElementById(id).getAttribute("data-step");
+      var selecteds = document.querySelectorAll(".as-dimension-garan .selected");
+      for(var i=0; i<selecteds.length; i++){
+        selecteds[i].classList.remove("selected");
+      }
+      document.getElementById(id).classList.add("selected");
+      if(id!=="GARANTIA_OPTION_NONE"){
+        grouping.openModal(id);
+      }else{
+        document.getElementById("variant_a_to_cart").value = "";
+        document.getElementById("variant_a_to_cart").setAttribute("data-productid", "");
+        var productId = document.getElementById("variant_b_to_cart").getAttribute("data-productid");
+        //var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+        var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+        var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+        var total_price = grouping.formatMoney(parseFloat(sprice)/100);
+        document.getElementById("prod_"+productId).innerHTML = total_price;
+
+        $('html, body').animate({
+          scrollTop: $(".product-selected").offset().top-150
+        }, 800);
+      }
+    },
+    openModal: function(id){
+      var htmlContent = document.querySelector("#GARANTIA_"+id+" > .popup-container-care").innerHTML;
+      document.getElementById("popupGroupingContent").innerHTML = htmlContent;
+      document.getElementsByTagName("body")[0].classList.add("show-modal-bg");
+      document.getElementById("popupGrouping").classList.add("show-modal");
+      if(document.getElementById("variant_a_to_cart").value!==""){
+        document.getElementById("popupGrouping").classList.add("variant-garantia-is-selected");
+      }else{
+        document.getElementById("popupGrouping").classList.remove("variant-garantia-is-selected");
+      }
+    },
+    closeModal: function(){
+      if(document.getElementById("variant_a_to_cart").value==="")
+          grouping.selectGarantia("GARANTIA_OPTION_NONE");
+
+      document.getElementById("popupGrouping").classList.remove("show-modal");
+      document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+
+      $('html, body').animate({
+        scrollTop: $(".product-selected").offset().top-150
+      }, 800);
+    },
+    addGarantiaCart: function(garantia_id = ''){
+      var gproduct_id = document.getElementById(garantia_id).getAttribute("data-productid");
+      var gvariant_id = document.getElementById(garantia_id).getAttribute("data-variantid");
+      var gprice = document.getElementById(garantia_id).getAttribute("data-price");
+      if(gproduct_id!=="" && gvariant_id!==""){
+        var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+        var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+        var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+        var total_price = grouping.formatMoney((parseFloat(sprice)/100)+(parseFloat(gprice/100)));
+
+        document.getElementById("prod_"+sproduct_id).innerHTML = total_price;
+        document.getElementById("variant_a_to_cart").value = gvariant_id;
+        //document.getElementById("variant_a_to_cart").setAttribute("data-productid", gproduct_id);
+        document.getElementById("GARANTIA_OPTION_NONE").classList.remove("selected");
+        document.getElementById(garantia_id.replace("GARANTIA_", "")).classList.add("selected");
+        document.getElementById("popupGrouping").classList.remove("show-modal");
+        document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+        //reloadSequraPaymentScript();
+
+        $('html, body').animate({
+          scrollTop: $(".product-selected").offset().top-150
+        }, 800);
+      }
+    },
+    addGarantiaCartV2: function(garantia_id = '', addGarantia = '0'){
+      var gproduct_id = document.getElementById(garantia_id).getAttribute("data-productid");
+      var gvariant_id = document.getElementById(garantia_id).getAttribute("data-variantid");
+      var gprice = document.getElementById(garantia_id).getAttribute("data-price");
+      if(gproduct_id!=="" && gvariant_id!=="" && parseInt(addGarantia)===1){
+        var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+        var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+        var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+        var total_price = grouping.formatMoney((parseFloat(sprice)/100)+(parseFloat(gprice/100)));
+        document.getElementById("prod_"+sproduct_id).innerHTML = total_price;
+        document.getElementById("variant_a_to_cart").value = gvariant_id;
+        //document.getElementById("variant_a_to_cart").setAttribute("data-productid", gproduct_id);
+        document.getElementById("GARANTIA_OPTION_NONE").classList.remove("selected");
+        document.getElementById(garantia_id.replace("GARANTIA_", "")).classList.add("selected");
+        //document.getElementById("popupGrouping").classList.remove("show-modal");
+        //document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+      }
+      grouping.addToCartJS();
+    },
+    glearnmorelink: function(){
+      var id = document.getElementById("garantia_mas_info").getAttribute("data-garantiaid");
+      if(id!=="")
+        grouping.openModal(id);
+    },
+    activarFiltrosVisuales: function(id, stepId, nextId){
+      var currStepNum = parseInt(stepId.replace("Item", ""));
+      var currStepValueOpt = document.getElementById(id).getAttribute("data-valueopt");
+      var selectorFilters = document.querySelectorAll(".selector-container__filter");
+      var _variants = document.querySelectorAll("#product_variants > option");
+      var _variantFilters = [];
+      
+      for(var b=0; b<_variants.length; b++){
+        var _option1 = _variants[b].getAttribute("data-option1");
+        var _option2 = _variants[b].getAttribute("data-option2");
+        var _option3 = _variants[b].getAttribute("data-option3");
+        var _valueOptEval = "";
+        switch(currStepNum){
+          case 0: 
+            _valueOptEval = _option1;
+            if(_option1===currStepValueOpt){
+              _variantFilters.push(_option1+","+_option2+","+_option3);
+            }
+            break;
+          case 1: 
+            var _valueOptEval0 = document.querySelector("#Item0 .selected");
+            if(_valueOptEval0.getAttribute("data-valueopt")===_option1 && _option2===currStepValueOpt){
+              _variantFilters.push(_option1+","+_option2+","+_option3);
+            }
+            break;
+          case 2: 
+            var _valueOptEval0 = document.querySelector("#Item0 .selected");
+            var _valueOptEval1 = document.querySelector("#Item1 .selected");
+            if(_valueOptEval0.getAttribute("data-valueopt")===_option1 
+               && _valueOptEval1.getAttribute("data-valueopt")===_option2
+               && _option3===currStepValueOpt){
+              _variantFilters.push(_option1+","+_option2+","+_option3);
+            }
+            break;
+        }
+      }
+      for(var a=0; a<selectorFilters.length; a++){
+        var evalStepNum = parseInt(selectorFilters[a].getAttribute("data-step"));
+        if(evalStepNum > currStepNum){
+          var evalShow = false;
+          var evalStepTag = selectorFilters[a].getAttribute("data-id");
+          var evalChoice = document.getElementById(evalStepTag).getAttribute("data-valueopt");
+          for(var b=0; b<_variantFilters.length; b++){
+            var _valueOpts = _variantFilters[b].split(",");
+            for(var c=0; c<_valueOpts.length; c++){
+              if(_valueOpts[c]===evalChoice)
+                evalShow = true;
+            }//end for
+          }//end for
+          if(evalShow){
+            selectorFilters[a].classList.remove("hide");
+          }else{
+            selectorFilters[a].classList.add("hide");
+          }
+        }//end if
+      }//end for
+    }, 
+    preguntarGarantia: function(el){
+      var garantId = el.getAttribute("data-garantid");
+      grouping.selectGarantia(garantId);
+    },
+    addToCartJS: function(){
+      var variant_garantia = document.getElementById("variant_a_to_cart").value;
+      var variant_group = document.getElementById("variant_b_to_cart").value;
+      if(variant_group!==""){
+        var callBackCart = null;
+        if(variant_garantia!==""){
+          callBackCart = function(){
+            grouping.ajaxCartJS(variant_garantia, null);
+          };
+        }
+        grouping.ajaxCartJS(variant_group, callBackCart);
+      }
+    },
+    ajaxCartJS: function(variant_id, _callback){
+      var data = 'id='+ variant_id + '&quantity=1';
+      $.ajax({
+        type: 'POST',
+        url: '/cart/add.js',
+        dataType: 'json',
+        data: data,
+        success: function(res){
+          console.log("ADD_TO_CART SUCCESS ("+variant_id+"):");
+          console.log(res);
+          if(typeof(_callback)==="function"){
+            _callback();
+          }else{
+            window.top.location.href = "/cart"; 
+          }
+        },
+        error: function(d){
+          console.log("ADD_TO_CART ERROR ("+variant_id+"):");
+          console.log(d);
+        }
+      });
+    }, 
+	changeThumbnailAlt: function(el){
+        //el.preventDefault();
+        const mainFlkty = new Flickity('#slideShowMainProduct');
+        const contentSlider = $("#slideShowMainProduct > .flickity-viewport > .flickity-slider");
+        if(contentSlider.length){
+          $('.Product__SlideshowNav--thumbnails .is-selected').removeClass('is-selected');
+          let positionSlide = 0;
+          let positionToSelect = -1;
+          contentSlider.find(".Product__SlideItem").each(function(){
+            if($(this).attr("data-image-id") === el.getAttribute("data-image-id")){
+              positionToSelect = positionSlide;
+            }
+            positionSlide++;
+          });
+          if(positionToSelect>-1){
+            el.classList.add("is-selected");
+            setTimeout(function(){
+            	mainFlkty.selectCell(positionToSelect);
+            }, 200);
+          }
+        }
+        return;
+    }
+  };
+  
+  let product_garanty = {{ garant_prod | t | json }};
+  let product_options = {{ product.options_with_values | t | json }};
+  grouping.getJSON(grouping.config_url, grouping.renderizarFiltros, product_options, product_garanty);
+  
+  if(document.querySelector('.is-product-with-selector') && screen.width > 998){
+    let topProduct = 0;
+    let styleProduct = "";
+    if(document.querySelector('#shopify-section-announcement')){
+      topProduct += document.querySelector('#shopify-section-announcement').offsetHeight;
+    }
+    if(document.querySelector('#shopify-section-header').length){
+      topProduct += document.querySelector('#shopify-section-header').offsetHeight;
+    }
+    if(topProduct > 0){
+      styleProduct += "top:"+topProduct+"px;";
+    }
+    styleProduct += "position:sticky;";
+    document.querySelector('.is-product-with-selector > .Product__Wrapper > .Product__Gallery').setAttribute('style', styleProduct);
+  }
+
+  window.addEventListener("load", function(){
+    if($('#product_option_colors').length){
+      let arrayValues = [];
+      $('#product_option_colors option').each(function(){
+        const arrOption = $(this).attr("data-values").split(",");
+        for(let i=0; i<arrOption.length; i++){
+          if(arrOption[i]!=="" && !arrayValues.includes(arrOption[i])){
+            arrayValues.push(arrOption[i]);
+          }
+        }
+      });
+      
+      let imagesToShow = [];
+      let htmlNuevoSlider = '';
+      const allThumbnails = $('.Product__SlideshowNav--thumbnails .Product__SlideshowNavImage');
+      if(arrayValues.length > 0 && allThumbnails){
+        allThumbnails.each(function(){
+          const elThumbContainer = $(this).parent();
+          const elThumbClone = $(this).clone();
+          elThumbClone.attr("onclick", "grouping.changeThumbnailAlt(this)");
+          elThumbClone.removeAttr("id");
+          let thumAlt = elThumbClone.attr("data-img-alt").toString();
+          if(arrayValues.includes(thumAlt)){
+            elThumbClone.removeClass("show");
+            elThumbClone.addClass("hide"); 
+          }else{
+            imagesToShow.push(elThumbClone.attr("data-image-id"));
+          }
+          $(this).remove();
+          elThumbContainer.append(elThumbClone);
+        });
+        
+        const mainFlkty = new Flickity('#slideShowMainProduct');
+        const contentSlider = $("#slideShowMainProduct > .flickity-viewport > .flickity-slider");
+        if(contentSlider.length){
+          $("#slideShowMainProduct").after(`<div id="slideShowMainProductClone" style="display:none;">${contentSlider.html()}</div>`);
+          $("#slideShowMainProductClone .is-selected").removeClass("is-selected");
+          contentSlider.find(".Product__SlideItem").each(function(){
+            if(!imagesToShow.includes($(this).attr("data-image-id"))){
+              mainFlkty.remove($(this));
+            }
+          });
+          mainFlkty.selectCell(0);
+        }
+      }//end if
+      
+    }//endif
+  });
+</script>

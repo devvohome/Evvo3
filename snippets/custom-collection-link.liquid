@@ -1,0 +1,38 @@
+<div class="ProductItem">
+  <div class="ProductItem__Wrapper">
+    <a href="{{ grouping.custom_url }}" class="ProductItem__ImageWrapper">
+      {%- if grouping.custom_image -%}
+      	{%- assign max_width = grouping.custom_image.width -%}
+      {%- else -%}
+        {%- assign max_width = 125 -%}
+      {%- endif -%}
+      
+      <div class="AspectRatio AspectRatio--withFallback" style="max-width: {{ max_width }}px; padding-bottom: {{ 100.0 | divided_by: grouping.custom_image.aspect_ratio }}%; --aspect-ratio: {{ grouping.custom_image.aspect_ratio }}">
+
+        {%- include 'image-size', sizes: '200,400,600,700,800,900,1000,1200', image: grouping.custom_image -%}
+        {%- assign image_url = grouping.custom_image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' -%}
+
+        <img class="ProductItem__Image Image--lazyLoad Image--fadeIn" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ grouping.custom_image.alt | escape }}" data-image-id="{{ grouping.custom_image.id }}">
+        <span class="Image__Loader"></span>
+
+        <noscript>
+          <img class="ProductItem__Image" src="{{ grouping.custom_image | img_url: '600x' }}" alt="{{ grouping.custom_image.alt | escape }}">
+        </noscript>
+      </div>
+    </a>
+
+    {%- if grouping.custom_label != blank -%}
+    <div class="ProductItem__LabelList">
+      <span class="ProductItem__Label Heading Text--subdued">{{ grouping.custom_label }}</span>
+    </div>
+    {%- endif -%}
+
+    {%- if grouping.custom_title != blank -%}
+    <div class="ProductItem__Info ProductItem__Info--{{ settings.product_info_alignment }}">
+      <h2 class="ProductItem__Title Heading">
+        <a href="{{ grouping.custom_url }}">{{ grouping.custom_title }}</a>
+      </h2>
+    </div>
+    {%- endif -%}
+  </div>
+</div>

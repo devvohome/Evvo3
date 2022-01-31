@@ -1,0 +1,15 @@
+{
+  "name": "Alternate",
+  "sections": {
+    "main": {
+      "type": "cart-alternate"
+    },
+    "recently": {
+      "type": "recently-viewed-products"
+    }
+  },
+  "order": [
+    "main",
+    "recently"
+  ]
+}

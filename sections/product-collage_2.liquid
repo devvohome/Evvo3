@@ -1,0 +1,94 @@
+<section class="Section Section--spacingNormal" id="section-{{ section.id }}" data-section-type="product-collage" data-section-id="{{ section.id }}">
+ <div class="Container collage-container">
+   <div class="Grid Grid--m Grid--center">
+     {%- for block in section.blocks -%}
+       {% if product.handle == block.settings.product %}
+         {%- include 'collage-container' title: block.settings.title, content: block.settings.content, image: block.settings.image -%}
+         {%- include 'collage-container' title: block.settings.title2, content: block.settings.content2, image: block.settings.image2 -%}
+         {%- include 'collage-container' title: block.settings.title3, content: block.settings.content3, image: block.settings.image3 -%}
+       {% endif %}
+     {%- endfor -%}
+   </div>
+ </div>
+</section>
+
+
+{% schema %}
+{
+  "name": "Product collage_2",
+  "class": "shopify-section--bordered",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "collage",
+      "name": "Collage",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "header",
+          "content": "Row 1"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Header"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image"
+        },
+        {
+          "type": "header",
+          "content": "Row 2"
+        },
+        {
+          "type": "text",
+          "id": "title2",
+          "label": "Header"
+        },
+        {
+          "type": "richtext",
+          "id": "content2",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image2",
+          "label": "Image",
+          "info": "1200 x 1200px png recommended"
+        },
+        {
+          "type": "header",
+          "content": "Row 3"
+        },
+        {
+          "type": "text",
+          "id": "title3",
+          "label": "Header"
+        },
+        {
+          "type": "richtext",
+          "id": "content3",
+          "label": "Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image3",
+          "label": "Image",
+          "info": "1200 x 1200px png recommended"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

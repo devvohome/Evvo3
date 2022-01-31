@@ -1,0 +1,246 @@
+function sendErrorToPepper (url, error, config, token) {
+    $.ajax({
+        type: 'GET',
+        url: url,
+        data: {
+            'token': token,
+            'useragent': window.navigator.userAgent,
+            'error': error,
+            'config': JSON.stringify(config)
+        }, 
+        async: false,
+        jsonpCallback: 'jsonp_callback',
+        contentType: "application/json",
+        dataType: 'jsonp',
+        cache: false
+    });
+}
+
+//Apoyo para trabajo sessionStorage
+function setSessionStoragePepper(key, value) {
+    if(typeof(Storage) !== "undefined") {
+        sessionStorage.setItem(key, value);
+    }
+}
+function getSessionStoragePepper (key) {
+    if(typeof(Storage) !== "undefined") {
+        return sessionStorage.getItem(key);
+    }
+    else {
+        return null;
+    }
+}
+
+function addTermCookie(term, transactionId, externalData, cookieName) {
+    if (getCookiePepper(cookieName)) {
+        setCookiePepper(cookieName, null);
+    }
+    setCookiePepper(
+        cookieName,
+        JSON.stringify({
+            term: term,
+            externalData: externalData,
+            transactionId: transactionId
+        })
+    );
+}
+
+function getCookiePepper (cname) {
+    var name = cname + "=";
+    var cArr = window.document.cookie.split(';');
+
+    for (var i = 0; i < cArr.length; i++) {
+        var c = cArr[i].trim();
+        if (c.indexOf(name) == 0)
+            return c.substring(name.length, c.length);
+    }
+
+    return false;
+}
+
+function setCookiePepper (cookieName, value)
+{
+	var expireDate = new Date(1983,6,22);
+	document.cookie = [
+				encodeURIComponent(cookieName), '=', encodeURIComponent(value),
+				'; path=/',
+				(value === null || value === undefined) ? '; expires=' + expireDate.toUTCString() : ''
+			].join('');
+}
+
+if (typeof PEPPER !== 'object') {
+    var PEPPER = {}
+}
+
+PEPPER.config = {
+    config: null,
+    environment: null,
+    language: null,
+    currency: null,
+    sessionName: 'pepper_config',
+    configUrl: null,
+    tokenUrl: null,
+    session: null,
+    securityName: 'pepper_session',
+    catchErrorUrl: null,
+
+    init: function (environment, language, currency, configUrl, catchErrorUrl, tokenUrl) {
+    	console.log(configUrl);
+        this.environment = environment;
+        this.language = language;
+        this.currency = currency;
+        this.configUrl = configUrl;
+        this.catchErrorUrl = catchErrorUrl;
+        this.tokenUrl = tokenUrl;
+        var that = this;
+
+        try {
+            this.getConfig();
+        } catch (err) {
+            sendErrorToPepper(that.catchErrorUrl, err, that.config);
+        }
+    },
+    getConfig: function() {
+        try{
+            //20201022 => && getSessionStoragePepper(this.securityName) !== null
+            if (getSessionStoragePepper(this.sessionName) !== null) {
+                this.config = JSON.parse(getSessionStoragePepper(this.sessionName)).data;
+                //20201022 => this.session = JSON.parse(getSessionStoragePepper(this.securityName)).data;
+                if (this.config.enabled === true) {
+                    this.injectAssets();
+                    if(!this.session){
+                        this.getTokenAjax(true);
+                    }
+                }
+            }
+            else {
+                //this.getConfigAjax();
+                this.getTokenAjax();
+            }
+        }
+        catch (err) {
+            sendErrorToPepper(this.catchErrorUrl, err, this.config);
+        }
+    },
+    getTokenAjax: function(onlyToken = false){
+        var that = this;
+        $.ajax({
+            type: 'GET',
+            url: that.tokenUrl,
+            data: {},
+            async: false,
+            jsonpCallback: 'jsonp_callback',
+            contentType: "application/json",
+            dataType: 'jsonp',
+            cache: false,
+            success: function (response) {
+                //response = JSON.parse(response);
+                if (typeof response == 'object') {
+                    if (!response.result.errors) {
+                        that.session = response.data;
+                        //20201022 => setSessionStoragePepper(that.securityName, JSON.stringify(response));
+                        if(!onlyToken){
+                            that.getConfigAjax();
+                        }
+                    } else {
+                        that.sendErrorToPepper(that.catchErrorUrl, response.result.errors, that.session);
+                        throw response.error;
+                    }
+                }
+            }, 
+            error: function(xhr, status, error) {
+                console.log(xhr);
+                console.log(status);
+                console.log(error);
+            }
+        });
+    },
+    getConfigAjax: function () {
+        var that = this;
+        if(!that.session){
+            that.getTokenAjax();
+        }else{
+            $.ajax({
+                type: 'GET',
+                url: that.configUrl,
+                data: {
+                    'token': that.session.access_token
+                },
+                async: false,
+                jsonpCallback: 'jsonp_callback',
+                contentType: "application/json",
+                dataType: 'jsonp',
+                cache: false,
+                success: function (response) {
+                    //response = JSON.parse(response);
+                    if (typeof response == 'object') {
+                        if (!response.result.errors) {
+                            that.config = response.data;
+                            setSessionStoragePepper(that.sessionName, JSON.stringify(response));
+                            if (that.config.enabled === true) {
+                                that.injectAssets();
+                            }
+                            if (that.config.error) {
+                                sendErrorToPepper(that.catchErrorUrl, that.config.error, that.config);
+                                throw that.config.error;
+                            }
+                        } else {
+                            that.sendErrorToPepper(that.catchErrorUrl, response.result.errors, that.config);
+                            throw response.error;
+                        }
+                    }
+                }
+            });
+        }
+    },
+    injectAssets: function () {
+        try {
+            this.getCss();
+            this.getJs();
+        } catch (err) {
+            throw err;
+        }
+    },
+    getCss: function () {
+        var url = this.config.css_version;
+        var elmt = document.createElement("link");
+        elmt.setAttribute('rel', 'stylesheet');
+        elmt.setAttribute('type', 'text/css');
+        elmt.setAttribute('href', url);
+
+        document.getElementsByTagName("head")[0].appendChild(elmt);
+    },
+    getJs: function () {
+        var elmt = document.createElement("script");
+        elmt.setAttribute('type', 'text/javascript');
+        elmt.setAttribute('src', this.config.js_version);
+
+        var elmt2 = document.createElement("script");
+        elmt2.setAttribute('type', 'text/javascript');
+        elmt2.setAttribute('src', this.config.js_platform_version);
+
+        var that = this;
+
+        elmt2.addEventListener('load', function() {
+            try {
+                if (typeof PEPPER === 'object' && typeof PEPPER.widgets === 'object') {
+                    PEPPER.widgets.init(
+                        that.catchErrorUrl,
+                        that.config
+                    );
+                } else {
+                    sendErrorToPepper(this.catchErrorUrl, 'PEPPER.widgets is not an object', this.config);
+                }
+            } catch (err) {
+                sendErrorToPepper(this.catchErrorUrl, err, this.config);
+                throw err;
+            }
+        });
+
+        var head_element = document.getElementsByTagName("head")[0];
+        elmt.addEventListener('load', function() {
+            head_element.appendChild(elmt2);
+        });
+        head_element.appendChild(elmt);
+    }
+};

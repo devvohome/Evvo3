@@ -1,0 +1,16 @@
+{% section 'cart-template' %}
+{% section 'recently-viewed-products' %}
+<script>
+  $(document).ready(function(){
+    if(window.wcp_data){
+      if(!window.wcp_data.discounted_hash || typeof(window.wcp_data.discounted_hash) == "undefined"){
+        window.wcp_data.discounted_hash = {};
+        window.wcp_data.discounted_hash.discount_value = null;
+      }
+      else if(!window.wcp_data.discounted_hash.discount_value || typeof(window.wcp_data.discounted_hash.discount_value) == "undefined"){
+      	window.wcp_data.discounted_hash.discount_value = null;
+      }
+    }
+
+  });
+</script>

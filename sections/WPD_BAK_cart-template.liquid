@@ -1,0 +1,304 @@
+<script class="cartFlagX"></script>{%- capture section_settings -%}
+{
+  "type": {{ settings.cart_type | json }},
+  "itemCount": {{ cart.item_count }},
+  "drawer": false,
+  "hasShippingEstimator": {% if section.settings.show_shipping_estimator and cart.item_count > 0 %}true{% else %}false{% endif %}
+}
+{%- endcapture -%}
+<script
+  src="https://code.jquery.com/jquery-3.3.1.min.js"
+  integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+  crossorigin="anonymous"></script>
+<section data-section-id="{{ section.id }}" data-section-type="cart" data-section-settings='{{ section_settings }}'>
+  {%- if cart.item_count == 0 -%}
+    <div class="EmptyState">
+      <div class="Container">
+        <h1 class="EmptyState__Title Heading u-h5">{{ 'cart.general.empty' | t }}</h1>
+
+        {%- if settings.cart_show_free_shipping_threshold -%}
+          {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+          {%- capture remaining_amount -%}<span><span style="display:none" class="tdf-cart-total-flag"></span><span class="wh-original-cart-total"><span class='wh-original-price'>
+<span class="saso-cart-original-total"><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total" style="display:none !important;"></span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>
+<span class="saso-cart-total"></span>
+</span></span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span>{%- endcapture -%}
+
+          <p class="Text--subdued">{{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}</p>
+        {%- endif -%}
+
+        <a href="/collections/all" class="EmptyState__Action Button Button--primary">{{ 'cart.general.empty_button' | t }}</a>
+      </div>
+    </div>
+  {%- else -%}
+    <div class="Container">
+      <header class="PageHeader">
+        <div class="SectionHeader SectionHeader--center">
+          <h1 class="SectionHeader__Heading Heading u-h1">{{ 'cart.general.title' | t }}</h1>
+
+          {%- if settings.cart_show_free_shipping_threshold -%}
+            {%- assign threshold_in_cents = settings.cart_free_shipping_threshold | times: 100 -%}
+
+            <p class="SectionHeader__Description Text--subdued">
+              {%- if cart.total_price >= threshold_in_cents -%}
+                {{- 'cart.general.free_shipping' | t -}}
+              {%- else -%}
+                {%- capture remaining_amount -%}<span><span style="display:none" class="tdf-cart-total-flag"></span><span class="wh-original-cart-total"><span class='wh-original-price'>
+<span class="saso-cart-original-total"><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total_2" style="display:none !important;"></span>{{ cart.total_price | minus: threshold_in_cents | abs | money_without_trailing_zeros }}</span>
+<span class="saso-cart-total"></span>
+</span></span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span>{%- endcapture -%}
+                {{- 'cart.general.free_shipping_remaining_html' | t: remaining_amount: remaining_amount -}}
+              {%- endif -%}
+            </p>
+          {%- endif -%}
+        </div>
+      </header>
+
+      <div class="PageContent">
+        <div class="cart-error--message"></div>
+        <form action="/cart" method="POST" class="Cart Cart--expanded">
+          <input type="hidden" name="attributes[collection_mobile_items_per_row]" value="">
+          <input type="hidden" name="attributes[collection_desktop_items_per_row]" value="">
+
+          {% include 'cart-items' %}
+
+          <footer class="Cart__Footer">
+            {%- if settings.cart_enable_notes -%}
+              <div class="Cart__NoteContainer">
+                <span class="Cart__NoteButton">{{ 'cart.general.add_note' | t }}</span>
+                <textarea class="Cart__Note Form__Textarea" name="note" id="cart-note" rows="4" placeholder="{{ 'cart.general.note_placeholder' | t }}">{{ cart.note }}</textarea>
+              </div>
+            {%- endif -%}
+
+            <div class="Cart__Recap">
+              {%- capture shipping_and_taxes_notice -%}{{ 'cart.general.shipping_and_taxes_notice' | t }}{%- endcapture -%}
+
+              <span class="Cart__Total Heading u-h6">{{ 'cart.general.total' | t }}: <span data-money-convertible><span style="display:none" class="tdf-cart-total-flag"></span><span class="wh-original-cart-total"><span class='wh-original-price'>
+<span class="saso-cart-original-total"><span class="bcpo-cart-original-total"><span class="Bold-theme-hook-DO-NOT-DELETE bold_cart_total_3" style="display:none !important;"></span>{{ cart.total_price | money_without_trailing_zeros }}</span></span>
+<span class="saso-cart-total"></span>
+</span></span><span class="wh-cart-total"></span><div class="additional-notes"><span class="wh-minimums-note"></span><span class="wh-extra-note"></span></div></span></span>
+
+              {%- if shipping_and_taxes_notice != blank -%}
+                <span class="Cart__Taxes Text--subdued">{{ shipping_and_taxes_notice }}</span>
+              {%- endif -%}
+              <!---<div class="Form__Item">
+                <div class="Form__CheckboxWrapper">
+                  <input id="terms" type="checkbox" name="terms" class="Form__Checkbox"  required>
+                  {% include 'icon' with 'checkmark' %}
+                  <label for="terms"><span class="Rte">{{ 'footer.newsletter.conditions_html' | t }}</span></label>
+                </div>
+              </div>--->
+              <div class="GroupFooterx group-cart-footer--custom">
+                <a class="Button Button--secondary Button--full" href="{{ section.settings.continue_buying_link }}">{{ 'cart.general.continue_buying' | t }}</a>
+                <br>
+                <br>
+                <span class="titulo-forma-pago">¿Cómo quieres pagar?</span>
+                <br>
+                <div class="button-forma-pago button-cart-contado is-not-selected">
+                  <span class="cart-left">Al contado</span>
+                  <span class="cart-right-icon-svg">
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 240.811 240.811" style="enable-background:new 0 0 240.811 240.811;" xml:space="preserve">
+                      <g><path id="Expand_More" d="M220.088,57.667l-99.671,99.695L20.746,57.655c-4.752-4.752-12.439-4.752-17.191,0c-4.74,4.752-4.74,12.451,0,17.203l108.261,108.297l0,0l0,0c4.74,4.752,12.439,4.752,17.179,0L237.256,74.859c4.74-4.752,4.74-12.463,0-17.215C232.528,52.915,224.828,52.915,220.088,57.667z"></path></g>
+                    </svg>
+                  </span>
+                  <span class="cart-right">{{ cart.total_price | money_without_trailing_zeros }}</span>
+                  <span class="cart-whole">
+                  	<span class="text-center">Un solo pago por tarjeta de crédito</span>
+                  </span>
+                </div>
+                <br>
+                <div class="button-forma-pago button-cart-credito is-not-selected">
+                  <span class="cart-left">Pagos mensuales</span>
+                  <span class="cart-right-icon-svg">
+                    <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 240.811 240.811" style="enable-background:new 0 0 240.811 240.811;" xml:space="preserve">
+                      <g><path id="Expand_More" d="M220.088,57.667l-99.671,99.695L20.746,57.655c-4.752-4.752-12.439-4.752-17.191,0c-4.74,4.752-4.74,12.451,0,17.203l108.261,108.297l0,0l0,0c4.74,4.752,12.439,4.752,17.179,0L237.256,74.859c4.74-4.752,4.74-12.463,0-17.215C232.528,52.915,224.828,52.915,220.088,57.667z"></path></g>
+                    </svg>
+                  </span>
+                  <span class="cart-right"></span>
+                  <span class="cart-whole">
+                    <ul class="cuotas-arquitectura" data-format="{{ 0 | money_without_trailing_zeros }}" data-totalprice="{{ cart.total_price }}" data-cuotas="3,6,10,15,24" data-tae="0,0,0,7.01,10.65" data-mult="0,0,0,0.04,0.10" data-valid="0,0,0,800,800"></ul>
+                    <br>
+                    <span>Máximo de 2000 Euros. Financiación al instante. Sin papeleos. Solo con una tarjeta de crédito.</span>                  
+                  </span>                  
+                </div>
+                <br>
+                <div class="Form__Item">
+                  <div class="Form__CheckboxWrapper">
+                    <input id="terms" type="checkbox" name="terms" class="Form__Checkbox"  required>
+                    {% include 'icon' with 'checkmark' %}
+                    <label for="terms"><span class="Rte">{{ 'footer.newsletter.conditions_html' | t }}</span></label>
+                  </div>
+                </div>
+                <br>
+                <button type="button" class="proceed-to-pay">Proceder al pago</button>
+                <input type="submit" id='input_button' name="checkout" style="width:100%" class="hide Cart__Checkout Button Button--primary Button--full dont-allow" value="Al contado" data-value="{{ 'cart.general.checkout' | t }}">
+                <span class="hide opacity-on-mobile" style="line-height:47px;margin:0 20px;">o</span> 
+                <a class="hide Button Button--secondary Button--full custom-link-to-checkout" href="/pages/custom-checkout">Pagos mensuales</a>
+              </div>
+            </div>
+            <script>
+              $('.Form__CheckboxWrapper input').change(function(){
+                if ($('.Form__CheckboxWrapper input.Form__Checkbox:checked').length == $('.checkout-item input.check-terms').length) {
+                  $('.Cart__Checkout').removeClass('dont-allow')
+                } else {
+                  $('.Cart__Checkout').addClass('dont-allow')
+                }
+              });
+              $('.custom-link-to-checkout').click(function(e){
+                e.preventDefault();
+                if(!$("#terms").is(":checked")){
+                  $("#input_button").trigger("click");
+                  return false;
+                }
+                top.location.href = $(this).attr("href");
+              });
+              $(document).on('click', '.button-forma-pago', function(e){
+                $('.cart-pay-error').remove();
+                if(!$(this).hasClass('button-forma-pago-selected')){
+                  $('.button-forma-pago-selected').addClass('is-not-selected');
+                  $('.button-forma-pago-selected').removeClass('button-forma-pago-selected');
+                  $(this).removeClass('is-not-selected');
+                  $(this).addClass('button-forma-pago-selected');
+                  //$('input[name="cart_credit"]:last').prop("checked", true);
+                  if($(this).hasClass('button-cart-credito')){
+                    //$('input[name="cart_credit"]:last').trigger("click");
+                    $('input[name="cart_credit"]:last').prop("checked", true);
+                    $('input[name="cart_credit"]:last').change();
+                  }
+                }
+              });
+              $(document).on('change', 'input[name="cart_credit"]', function(e){
+                const money_format = $('.cuotas-arquitectura').attr('data-format');
+                const cuotaSelected = `
+					${money_format.replace("0",$(this).attr('data-cuotaval'))} <small>al mes durante ${$(this).val()} meses al ${$(this).attr('data-tae')}% TAE</small>
+				`;
+                $('.button-forma-pago.button-cart-credito .cart-right').html(cuotaSelected);
+              });
+              $(document).on('click', '.proceed-to-pay', function(e){
+                e.preventDefault();
+                $('.cart-pay-error').remove();
+                if(!$('.button-forma-pago-selected').length){
+                  $('.proceed-to-pay').before('<span class="cart-pay-error">*Seleccione un método de pago</span>');
+                  return;
+                }
+                if($('.cuotas-arquitectura.is-cuotas-loaded').length){
+                  const total_price = parseFloat($('.cuotas-arquitectura.is-cuotas-loaded').attr('data-totalprice'))/100;
+                  if(total_price > 2000){
+                    $('.proceed-to-pay').before('<span class="cart-pay-error">*Máximo 2000 Euros, por favor selecciona Al contado</span>');
+                    return;
+                  }
+                }
+                if($('.button-forma-pago.button-forma-pago-selected').hasClass('button-cart-credito')){
+                  if(!$("#terms").is(":checked")){
+                    $("#input_button").trigger("click");
+                    return false;
+                  }
+                  top.location.href = "/pages/custom-checkout";
+                }else{
+                  $('#input_button').trigger("click");
+                }
+              });
+              if(!$('.cuotas-arquitectura').hasClass('is-cuotas-loaded')){
+                const money_format = $('.cuotas-arquitectura').attr('data-format');
+                const total_price = parseFloat($('.cuotas-arquitectura').attr('data-totalprice'))/100;
+                const data_cuotas = $('.cuotas-arquitectura').attr('data-cuotas').split(",");
+                const data_tae = $('.cuotas-arquitectura').attr('data-tae').split(",");
+                const data_mult = $('.cuotas-arquitectura').attr('data-mult').split(",");
+                const data_valid = $('.cuotas-arquitectura').attr('data-valid').split(",");
+                let countQuotes = 0;
+                data_cuotas.map(function(v, i){
+                  if(total_price > parseFloat(data_valid[i])){
+                    const valor_cuota = ((total_price + (total_price * parseFloat(data_mult[i])))/v).toFixed(2);
+                    if(valor_cuota >= 20){
+                      countQuotes++;
+                      $('.cuotas-arquitectura').append(`
+                          <li>
+                              <label for="id_${i}">
+                                  <input id="id_${i}" type="radio" name="cart_credit" value="${v}" data-cuotaval="${valor_cuota}" data-tae="${data_tae[i]}"/> 
+                                  <span>${v} meses al ${data_tae[i]}% TAE: </span>
+                                  <span>${money_format.replace("0",valor_cuota)}</span>
+                              </label>
+                          </li>
+                      `);
+                    }
+                  }
+                });
+                $('.cuotas-arquitectura').addClass('is-cuotas-loaded');
+                if(countQuotes === 0){
+                  $('.button-forma-pago.button-cart-credito').addClass('hide');
+                  $('.button-forma-pago.button-cart-contado').removeClass('is-not-selected').addClass('button-forma-pago-selected');
+                }
+              }
+              if(window.top.location.href.includes('error=nocredit')){
+                $('.cart-error--message').addClass('cart-error--visible');
+                $('.cart-error--message').html('El pago se ha interrumpido debido a que Pepper a denegado su préstamo o porque ha surgido otro problema durante el proceso. Inténtelo de nuevo con otro método de pago o contacte con nosotros.');
+                window.history.replaceState({},document.title,'/cart');
+              }
+            </script>
+          </footer>
+        </form>
+
+        {%- if section.settings.show_shipping_estimator -%}
+          <div class="Section Section--spacingExtraLarge">
+            <div class="Panel">
+              <h2 class="Panel__Title Heading u-h2">{{ 'cart.shipping_estimator.title' | t }}</h2>
+
+              <div class="Panel__Content">
+                <div class="ShippingEstimator">
+                  <div class="ShippingEstimator__Form">
+                    <div class="ShippingEstimator__Country Form__Select Select Select--primary">
+                      {%- include 'icon' with 'select-arrow' -%}
+                      <select name="country" title="{{ 'cart.shipping_estimator.country' | t }}" data-default="{% if customer %}{{ customer.default_address.country }}{% elsif section.settings.shipping_estimator_default_country != '' %}{{ section.settings.shipping_estimator_default_country }}{% endif %}">{{ all_country_option_tags }}</select>
+                    </div>
+
+                    <div class="ShippingEstimator__Province Form__Select Select Select--primary" style="display: none">
+                      {%- include 'icon' with 'select-arrow' -%}
+                      <select name="province" title="{{ 'cart.shipping_estimator.province' | t }}"></select>
+                    </div>
+
+                    <input type="text" class="ShippingEstimator__Zip Form__Input" name="zip" placeholder="{{ 'cart.shipping_estimator.zip_code' | t }}">
+
+                    <button type="button" class="ShippingEstimator__Submit Button Button--primary">{{ 'cart.shipping_estimator.estimate' | t }}</button>
+                  </div>
+
+                  <div class="ShippingEstimator__Error Alert Alert--error" style="display: none"></div>
+                  <div class="ShippingEstimator__Results">
+                    <div class="ShippingEstimator__ResultsInner"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        {%- endif -%}
+      </div>
+    </div>
+  {%- endif -%}
+</section>
+
+{% schema %}
+{
+  "name": "Cart page",
+  "class": "shopify-section--bordered",
+  "settings": [
+    {
+      "type": "url",
+      "id": "continue_buying_link",
+      "label": "Continue Buying Link"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_shipping_estimator",
+      "label": "Show shipping rates calculator",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "shipping_estimator_default_country",
+      "label": "Default country to use",
+      "info": "If your customer is logged-in, the country in his default shipping address will be selected.",
+      "default": "United States"
+    }
+  ]
+}
+{% endschema %}
+
+<!-- bcpo done -->

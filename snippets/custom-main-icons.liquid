@@ -1,0 +1,592 @@
+{% assign lavado_content = false %}
+{% assign secado_content = false %}
+{% assign rpm_content = false %}
+{% assign revolucionest8 = false %}
+{% assign energy_content = false %}
+{% assign cubiertos_content = false %}
+{% assign programas_content = false %}
+{% assign media_content = false %}
+{% assign hora_content = false %}
+{% assign zonewash_content = false %}
+{% assign led_content = false %}
+{% assign bandeja_content = false %}
+{% assign diferido_content = false %}
+{% assign auto_content = false %}
+{% assign autodoor_content = false %}
+{% assign innowash_content = false %}
+{% assign extradrying_content = false %}
+{% assign condensacion_content = false %}
+{% assign evacuacion_content = false %}
+{% assign bombacalor_content = false %}
+{% assign mini_content = false %}
+{% assign inverter_content = false %}
+{% assign autonomia = false %}
+{% assign velocidades = false %}
+{% assign motor = false %}
+{% assign amortiguacion = false %}
+{% assign autonomia50 = false %}
+{% assign capacidad_content = false %}
+{% assign smarttv_content = false %}
+{% assign androidtv_content = false %}
+{% assign uhd4k_content = false %}
+{% assign capacidadat3_content = false %}
+{% assign potenciaat3_content = false %}
+{% assign silenciosoat3_content = false %}
+{% assign pulgadas32_content = false %}
+{% assign Dolby_content = false %}
+{% assign HD32_content = false %}
+{% assign ahorromovil_content = false %}
+{% assign ecomovil_content = false %}
+{% assign garantiamovil_content = false %}
+
+
+
+
+
+{%- capture lavado -%}{% include 'tag-prefixer' prefix: 'lavado:' %}{%- endcapture -%}
+{%- capture secado -%}{% include 'tag-prefixer' prefix: 'secado:' %}{%- endcapture -%}
+{%- capture rpm -%}{% include 'tag-prefixer' prefix: 'rpm:' %}{%- endcapture -%}
+{%- capture energy -%}{% include 'tag-prefixer' prefix: 'eficiencia:' %}{%- endcapture -%}
+{%- capture cubiertos -%}{% include 'tag-prefixer' prefix: 'cubiertos:' %}{%- endcapture -%}
+{%- capture programas -%}{% include 'tag-prefixer' prefix: 'programas:' %}{%- endcapture -%}
+{%- capture media -%}{% include 'tag-prefixer' prefix: 'media:' %}{%- endcapture -%}
+{%- capture hora -%}{% include 'tag-prefixer' prefix: 'hora:' %}{%- endcapture -%}
+{%- capture zonewash -%}{% include 'tag-prefixer' prefix: 'zonewash:' %}{%- endcapture -%}
+{%- capture led -%}{% include 'tag-prefixer' prefix: 'led:' %}{%- endcapture -%}
+{%- capture bandeja -%}{% include 'tag-prefixer' prefix: 'bandeja:' %}{%- endcapture -%}
+{%- capture diferido -%}{% include 'tag-prefixer' prefix: 'diferido:' %}{%- endcapture -%}
+{%- capture auto -%}{% include 'tag-prefixer' prefix: 'auto:' %}{%- endcapture -%}
+{%- capture autodoor -%}{% include 'tag-prefixer' prefix: 'autodoor:' %}{%- endcapture -%}
+{%- capture innowash -%}{% include 'tag-prefixer' prefix: 'innowash:' %}{%- endcapture -%}
+{%- capture extradrying -%}{% include 'tag-prefixer' prefix: 'extradrying:' %}{%- endcapture -%}
+{%- capture condensacion -%}{% include 'tag-prefixer' prefix: 'condensacion:' %}{%- endcapture -%}
+{%- capture evacuacion -%}{% include 'tag-prefixer' prefix: 'evacuacion:' %}{%- endcapture -%}
+{%- capture bombacalor -%}{% include 'tag-prefixer' prefix: 'bombacalor:' %}{%- endcapture -%}
+{%- capture mini -%}{% include 'tag-prefixer' prefix: 'mini:' %}{%- endcapture -%}
+{%- capture inverter -%}{% include 'tag-prefixer' prefix: 'inverter:' %}{%- endcapture -%}
+{%- capture autonomia -%}{% include 'tag-prefixer' prefix: 'autonomia:' %}{%- endcapture -%}
+{%- capture velocidades -%}{% include 'tag-prefixer' prefix: 'velocidades:' %}{%- endcapture -%}
+{%- capture motor -%}{% include 'tag-prefixer' prefix: 'motor:' %}{%- endcapture -%}
+{%- capture amortiguacion -%}{% include 'tag-prefixer' prefix: 'amortiguacion:' %}{%- endcapture -%}
+{%- capture autonomia50 -%}{% include 'tag-prefixer' prefix: 'autonomia50:' %}{%- endcapture -%}
+{%- capture revolucionest8 -%}{% include 'tag-prefixer' prefix: 'revolucionest8:' %}{%- endcapture -%}
+{%- capture capacidad -%}{% include 'tag-prefixer' prefix: 'capacidad:' %}{%- endcapture -%}
+{%- capture smarttv -%}{% include 'tag-prefixer' prefix: 'smarttv:' %}{%- endcapture -%}
+{%- capture androidtv -%}{% include 'tag-prefixer' prefix: 'androidtv:' %}{%- endcapture -%}
+{%- capture uhd4k -%}{% include 'tag-prefixer' prefix: 'uhd4k:' %}{%- endcapture -%}
+{%- capture capacidadat3 -%}{% include 'tag-prefixer' prefix: 'capacidadat3:' %}{%- endcapture -%}
+{%- capture potenciaat3 -%}{% include 'tag-prefixer' prefix: 'potenciaat3:' %}{%- endcapture -%}
+{%- capture silenciosoat3 -%}{% include 'tag-prefixer' prefix: 'silenciosoat3:' %}{%- endcapture -%}
+{%- capture pulgadas32 -%}{% include 'tag-prefixer' prefix: 'pulgadas32:' %}{%- endcapture -%}
+{%- capture Dolby -%}{% include 'tag-prefixer' prefix: 'Dolby:' %}{%- endcapture -%}
+{%- capture HD32 -%}{% include 'tag-prefixer' prefix: 'HD32:' %}{%- endcapture -%}
+{%- capture ahorromovil -%}{% include 'tag-prefixer' prefix: 'ahorromovil:' %}{%- endcapture -%}
+{%- capture ecomovil -%}{% include 'tag-prefixer' prefix: 'ecomovil:' %}{%- endcapture -%}
+{%- capture garantiamovil -%}{% include 'tag-prefixer' prefix: 'garantiamovil:' %}{%- endcapture -%}
+
+{% if lavado != blank %}
+  {% assign lavado_content = true %}
+{% endif %}
+{% if secado != blank %}
+  {% assign secado_content = true %}
+{% endif %}
+{% if rpm != blank %}
+  {% assign rpm_content = true %}
+{% endif %}
+{% if energy != blank %}
+  {% assign energy_content = true %}
+{% endif %}
+{% if cubiertos != blank %}
+  {% assign cubiertos_content = true %}
+{% endif %}
+{% if programas != blank %}
+  {% assign programas_content = true %}
+{% endif %}
+{% if media != blank %}
+  {% assign media_content = true %}
+{% endif %}
+{% if hora != blank %}
+  {% assign hora_content = true %}
+{% endif %}
+{% if zonewash != blank %}
+  {% assign zonewash_content = true %}
+{% endif %}
+{% if led != blank %}
+  {% assign led_content = true %}
+{% endif %}
+{% if bandeja != blank %}
+  {% assign bandeja_content = true %}
+{% endif %}
+{% if diferido != blank %}
+  {% assign diferido_content = true %}
+{% endif %}
+{% if auto != blank %}
+  {% assign auto_content = true %}
+{% endif %}
+{% if autodoor != blank %}
+  {% assign autodoor_content = true %}
+{% endif %}
+{% if innowash != blank %}
+  {% assign innowash_content = true %}
+{% endif %}
+{% if extradrying != blank %}
+  {% assign extradrying_content = true %}
+{% endif %}
+{% if condensacion != blank %}
+  {% assign condensacion_content = true %}
+{% endif %}
+{% if evacuacion != blank %}
+  {% assign evacuacion_content = true %}
+{% endif %}
+{% if bombacalor != blank %}
+  {% assign bombacalor_content = true %}
+{% endif %}
+{% if mini != blank %}
+  {% assign mini_content = true %}
+{% endif %}
+{% if inverter != blank %}
+  {% assign inverter_content = true %}
+{% endif %}
+{% if autonomia != blank %}
+  {% assign autonomia_content = true %}
+{% endif %}
+{% if velocidades != blank %}
+  {% assign velocidades_content = true %}
+{% endif %}
+{% if motor != blank %}
+  {% assign motor_content = true %}
+{% endif %}
+{% if amortiguacion != blank %}
+  {% assign amortiguacion_content = true %}
+{% endif %}
+{% if autonomia50 != blank %}
+  {% assign autonomia50_content = true %}
+{% endif %}
+{% if revolucionest8 != blank %}
+  {% assign revolucionest8_content = true %}
+{% endif %}
+{% if capacidad != blank %}
+  {% assign capacidad_content = true %}
+{% endif %}
+{% if smarttv != blank %}
+  {% assign smarttv_content = true %}
+{% endif %}
+{% if androidtv != blank %}
+  {% assign androidtv_content = true %}
+{% endif %}
+{% if uhd4k != blank %}
+  {% assign uhd4k_content = true %}
+{% endif %}
+{% if capacidadat3 != blank %}
+  {% assign capacidadat3_content = true %}
+{% endif %}
+{% if potenciaat3 != blank %}
+  {% assign potenciaat3_content = true %}
+{% endif %}
+{% if silenciosoat3 != blank %}
+  {% assign silenciosoat3_content = true %}
+{% endif %}
+{% if pulgadas32 != blank %}
+  {% assign pulgadas32_content = true %}
+{% endif %}
+{% if Dolby != blank %}
+  {% assign Dolby_content = true %}
+{% endif %}
+{% if HD32 != blank %}
+  {% assign HD32_content = true %}
+{% endif %}
+{% if ahorromovil != blank %}
+  {% assign ahorromovil_content = true %}
+{% endif %}
+{% if ecomovil != blank %}
+  {% assign ecomovil_content = true %}
+{% endif %}
+{% if garantiamovil != blank %}
+  {% assign garantiamovil_content = true %}
+{% endif %}
+
+{% unless energy_content == false and rpm_content == false and lavado_content == false and secado_content == false and cubiertos_content == false and programas_content == false and media_content == false and zonewash_content == false and led_content == false and bandeja_content == false and diferido_content == false and auto_content == false and autodoor_content == false and innowash_content == false and extradrying_content == false and condensacion_content == false and evacuacion_content == false and bombacalor_content == false and mini_content == false and inverter_content == false and autonomia_content == false and velocidades_content == false and motor_content == false and amortiguacion_content == false and autonomia50_content == false and revolucionest8_content == false  and capacidad_content == false  and smarttv_content == false  and androidtv_content == false  and uhd4k_content == false and capacidadat3_content == false and potenciaat3_content == false and silenciosoat3_content == false and pulgadas32_content == false 	 and Dolby_content == false and HD32_content == false and ahorromovil_content == false and ecomovil_content == false and garantiamovil_content == false%}
+
+<section class="Section Section--spacingNormal main-icons-product hide" id="main-icons-product_{{ product.id }}">
+ <div class="Container main-icons__container">
+   <div class="Grid Grid--m Grid--center">
+
+     {% if lavado_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign lavado_img = lavado | append: '.png' %}
+       <img src="{{ lavado_img | asset_url  }}" alt="{{ lavado }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.lavado' | t }}
+       </h3>
+     </div>
+    {% endif %}
+                  {% if secado_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign secado_img = secado | append: '.png' %}
+       <img src="{{ secado_img | asset_url  }}" alt="{{ secado }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.secado' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if rpm_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign rpm_img = rpm | append: '.png' %}
+       <img src="{{ rpm_img | asset_url  }}" alt="{{ rpm }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.rpm' | t }}
+       </h3>
+     </div>
+    {% endif %}
+
+     
+      {% if cubiertos_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign cubiertos_img = cubiertos | append: '.png' %}
+       <img src="{{ cubiertos_img | asset_url  }}" alt="{{ cubiertos }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.cubiertos' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+      {% if programas_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign programas_img = programas | append: '.png' %}
+       <img src="{{ programas_img | asset_url  }}" alt="{{ programas }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.programas' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+          {% if energy_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign energy_img = energy | append: '.png' %}
+       <img src="{{ energy_img | asset_url  }}" alt="{{ energy }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.eficiencia' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+          {% if media_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign media_img = media | append: '.png' %}
+       <img src="{{ media_img | asset_url  }}" alt="{{ media }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.media' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+        {% if hora_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign hora_img = hora | append: '.png' %}
+       <img src="{{ hora_img | asset_url  }}" alt="{{ hora }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.hora' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+               {% if zonewash_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign zonewash_img = zonewash | append: '.png' %}
+       <img src="{{ zonewash_img | asset_url  }}" alt="{{ zonewash }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.zonewash' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if led_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign led_img = led | append: '.png' %}
+       <img src="{{ led_img | asset_url  }}" alt="{{ led }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.led' | t }}
+       </h3>
+     </div>
+    {% endif %}
+
+   {% if bandeja_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign bandeja_img = bandeja | append: '.png' %}
+       <img src="{{ bandeja_img | asset_url  }}" alt="{{ bandeja }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.bandeja' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if diferido_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign diferido_img = diferido | append: '.png' %}
+       <img src="{{ diferido_img | asset_url  }}" alt="{{ diferido }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.diferido' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if auto_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign auto_img = auto | append: '.png' %}
+       <img src="{{ auto_img | asset_url  }}" alt="{{ auto }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.auto' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if autodoor_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign autodoor_img = autodoor | append: '.png' %}
+       <img src="{{ autodoor_img | asset_url  }}" alt="{{ autodoor }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.autodoor' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     
+   {% if innowash_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign innowash_img = innowash | append: '.png' %}
+       <img src="{{ innowash_img | asset_url  }}" alt="{{ innowash }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.innowash' | t }}
+       </h3>
+     </div>
+    {% endif %}
+          
+   {% if extradrying_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign extradrying_img = extradrying | append: '.png' %}
+       <img src="{{ extradrying_img | asset_url  }}" alt="{{ extradrying }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.extradrying' | t }}
+       </h3>
+     </div>
+    {% endif %}
+   {% if condensacion_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign condensacion_img = condensacion | append: '.png' %}
+       <img src="{{ condensacion_img | asset_url  }}" alt="{{ condensacion }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.condensacion' | t }}
+       </h3>
+     </div>
+    {% endif %}
+        {% if evacuacion_content %}
+          <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign evacuacion_img = evacuacion | append: '.png' %}
+       <img src="{{ evacuacion_img | asset_url  }}" alt="{{ evacuacion }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.evacuacion' | t }}
+       </h3>
+     </div>
+    {% endif %}
+        {% if bombacalor_content %}
+          <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign bombacalor_img = bombacalor | append: '.png' %}
+       <img src="{{ bombacalor_img | asset_url  }}" alt="{{ bombacalor }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.bombacalor' | t }}
+       </h3>
+     </div>
+    {% endif %}
+        {% if mini_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign mini_img = mini | append: '.png' %}
+       <img src="{{ mini_img | asset_url  }}" alt="{{ mini }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.mini' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if inverter_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign inverter_img = inverter | append: '.png' %}
+       <img src="{{ inverter_img | asset_url  }}" alt="{{ inverter }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.inverter' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if autonomia_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign autonomia_img = autonomia | append: '.png' %}
+       <img src="{{ autonomia_img | asset_url  }}" alt="{{ autonomia }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.autonomia' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if velocidades_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign velocidades_img = velocidades | append: '.png' %}
+       <img src="{{ velocidades_img | asset_url  }}" alt="{{ velocidades }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.velocidades' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if motor_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign motor_img = motor | append: '.png' %}
+       <img src="{{ motor_img | asset_url  }}" alt="{{ motor }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.motor' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if amortiguacion_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign amortiguacion_img = amortiguacion | append: '.png' %}
+       <img src="{{ amortiguacion_img | asset_url  }}" alt="{{ amortiguacion }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.amortiguacion' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if autonomia50_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign autonomia50_img = autonomia50 | append: '.png' %}
+       <img src="{{ autonomia50_img | asset_url  }}" alt="{{ autonomia50 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.autonomia50' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if revolucionest8_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign revolucionest8_img = revolucionest8 | append: '.png' %}
+       <img src="{{ revolucionest8_img | asset_url  }}" alt="{{ revolucionest8 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.revolucionest8' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if capacidad_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign capacidad_img = capacidad | append: '.png' %}
+       <img src="{{ capacidad_img | asset_url  }}" alt="{{ capacidad }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.capacidad' | t }}
+       </h3>
+     </div>
+     {% endif %}
+     {% if smarttv_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign smarttv_img = smarttv | append: '.png' %}
+       <img src="{{ smarttv_img | asset_url  }}" alt="{{ smarttv }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.smarttv' | t }}
+       </h3>
+     </div>
+    {% endif %}
+    {% if androidtv_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign androidtv_img = androidtv | append: '.png' %}
+       <img src="{{ androidtv_img | asset_url  }}" alt="{{ androidtv }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.androidtv' | t }}
+       </h3>
+     </div>
+    {% endif %}
+    {% if uhd4k_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign uhd4k_img = uhd4k | append: '.png' %}
+       <img src="{{ uhd4k_img | asset_url  }}" alt="{{ uhd4k }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.uhd4k' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if potenciaat3_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign potenciaat3_img = potenciaat3 | append: '.png' %}
+       <img src="{{ potenciaat3_img | asset_url  }}" alt="{{ potenciaat3 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.potenciaat3' | t }}
+       </h3>
+     </div>
+    {% endif %}
+    {% if capacidadat3_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign capacidadat3_img = capacidadat3 | append: '.png' %}
+       <img src="{{ capacidadat3_img | asset_url  }}" alt="{{ capacidadat3 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.capacidadat3' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if silenciosoat3_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign silenciosoat3_img = silenciosoat3 | append: '.png' %}
+       <img src="{{ silenciosoat3_img | asset_url  }}" alt="{{ silenciosoat3 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.silenciosoat3' | t }}
+       </h3>
+     </div>
+    {% endif %}
+	{% if pulgadas32_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign pulgadas32_img = pulgadas32 | append: '.png' %}
+       <img src="{{ pulgadas32_img | asset_url  }}" alt="{{ pulgadas32 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.pulgadas32' | t }}
+       </h3>
+     </div>
+    {% endif %}
+	{% if Dolby_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign Dolby_img = Dolby | append: '.png' %}
+       <img src="{{ Dolby_img | asset_url  }}" alt="{{ Dolby }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.Dolby' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if HD32_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign HD32_img = HD32 | append: '.png' %}
+       <img src="{{ HD32_img | asset_url  }}" alt="{{ HD32 }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.HD32' | t }}
+       </h3>
+     </div>
+    {% endif %}
+     {% if ahorromovil_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign ahorromovil_img = ahorromovil | append: '.png' %}
+       <img src="{{ ahorromovil_img | asset_url  }}" alt="{{ ahorromovil }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.ahorromovil' | t }}
+       </h3>
+     </div>
+    {% endif %}
+	{% if ecomovil_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign ecomovil_img = ecomovil | append: '.png' %}
+       <img src="{{ ecomovil_img | asset_url  }}" alt="{{ ecomovil }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.ecomovil' | t }}
+       </h3>
+     </div>
+    {% endif %}
+	{% if garantiamovil_content %}
+     <div class="Grid__Cell 1/3--tablet-and-up content-image">
+       {% assign garantiamovil_img = garantiamovil | append: '.png' %}
+       <img src="{{ garantiamovil_img | asset_url  }}" alt="{{ garantiamovil }}">
+       <h3 class="Heading u-h3">
+         {{ 'product.icons.garantiamovil' | t }}
+       </h3>
+     </div>
+    {% endif %}	
+     
+   </div>
+ </div>
+</section>
+{% endunless %}

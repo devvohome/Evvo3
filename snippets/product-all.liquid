@@ -1,0 +1,336 @@
+
+<section id="product-section" class="text-gray-600 body-font overflow-hidden">
+    <div class="container px-5 py-24 mx-auto">
+      <div class="lg:w-4/5 mx-auto flex flex-wrap">
+        <img alt="ecommerce" class="lg:w-1/2 w-full lg:h-auto h-64 object-cover object-center rounded" src={{var_product.featured_image.src | image_url }}>
+        <div class="lg:w-1/2 w-full lg:pl-10 lg:py-6 mt-6 lg:mt-0">
+          <h2 class="text-sm title-font text-gray-500 tracking-widest">{{shop.name}}</h2>
+          <h1 class="text-gray-900 text-3xl title-font font-medium mb-1">{{var_product.title}}</h1>
+          <div class="flex mb-4">
+            <span class="flex items-center">
+              <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <svg fill="currentColor" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4 text-red-500" viewBox="0 0 24 24">
+                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+              </svg>
+              <span class="text-gray-600 ml-3">4 Reviews</span>
+            </span>
+            <span class="flex ml-3 pl-3 py-2 border-l-2 border-gray-200 space-x-2s">
+              <a class="text-gray-500">
+                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"></path>
+                </svg>
+              </a>
+              <a class="text-gray-500">
+                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"></path>
+                </svg>
+              </a>
+              <a class="text-gray-500">
+                <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                  <path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"></path>
+                </svg>
+              </a>
+            </span>
+            
+          </div>
+          <span class="title-font font-medium text-2xl text-gray-900">${ formatPrice(currentVariant) }</span>
+
+          
+          <p class="leading-relaxed">Fam locavore kickstarter distillery. Mixtape chillwave tumeric sriracha taximy chia microdosing tilde DIY. XOXO fam indxgo juiceramps cornhole raw denim forage brooklyn. Everyday carry +1 seitan poutine tumeric. Gastropub blue bottle austin listicle pour-over, neutra jean shorts keytar banjo tattooed umami cardigan.</p>
+          
+          
+          <div class="flex mt-6 items-center pb-5 border-b-2 border-gray-100 mb-5">
+            <!-- Need to put some title for selling plans esto se puede pasar a bloques app -->
+          <div class="flex justify-between container w-1/2 inline-block">
+            {% for plan_option in var_product.options_by_name['Plan'].values %}
+            <button
+              @click="setPlan"
+              value="{{plan_option}}"
+              class="bg-red-500 text-white active:bg-red-600 font-bold uppercase text-xs px-4 py-2 rounded shadow hover:shadow-md outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+              type="button" data-bs-toggle="tooltip" data-bs-placement="top" data-bs-html="true"
+              title="Info sobre la opcion correspondiente">
+              {{plan_option}}
+            </button>
+            {% endfor %}
+          </div>  
+            <!--
+            <div class="flex">
+              <span class="mr-3">Color</span>
+              <button class="border-2 border-gray-300 rounded-full w-6 h-6 focus:outline-none"></button>
+              <button class="border-2 border-gray-300 ml-1 bg-gray-700 rounded-full w-6 h-6 focus:outline-none"></button>
+              <button class="border-2 border-gray-300 ml-1 bg-red-500 rounded-full w-6 h-6 focus:outline-none"></button>
+            </div>
+            <div class="flex ml-6 items-center">
+              <span class="mr-3">Size</span>
+              <div class="relative">
+                <select class="rounded border appearance-none border-gray-300 py-2 focus:outline-none focus:ring-2 focus:ring-red-200 focus:border-red-500 text-base pl-3 pr-10">
+                  <option>SM</option>
+                  <option>M</option>
+                  <option>L</option>
+                  <option>XL</option>
+                </select>
+                <span class="absolute right-0 top-0 h-full w-10 text-center text-gray-600 pointer-events-none flex items-center justify-center">
+                  <svg fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-4 h-4" viewBox="0 0 24 24">
+                    <path d="M6 9l6 6 6-6"></path>
+                  </svg>
+                </span>
+              </div>
+            </div>
+            -->
+
+
+          </div>
+          <div class="flex">
+            <button @click="addToCart" type="button"
+              class="w-1/2 uppercase inline-block items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:text-indigo-700 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-indigo-500 hover:border-indigo-500">
+            
+              Añadir
+            </button>
+            <!--
+            <button @click="cartPlans" type="button"
+              class="w-1/2 uppercase inline-block items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:text-indigo-700 hover:bg-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 hover:ring-2 hover:ring-offset-2 hover:ring-indigo-500 hover:border-indigo-500">
+            
+              Cart Plans
+            </button>
+            -->
+           <!-- <button class="flex ml-auto text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded">Button</button>
+            <button class="rounded-full w-10 h-10 bg-gray-200 p-0 border-0 inline-flex items-center justify-center text-gray-500 ml-4">
+              <svg fill="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="w-5 h-5" viewBox="0 0 24 24">
+                <path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"></path>
+              </svg>
+            </button>-->
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script type="text/javascript">
+    if (document.querySelector('#product-section')) {
+
+        const formOption = {
+          name: "product-section",
+          delimiters: ['${', '}'],
+          data() {
+            return {
+              test: 'test',
+              variant: {},
+              quantity: 1,
+              open: false,
+              variants: "",
+              selected: [],
+              form: {
+                selections: [null,null,null],
+                options: ""
+              }
+            }
+          },
+          created() {
+            console.log('data')
+            fetch('/products/{{ product.handle }}.js')
+              .then(res => res.json())
+              .then(result => {
+                console.log(result)
+                this.form.options = result.options.map(item => ({
+                  ...item,
+                  visible: false
+                }))
+                this.variants = result.variants
+                this.variant = this.variants[0]
+                result.options.map(item => this.selected.push(item.values[0]))
+                this.form.selections = [
+                  this.select[0] ? this.selected[0] : null,
+                  this.select[1] ? this.selected[1] : null,
+                  this.select[2] ? this.selected[2] : null,
+
+                ]
+              })
+              .catch(error => console.log(error));
+
+          }, computed: {
+            // un getter computado de la variante actual segun la seleccion de opciones
+            currentVariant: function () {
+              if(this.form.selections[0] === null && this.form.selections[1] === null && this.form.selections[2] === null){
+                // return a arbitrary variant
+                return this.variants[0];
+              }else{
+                let result = this.variants.filter(variant => {
+                  if (variant.option1 === this.form.selections[0] && variant.option2 === this.form.selections[1] &&
+                    variant.option3 === this.form.selections[2]
+                  ){
+                    return variant
+                  }
+                })[0];
+              
+                return result;
+              
+              }             
+            }
+          },
+          methods: {
+            randomInteger(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+            }, floatToEuro(float) {
+              var euroCurrency
+              euroCurrency =  float.toLocaleString('nl-NL', { minimumFractionDigits: 2 }) + '\u20AC';
+              return euroCurrency;
+            },
+            formatPrice(variant){
+              let monthly = (variant.option1 !== "Compra")? 'al mes' + ' durante ' + variant.option1: ''
+              return this.floatToEuro(variant.price/100) +  ' ' + monthly
+            },
+            setPlan(event){
+              //const index = this.randomInteger(0, 6)
+              //this.variant = this.variants[index];
+              this.form.selections[0] = event.target.value
+        
+            },
+            getCurrentVariant(){
+              if (this.form.selections[0] === null && this.form.selections[1] === null && this.form.selections[2] === null) {
+                // return a arbitrary variant
+                return this.variants[0];
+              } else {
+                let result = this.variants.filter(variant => {
+                  if (variant.option1 === this.form.selections[0] && variant.option2 === this.form.selections[1] &&
+                    variant.option3 === this.form.selections[2]
+                  ) {
+                    return variant
+                  }
+                })[0];
+
+                return result;
+
+              }
+            }, getRestVariants(currentVariant){
+                
+                let result = this.variants.filter(variant => {
+                if ( variant.option2 === currentVariant.option2 &&
+                  variant.option3 === currentVariant.option3
+                ) {
+                  return variant
+                }
+              });
+              console.log(result)
+                return result;
+            }, 
+            cartPlans(){
+              cartVariants = [];
+              //   call to api to add a element to a car
+              fetch('/cart.js').then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => {
+                  console.log('Success:', response)
+                  const newPlan = "12 meses"
+                  
+                  const carItems = response.items.map((item,index) =>{
+                     console.log(item)
+                     const variantPlanQuantity = item.quantity;
+                     const variantsPlan = item.properties._rest;
+                     const variantPlan = variantsPlan.filter(variant => {
+                      if (variant.option1 === newPlan) {
+                        return variant
+                      }
+                    })[0];
+                    
+                     return {
+                      id: variantPlan.id,
+                      quantity: variantPlanQuantity,
+                      properties: {
+                        '_rest': variantsPlan
+                      }
+                    };  
+                  
+                  })
+                     
+                  // Clear car Items 
+                  //   call to api to add a element to a car
+                  fetch('/cart/clear.js', {
+                    method: 'POST', // or 'PUT'
+                    headers: {
+                      'Content-Type': 'application/json'
+                    }
+                  }).then(res => res.json())
+                    .catch(error => console.error('Error:', error))
+                    .then(response => {
+                      
+                      console.log('Success:', response)
+                      // Add new Car Items
+                      //   call to api to add a element to a car
+                      fetch('/cart/add.js', {
+                        method: 'POST', // or 'PUT'
+                        body: JSON.stringify({items:carItems}), // data can be `string` or {object}!
+                        headers: {
+                          'Content-Type': 'application/json'
+                        }
+                      }).then(res => res.json())
+                        .catch(error => console.error('Error:', error))
+                        .then(response => console.log('Success:', response));
+                    
+                    
+                    });                 
+                   
+                });
+            
+            },
+            addToCart(event) {
+              // En este caso no es necesario
+              event.preventDefault()
+              const selectedVariant = this.getCurrentVariant();
+              const restVariants = this.getRestVariants(selectedVariant)
+        
+              // Preparing Data
+              let data = {
+                id: selectedVariant.id,
+                quantity: 1,
+                properties: {
+                  '_rest': restVariants
+                }
+              }
+
+              //   call to api to add a element to a car
+              fetch('/cart/add.js', {
+                method: 'POST', // or 'PUT'
+                body: JSON.stringify(data), // data can be `string` or {object}!
+                headers: {
+                  'Content-Type': 'application/json'
+                }
+              }).then(res => res.json())
+                .catch(error => console.error('Error:', error))
+                .then(response => console.log('Success:', response));
+
+            }
+          }
+
+
+        }
+
+
+        const productForm = Vue.createApp(formOption).mount('#product-section')
+      }
+
+  </script>
+
+ <!-- Required popper.js -->
+<script src="https://unpkg.com/@popperjs/core@2.9.1/dist/umd/popper.min.js" charset="utf-8"></script>
+<script type="text/javascript">
+ 
+  
+
+  var tooltipTriggerList = [].slice.call(
+    document.querySelectorAll('[data-bs-toggle="tooltip"]')
+  );
+  var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new Tooltip(tooltipTriggerEl);
+  });
+</script> 

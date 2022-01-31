@@ -1,0 +1,101 @@
+<form id="add-to-cart-form">
+    <template v-for="(option, i) in form.options" :key="i">
+        <div>
+            {% render 'product-option-row' %}
+        </div>
+    </template>    
+       
+    {{ current_variant.price | money }}
+    <label for="Quantity"> quantity </label>
+    <input type="Number" id="quantity" name="quantity" value="1" min="1">
+    <button @click="addToCart" type="submit" name="add" id="add-to-cart-form"> Add to Cart </button>
+</form>
+
+
+
+<script>
+
+    
+    if(document.querySelector('#add-to-cart-form')){
+
+        const formOption ={
+            name: "add-cart",
+            delimiters: ['${', '}'],
+            data(){
+                return {
+                    test: 'test',
+                    variant: "",
+                    quantity: 1,
+                    open: false,
+                    variants: "",
+                    selected: [],
+                    form: {
+                        selections: "",
+                        options: ""
+                    }
+                }
+            },
+            created() {
+                
+                fetch('/products/{{ product.handle }}.js')
+                .then(res => res.json())
+                .then(result => {
+                      
+                      this.form.options = result.options.map(item =>({
+                        ...item, 
+                        visible: false
+                      }))
+                      this.variants = result.variants 
+                      result.options.map(item => this.selected.push(item.values[0]))
+                      this.form.selections = [
+                          this.select[0] ? this.selected[0] : null,
+                          this.select[1] ? this.selected[2] : null,
+                          this.select[2] ? this.selected[2] : null,
+                          
+                      ]
+                })
+                .catch( error => console.log(error));
+                
+            },
+            methods: {
+                addToCart(event){
+                    // Corta la accion normal del formualrio
+                    event.preventDefault()
+
+                    let selectedVariant;
+
+                    // Buscando la variante segun las optiones seleccionadas por el usuario
+                    this.variant.forEach((variant, i) =>{
+                        if(variant.option1 === this.form.selections[0] && variant.option2 === this.form.selections[1] &&
+                            variant.option3 === this.form.selections[2]
+                        ){
+                            selectedVariant = variant
+                        }
+                    })
+
+                    // Preparing Data
+                    let data = {
+                        id: selectedVariant.id,
+                        quantity: 1
+                    }    
+
+                    //   call to api to add a element to a car
+                    fetch('/cart/add.js', {
+                        method: 'POST', // or 'PUT'
+                        body: JSON.stringify(data), // data can be `string` or {object}!
+                        headers:{
+                          'Content-Type': 'application/json'
+                        }
+                      }).then(res => res.json())
+                      .catch(error => console.error('Error:', error))
+                      .then(response => console.log('Success:', response));
+
+                }
+            }
+
+
+        }
+
+       const productForm = Vue.createApp(formOption).mount('#add-to-cart-form') 
+    }
+</script>

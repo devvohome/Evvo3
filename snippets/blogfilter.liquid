@@ -1,0 +1,230 @@
+<!-- blog-filter-start -->
+    <script>
+      var path = window.location.pathname.split('/');
+var anchor = document.getElementsByClassName("section-header");
+var loader = document.createElement("DIV");
+var span_load = document.createElement("SPAN");
+var span_load2 = document.createElement("SPAN");
+    span_load.style.width = '300px';
+    span_load.style.height = '2em';
+    span_load.style.marginRight = '10px';
+    span_load.classList.add('blog-filter-skeleton-box');
+	span_load2.style.width = '80px';
+    span_load2.style.height = '2em';
+    span_load2.classList.add('blog-filter-skeleton-box');
+    loader.appendChild(span_load);
+    loader.appendChild(span_load2);
+    loader.style.marginTop = "10px";
+    anchor[0].appendChild(loader);  
+      
+    path.shift();
+      
+      var isSafari = navigator.vendor && navigator.vendor.indexOf('Apple') > -1 &&
+          navigator.userAgent &&
+          navigator.userAgent.indexOf('CriOS') == -1 &&
+          navigator.userAgent.indexOf('FxiOS') == -1;
+
+      if (isSafari) {
+        // Create Promise polyfill script tag
+        var promiseScript = document.createElement("script");
+        promiseScript.type = "text/javascript";
+        promiseScript.src =
+          "https://cdn.jsdelivr.net/npm/promise-polyfill@8.1.3/dist/polyfill.min.js";
+
+        // Create Fetch polyfill script tag
+        var fetchScript = document.createElement("script");
+        fetchScript.type = "text/javascript";
+        fetchScript.src =
+          "https://cdn.jsdelivr.net/npm/whatwg-fetch@3.4.0/dist/fetch.umd.min.js";
+
+        // Add polyfills to head element
+        document.head.appendChild(promiseScript);
+        document.head.appendChild(fetchScript);
+
+        // Wait for the polyfills to load and run the function. 
+        // We could have done this differently, 
+        // but I've found it to work well for my use-cases
+        setTimeout(function () {
+          fetchBlog(window.fetch);
+        }, 1000);
+      }
+      else {
+        fetchBlog(fetch);
+      }
+
+function selectChange() {
+    var selects = document.getElementsByClassName("blog-filter-app"),
+    	str = '',
+        url = '',
+        arr = [];
+    Object.keys(selects).forEach(function(ind, index) {
+       var ele = selects[ind];
+       if (ele.selectedIndex != 0) {
+            if (str == '') {
+                str = ele.value.trim().split(" ").join("-");
+                arr[index] = ele.value
+            }
+            else {
+                str += '+' + ele.value.trim().split(" ").join("-");
+                arr[index] = ele.value
+            }
+        }
+   
+    });
+  
+    if (arr.length == 0) { 
+      	url = window.location.origin + '/blogs/' + path[1] + '/' ;
+    }
+    else {
+        url = window.location.origin + '/blogs/' + path[1] + '/tagged/' + str;
+    }
+  
+  	console.log(url);
+  	fetch(url)
+    .then(function(res) {
+      if(res.status === 200) {
+        document.cookie = "blogFilter=" + JSON.stringify(arr) + "; path=/; max-age=" + 30*24*60*60;
+		window.location.href = url;
+      }
+      else {
+        var span = document.getElementsByClassName("blog-filter-error");
+        if (span.length == 0) { 
+          var span = document.createElement("SPAN"),
+            br = document.createElement("BR"),
+            br2 = document.createElement("BR");
+        
+        span.classList.add('blog-filter-error');
+        span.innerHTML = "There is NO result matching your filter";
+        span.style.padding = "10px";
+        span.style.color = "#fff";
+        span.style.borderRadius = "3px";
+        span.style.backgroundColor = "#f44336";
+        
+        anchor[0].appendChild(br2);
+        anchor[0].appendChild(br);
+        anchor[0].appendChild(span);
+		}
+      }
+      
+    });
+  
+  }
+
+function getCookie(name) {
+  let cookie = {};
+  document.cookie.split(';').forEach(function(el) {
+    let [k,v] = el.split('=');
+    cookie[k.trim()] = v;
+  })
+  return cookie[name];
+}
+      
+function resetChange() {
+   window.location.href = window.location.origin + '/blogs/' + path[1] + '/';
+}
+      
+function fetchBlog(fetch) {
+	 fetch('https://app.hueapps.co/filterList?shop=evvohome-ohdigital&blog=' + path[1])
+     .then(function(e) {
+            return e.json();
+        })
+     .then(function(data) {
+          console.log(data);
+           if (Object.keys(data).length > 0) {
+         var tagged = path[2] === 'tagged',
+                cookie = getCookie("blogFilter");
+
+            cookie = cookie ? JSON.parse(cookie) : [];
+            console.log(cookie);
+
+            if (document.getElementsByClassName("blog-filter").length != 0) {
+              document.getElementsByClassName("blog-filter")[0].style.display = "none";
+            }
+
+            // var select = '<select>'
+            Object.keys(data.filter).forEach(function(obj, ind) {
+                var select = document.createElement("SELECT");
+
+                select.style.marginRight = "10px";
+                        select.style.marginTop = "8px";
+                                select.style.padding = "0.3em";
+                option = document.createElement("OPTION");
+                option.text = data.filter[obj].filter;
+                option.value = data.filter[obj].filter.toLowerCase();
+                option.defaultSelected = tagged && cookie[ind] && cookie[ind] == data.filter[obj].filter.toLowerCase() ? false : true;
+        //         option.disabled = true;
+                select.add(option);
+                select.classList.add('blog-filter-app');
+                select.addEventListener("change", selectChange);	
+
+                Object.keys(data.filter[obj].option).forEach(function(opt) {
+                    option = document.createElement("OPTION");
+                    opt = data.filter[obj].option[opt];
+                    var new_opt = opt.toLowerCase().replace(/!|&|'/g, '').replace(/  +/g, ' ').replace('/', '');
+                    option.text = opt;
+                    option.value = new_opt;
+                    option.defaultSelected = tagged && cookie[ind] && cookie[ind] == new_opt ? true : false;
+                    select.add(option);
+                });
+
+                anchor[0].appendChild(select);
+          });
+            var button = document.createElement("BUTTON");
+            button.addEventListener("click", resetChange);
+            button.innerHTML = 'Reset';
+            button.style.border = 'none';
+            button.style.marginTop = '12px';
+            button.classList.add('blog-filter-reset');
+            anchor[0].appendChild(button);
+           }
+            loader.style.display = "none";
+         })
+     .catch(function(error) {
+            console.log(error);
+        });
+}
+
+</script>
+<style>
+.blog-filter-skeleton-box {
+  display: inline-block;
+  height: 1em;
+  position: relative;
+  overflow: hidden;
+  background-color: #f1f1f1;
+}
+.blog-filter-skeleton-box::after {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  transform: translateX(-100%);
+  background-image: linear-gradient(90deg, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0.2) 40%, rgba(255, 255, 255, 0.5) 90%, rgba(255, 255, 255, 0));
+  -webkit-animation: shimmer 2s infinite;
+          animation: shimmer 2s infinite;
+  content: "";
+}
+@-webkit-keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+@media only screen and (max-width: 700px) {
+  .blog-filter-app {
+    display: block;
+    width: 100%;
+  }
+}
+@media only screen and (max-width: 400px) {
+  .blog-filter-reset {
+    width: 100%;
+  }
+}
+</style>
+<!-- blog-filter-end -->

@@ -1,0 +1,1383 @@
+{% section 'grouping-template' %}
+
+<div class="container_videos-block hide" id="container_videos-block"></div>
+<div class="container_main-icons" id="container_main-icons">
+{% for product in collection.products %}
+	{% include 'custom-main-icons' %}
+{% endfor %}
+</div>
+<div class="container_text-block hide" id="container_text-block"></div>
+<div class="container_full-image-block shopify-section--bordered hide" id="container_full-image-block"></div>
+<div class="container_icon-images-block shopify-section--bordered hide" id="container_icon-images-block"></div>
+<div class="container_product-collage-block shopify-section--bordered hide" id="container_product-collage-block"></div>
+<div class="container_image-with-icons-block shopify-section--bordered hide" id="container_image-with-icons-block"></div>
+<div class="container_full-image-block-2 shopify-section--bordered hide" id="container_full-image-block-2"></div>
+<div class="container_full-image-block-3 shopify-section--bordered hide" id="container_full-image-block-3"></div>
+<div class="container_product-tabs shopify-section--bordered hide" id="container_product-tabs">
+  {% section 'custom-product-tabs' %}
+</div>
+<div class="container_product-reviews hide" id="container_product-reviews">
+{% for product in collection.products %}
+  <div class="reviews-product hide" id="reviews-product_{{product.id}}">
+	<!--Start Stamped.io Auto Installation--><div id="stamped-main-widget_{{product.id}}" class="stamped-main-widget" data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}">{{ product.metafields.stamped.reviews }}</div><!--End Stamped.io Auto Installation-->
+  </div>
+{% endfor %}
+</div>
+<div class="container_product-feature-image hide" id="container_product-feature-image">
+{% for product in collection.products %}
+  <div class="product-feature-image hide" id="feature-image-product_{{product.id}}">
+  {% include 'custom-product-feature-image' %}
+  </div>
+{% endfor %}
+</div>
+<div class="container_related-products hide" id="container_related-products">
+  {% section 'custom-related-products' %}
+</div>
+
+<link rel="stylesheet" href="{{ 'collection-grouping.scss.css' | asset_url }}" />
+<script>
+  /*FUNCIONES*/
+  var isGarantiaInPopUp = false;
+  var getJSON = function(url, callback, products, garantias) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('GET', url, true);
+    xhr.responseType = 'json';
+    xhr.onload = function() {
+      var status = xhr.status;
+      if (status === 200) {
+        callback(null, xhr.response, products, garantias);
+      } else {
+        console.log("Error getJSON: "+ status);
+        console.log(xhr.response);
+        //callback(status, xhr.response, products);
+      }
+    };
+    xhr.send();
+  };
+  function ejecutarSettings(_status, _res, _products, _garantias){
+    if(typeof(_res.current)!=="undefined"){
+      if(typeof(_res.current.sections)!=="undefined"){
+        var imgProgressive = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/310X-2_1x1.progressive.jpg?v=1560870870';
+        
+        if(typeof(_res.current.sections["product-video-2"])!=="undefined"){
+          var _html0 = '';
+          var queryVd = '?autoplay=1&loop=1&rel=0&playlist=';
+          var orders0 = _res.current.sections["product-video-2"].block_order;
+          var blocks0 = _res.current.sections["product-video-2"].blocks;
+          for(var a=0; a<orders0.length; a++){
+            if(typeof(blocks0[orders0[a]])!=="undefined"){
+              var prodSett0 = blocks0[orders0[a]].settings;
+              for(var b=0; b<_products.length; b++){//PRODUCTS
+                if(_products[b].handle === prodSett0.product){
+                  
+                  _html0 += '<section class="Section Section--spacingNone section-videos_all hide" id="section-videos_'+_products[b].id+'" data-productid="'+_products[b].id+'">';
+                    _html0 += '<div class="collage-container custom-related-videos" id="video-section_'+_products[b].id+'">';
+                      _html0 += '<div class="container">';
+                        _html0 += '<div class="custom-video-content" id="video-content_'+_products[b].id+'">';
+                          _html0 += '<header class="SectionHeader">';
+                            _html0 += '<h3>'+prodSett0.title+'</h3>';
+                          _html0 += '</header>';
+                          _html0 += '<div class="video-body" id="video-body_'+_products[b].id+'">';
+                  
+                  			var videoList = prodSett0.videolist.split(";");
+                            if(videoList.length>0){
+                            _html0 += '<div class="video-row">';
+                              _html0 += '<div class="video-md-12 video-play">';
+                                _html0 += '<div class="video-content-video">';
+                              	  var iframeUrl = 'https://www.youtube.com/embed/'+videoList[0]+queryVd+videoList[0];
+                                  _html0 += '<div class="video-content-play" id="video-modal_'+_products[b].id+'" data-iframe="'+iframeUrl+'" data-videosticky="1">';
+                                    _html0 += '<div class="video-content-button">';
+                                      _html0 += '<a class="item-video-close" href="javascript:void(0);" data-videoid="video-modal_'+_products[b].id+'" data-productid="'+_products[b].id+'" onclick="closeModalVideo(this)">X</a>';
+                                    _html0 += '</div>';
+                                    _html0 += '<iframe src="'+iframeUrl.replace('autoplay=1','autoplay=0')+'" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>';
+                                  _html0 += '</div>';
+                                _html0 += '</div>';
+                              _html0 += '</div>';
+                            _html0 += '</div>';
+                            }
+                  			if(videoList.length>1){
+                              _html0 += '<div class="carousel video-custom-slider" id="video-slider-product_'+_products[b].id+'">';
+                              for(var i=0; i<videoList.length; i++){
+                                if(videoList[i]!==""){
+                                  var pic = 'https://img.youtube.com/vi/'+videoList[i]+'/0.jpg';
+                                  var url = 'https://www.youtube.com/embed/'+videoList[i]+queryVd+videoList[i];
+                                  _html0 += '<div class="carousel-cell video-custom-slider_item slide-video-'+i+'">';
+                                    _html0 += '<div class="video-content-play" data-iframe="'+url+'">';
+                                      _html0 += '<img src="'+pic+'" alt="'+videoList[i]+'" width="175" height="130"/>';
+                                      _html0 += '<div class="slider-video-icon" onclick="renderVideoMain(this)" data-productid="'+_products[b].id+'" data-iframe="'+url+'"></div>';
+                                    _html0 += '</div>';
+                                  _html0 += '</div>';
+                                }
+                              }//end for
+                              _html0 += '</div>';
+                            }
+
+                          _html0 += '</div>';
+                        _html0 += '</div>';
+                      _html0 += '</div>';
+                    _html0 += '</div>';
+                  _html0 += '</section>';                  
+                  
+                }//end if
+              }//end for
+            }//end if
+          }//end for
+          document.getElementById("container_videos-block").innerHTML = _html0;
+        }
+        
+        if(typeof(_res.current.sections["text-block"])!=="undefined"){
+          var _html1 = '';
+          var orders1 = _res.current.sections["text-block"].block_order;
+          var blocks1 = _res.current.sections["text-block"].blocks;
+          for(var b=0; b<orders1.length; b++){
+            if(typeof(blocks1[orders1[b]])!=="undefined"){
+              var prodSett1 = blocks1[orders1[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett1.product){
+                  _html1 += '<section class="Section Section--spacingNone caracteristicas-product hide" id="caracteristicas-product_'+_products[c].id+'">';
+                  	_html1 += '<div class="collage-container">';
+                  		_html1 += '<div class="container">';
+                  			_html1 += '<header class="SectionHeader">';
+                  				_html1 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett1.title+'</h3>';
+                  			_html1 += '</header>';
+                  			_html1 += '<div class="Rte-collage">'+prodSett1.content+'</div>';
+                  		_html1 += '</div>';
+                  	_html1 += '</div>';
+                  _html1 += '</section>';
+                }//end if
+              }//end for
+            }//end if
+          }//end for
+          document.getElementById("container_text-block").innerHTML = _html1;
+        }//end if
+        
+        if(typeof(_res.current.sections["full-image-block"])!=="undefined"){
+          var _html2 = '';
+          var orders2 = _res.current.sections["full-image-block"].block_order;
+          var blocks2 = _res.current.sections["full-image-block"].blocks;
+          for(var b=0; b<orders2.length; b++){
+            if(typeof(blocks2[orders2[b]])!=="undefined"){
+              var prodSett2 = blocks2[orders2[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett2.product){
+                  var prodImgSRC = '';
+                  if(prodSett2.image!==""){
+                    prodImgSRC = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett2.image.replace("shopify://shop_images/",""));
+                  }
+                  _html2 += '<section class="Section full-image-block-product hide '+(prodSett2.fullimage==="false"?"Section--spacingNormal":"Section--spacingNone")+'" id="full-image-block-product_'+_products[c].id+'">';
+                  	if(prodSett2.fullimage==="true"){
+                      _html2 += '<div class="FlexboxIeFix">';
+                        _html2 += '<div class="ImageHero ImageHero--large" style="background-image:url('+imgProgressive+');">';
+                          _html2 += '<div class="ImageHero__ImageWrapper">';
+                          	_html2 += '<div class="ImageHero__Image Image--zoomOut Image--lazyLoaded" '+(prodImgSRC!==''?'style="background-image:url('+prodImgSRC+');"':'')+'></div>';
+                          _html2 += '</div>';
+                        _html2 += '</div>';
+                      _html2 += '</div>';
+                    }else{
+                      _html2 += '<div class="normal-image">';
+                          _html2 += '<img class="image" src="'+prodImgSRC+'" alt="'+_products[c].title+'">';
+                      _html2 += '</div>';
+                    }
+                  	_html2 += '<div class="collage-container">';
+                  		_html2 += '<div class="container">';
+                  			_html2 += '<header class="SectionHeader">';
+                  				_html2 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett2.title+'</h3>';
+                  			_html2 += '</header>';
+                  				_html2 += '<div class="Rte-collage">'+prodSett2.content+'</div>';
+                  		_html2 += '</div>';
+                  	_html2 += '</div>';
+                  _html2 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_full-image-block").innerHTML = _html2;
+        }//end if
+        
+        if(typeof(_res.current.sections["product-icon-images"])!=="undefined"){
+          var _html3 = '';
+          var orders3 = _res.current.sections["product-icon-images"].block_order;
+          var blocks3 = _res.current.sections["product-icon-images"].blocks;
+          for(var b=0; b<orders3.length; b++){
+            if(typeof(blocks3[orders3[b]])!=="undefined"){
+              var prodSett3 = blocks3[orders3[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett3.product){
+                  var prodIcon1 = '', prodIcon2 = '', prodIcon3 = '';
+                  var prodImgSRC = '';
+                  if(prodSett3.icon!==""){
+                    prodIcon1 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett3.icon.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett3.icon2!==""){
+                    prodIcon2 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett3.icon2.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett3.icon3!==""){
+                    prodIcon3 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett3.icon3.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett3.image!==""){
+                    prodImgSRC = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett3.image.replace("shopify://shop_images/",""));
+                  }
+                  _html3 += '<section class="Section Section--spacingNone products-images-icons icon-images-product hide" id="icon-images-product_'+_products[c].id+'">';
+                  	_html3 += '<div class="product-image__wrapper">';
+                  		_html3 += '<div class="Grid Grid--m">';
+                  			_html3 += '<div class="Grid__Cell 1/2--lap-and-up product-image__image">';
+                  				_html3 += '<div class="FlexboxIeFix">';
+                                    _html3 += '<div class="ImageHero ImageHero--large" style="background-image:url('+imgProgressive+');">';
+                                      _html3 += '<div class="ImageHero__ImageWrapper">';
+                                        _html3 += '<div class="ImageHero__Image Image--zoomOut Image--lazyLoaded" '+(prodImgSRC!==''?'style="background-image:url('+prodImgSRC+');"':'')+'></div>';
+                                      _html3 += '</div>';
+                                    _html3 += '</div>';
+                  				_html3 += '</div>';
+                  			_html3 += '</div>';
+                  			_html3 += '<div class="Grid__Cell 2/3--lap-and-up product-image__content">';
+                  				_html3 += '<div class="ContentWrapper">';
+                  					_html3 += '<header class="SectionHeader SectionHeader--center">';
+                  						_html3 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett3.title+'</h3>';
+                  					_html3 += '</header>';
+                  					_html3 += '<div class="product-blocks__holder">';
+                  						_html3 += '<div class="product-blocks__image">';
+                  							_html3 += '<img src="'+prodIcon1+'" class="icon-custom">';
+                  						_html3 += '</div>';
+                                        if(prodSett3.icontitle!==""){
+                                          _html3 += '<h3 class="Heading u-h2">'+prodSett3.icontitle+'</h3>';
+                                        }
+                  						_html3 += '<div class="Rte">'+prodSett3.iconcontent+'</div>';
+                  					_html3 += '</div>';
+                  					_html3 += '<div class="product-blocks__holder">';
+                  						_html3 += '<div class="product-blocks__image">';
+                  							_html3 += '<img src="'+prodIcon2+'" class="icon-custom">';
+                  						_html3 += '</div>';
+                                        if(prodSett3.icontitle2!==""){
+                                          _html3 += '<h3 class="Heading u-h2">'+prodSett3.icontitle2+'</h3>';
+                                        }
+                  						_html3 += '<div class="Rte">'+prodSett3.iconcontent2+'</div>';
+                  					_html3 += '</div>';
+                  					_html3 += '<div class="product-blocks__holder">';
+                  						_html3 += '<div class="product-blocks__image">';
+                  							_html3 += '<img src="'+prodIcon3+'" class="icon-custom">';
+                  						_html3 += '</div>';
+                                        if(prodSett3.icontitle3!==""){
+                                          _html3 += '<h3 class="Heading u-h2">'+prodSett3.icontitle3+'</h3>';
+                                        }
+                  						_html3 += '<div class="Rte">'+prodSett3.iconcontent3+'</div>';
+                  					_html3 += '</div>';
+                  				_html3 += '</div>';
+                  			_html3 += '</div>';
+                  		_html3 += '</div>';
+                  	_html3 += '</div>';
+                  _html3 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_icon-images-block").innerHTML = _html3;
+        }//end if
+        
+        if(typeof(_res.current.sections["product-collage"])!=="undefined"){
+          var _html4 = '';
+          var orders4 = _res.current.sections["product-collage"].block_order;
+          var blocks4 = _res.current.sections["product-collage"].blocks;
+          for(var b=0; b<orders4.length; b++){
+            if(typeof(blocks4[orders4[b]])!=="undefined"){
+              var prodSett4 = blocks4[orders4[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett4.product){
+                  var prodImgSRC1 = '', prodImgSRC2 = '', prodImgSRC3 = '';
+                  if(prodSett4.image!==""){
+                    prodImgSRC1 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett4.image.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett4.image2!==""){
+                    prodImgSRC2 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett4.image2.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett4.image3!==""){
+                    prodImgSRC3 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett4.image3.replace("shopify://shop_images/",""));
+                  }
+                  _html4 += '<section class="Section Section--spacingNormal collage-product hide" id="collage-product_'+_products[c].id+'">';
+                  	_html4 += '<div class="Container collage-container">';
+                  		_html4 += '<div class="Grid Grid--m Grid--center">';
+                  			_html4 += '<div class="Grid__Cell collage-block">';
+                  				_html4 += '<div class="Grid Grid--m Grid--center">';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-image">';
+                                        if(prodImgSRC1!==""){
+                                          _html4 += '<div class="FeatureText__ImageWrapper">';
+                                          	_html4 += '<div class="AspectRatio" style="max-width: 700px;">';
+                                          		_html4 += '<img style="position:relative;" class="Image--lazyLoad Image--fadeIn" data-src="'+prodImgSRC1+'" data-widths="[200,300,400,600,700,800,900,1000]" data-sizes="auto" alt="'+_products[c].title+'" />';
+                                          		_html4 += '<span class="Image__Loader"></span>';
+                                          		_html4 += '<noscript><img src="'+prodImgSRC1+'" alt="'+_products[c].title+'" /></noscript>';
+                                          	_html4 += '</div>';
+                                          _html4 += '</div>';
+                                        }
+                  					_html4 += '</div>';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-text Rte">';
+                                        if(prodSett4.title!==""){
+                                          _html4 += '<h3 class="collage-title">'+prodSett4.title+'</h3>';
+                                        }
+                  						if(prodSett4.content!==""){
+                                          _html4 += '<div class="collage-content">'+prodSett4.content+'</div>';
+                                        }
+                  					_html4 += '</div>';
+                  				_html4 += '</div>';
+                  			_html4 += '</div>';
+                  			_html4 += '<div class="Grid__Cell collage-block">';
+                  				_html4 += '<div class="Grid Grid--m Grid--center">';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-image">';
+                                        if(prodImgSRC2!==""){
+                                          _html4 += '<div class="FeatureText__ImageWrapper">';
+                                          	_html4 += '<div class="AspectRatio" style="max-width: 700px;">';
+                                          		_html4 += '<img style="position:relative;" class="Image--lazyLoad Image--fadeIn" data-src="'+prodImgSRC2+'" data-widths="[200,300,400,600,700,800,900,1000]" data-sizes="auto" alt="'+_products[c].title+'" />';
+                                          		_html4 += '<span class="Image__Loader"></span>';
+                                          		_html4 += '<noscript><img src="'+prodImgSRC2+'" alt="'+_products[c].title+'" /></noscript>';
+                                          	_html4 += '</div>';
+                                          _html4 += '</div>';
+                                        }
+                  					_html4 += '</div>';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-text Rte">';
+                                        if(prodSett4.title2!==""){
+                                          _html4 += '<h3 class="collage-title">'+prodSett4.title2+'</h3>';
+                                        }
+                  						if(prodSett4.content2!==""){
+                                          _html4 += '<div class="collage-content">'+prodSett4.content2+'</div>';
+                                        }
+                  					_html4 += '</div>';
+                  				_html4 += '</div>';
+                  			_html4 += '</div>';
+                  			_html4 += '<div class="Grid__Cell collage-block">';
+                  				_html4 += '<div class="Grid Grid--m Grid--center">';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-image">';
+                                        if(prodImgSRC3!==""){
+                                          _html4 += '<div class="FeatureText__ImageWrapper">';
+                                          	_html4 += '<div class="AspectRatio" style="max-width: 700px;">';
+                                          		_html4 += '<img style="position:relative;" class="Image--lazyLoad Image--fadeIn" data-src="'+prodImgSRC3+'" data-widths="[200,300,400,600,700,800,900,1000]" data-sizes="auto" alt="'+_products[c].title+'" />';
+                                          		_html4 += '<span class="Image__Loader"></span>';
+                                          		_html4 += '<noscript><img src="'+prodImgSRC3+'" alt="'+_products[c].title+'" /></noscript>';
+                                          	_html4 += '</div>';
+                                          _html4 += '</div>';
+                                        }
+                  					_html4 += '</div>';
+                  					_html4 += '<div class="Grid__Cell 1/2--tablet-and-up content-text Rte">';
+                                        if(prodSett4.title3!==""){
+                                          _html4 += '<h3 class="collage-title">'+prodSett4.title3+'</h3>';
+                                        }
+                  						if(prodSett4.content3!==""){
+                                          _html4 += '<div class="collage-content">'+prodSett4.content3+'</div>';
+                                        }
+                  					_html4 += '</div>';
+                  				_html4 += '</div>';
+                  			_html4 += '</div>';
+                  		_html4 += '</div>';
+                  	_html4 += '</div>';
+                  _html4 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_product-collage-block").innerHTML = _html4;
+        }//end if
+        
+        if(typeof(_res.current.sections["image-with-icons"])!=="undefined"){
+          var _html5 = '';
+          var orders5 = _res.current.sections["image-with-icons"].block_order;
+          var blocks5 = _res.current.sections["image-with-icons"].blocks;
+          for(var b=0; b<orders5.length; b++){
+            if(typeof(blocks5[orders5[b]])!=="undefined"){
+              var prodSett5 = blocks5[orders5[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett5.product){
+                  var prodIconSRC1 = '', prodIconSRC2 = '', prodIconSRC3 = '', prodBannerSRC = '';
+                  if(prodSett5.icon!==""){
+                    prodIconSRC1 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett5.icon.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett5.icon2!==""){
+                    prodIconSRC2 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett5.icon2.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett5.icon3!==""){
+                    prodIconSRC3 = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett5.icon3.replace("shopify://shop_images/",""));
+                  }
+                  if(prodSett5.banner!==""){
+                    prodBannerSRC = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett5.banner.replace("shopify://shop_images/",""));
+                  }
+                  _html5 += '<section class="Section Section--spacingNone image-icons hide" id="image-icons-product_'+_products[c].id+'">';
+                  	_html5 += '<div class="FlexboxIeFix">';
+                  		_html5 += '<div class="ImageHero ImageHero--large" style="background: url('+imgProgressive+');">';
+                          _html5 += '<div class="ImageHero__ImageWrapper">';
+                          	_html5 += '<div class="ImageHero__Image Image--zoomOut Image--lazyLoaded" '+(prodBannerSRC!==''?'style="background-image:url('+prodBannerSRC+');"':'')+'></div>';
+                          _html5 += '</div>';
+                  		_html5 += '</div>';
+                  	_html5 += '</div>';
+                    _html5 += '<div class="Container banner-container">';
+                  		_html5 += '<header class="SectionHeader">';
+                            if(prodSett5.maintitle!==""){
+                              _html5 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett5.maintitle+'</h3>';
+                            }
+                  		_html5 += '</header>';
+                        _html5 += '<div class="Grid Grid--m Grid--center">';
+                  
+                  			_html5 += '<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up ">';
+                  				_html5 += '<div class="product-blocks__holder">';
+                  					_html5 += '<div class="product-blocks__image">';
+                  						_html5 += '<img src="'+prodIconSRC1+'" class="icon icon-custom" />';
+                  					_html5 += '</div>';
+                  					if(prodSett5.icontitle!==""){
+                  						_html5 += '<h3 class="Heading u-h2">'+prodSett5.icontitle+'</h3>';
+                                    }
+                  					_html5 += '<div class="rte">'+prodSett5.iconcontent+'</div>';
+                  				_html5 += '</div>';
+                  			_html5 += '</div>';
+                  
+                  			_html5 += '<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up ">';
+                  				_html5 += '<div class="product-blocks__holder">';
+                  					_html5 += '<div class="product-blocks__image">';
+                  						_html5 += '<img src="'+prodIconSRC2+'" class="icon icon-custom" />';
+                  					_html5 += '</div>';
+                  					if(prodSett5.icontitle2!==""){
+                  						_html5 += '<h3 class="Heading u-h2">'+prodSett5.icontitle2+'</h3>';
+                                    }
+                  					_html5 += '<div class="rte">'+prodSett5.iconcontent2+'</div>';
+                  				_html5 += '</div>';
+                  			_html5 += '</div>';
+                  
+                  			_html5 += '<div class="Grid__Cell 1/2--tablet 1/3--lap-and-up ">';
+                  				_html5 += '<div class="product-blocks__holder">';
+                  					_html5 += '<div class="product-blocks__image">';
+                  						_html5 += '<img src="'+prodIconSRC3+'" class="icon icon-custom" />';
+                  					_html5 += '</div>';
+                  					if(prodSett5.icontitle3!==""){
+                  						_html5 += '<h3 class="Heading u-h2">'+prodSett5.icontitle3+'</h3>';
+                                    }
+                  					_html5 += '<div class="rte">'+prodSett5.iconcontent3+'</div>';
+                  				_html5 += '</div>';
+                  			_html5 += '</div>';
+                  
+                        _html5 += '</div>';
+                    _html5 += '</div>';
+                  _html5 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_image-with-icons-block").innerHTML = _html5;
+        }//end if
+      
+        if(typeof(_res.current.sections["full-image-block_2"])!=="undefined"){
+          var _html6 = '';
+          var orders6 = _res.current.sections["full-image-block_2"].block_order;
+          var blocks6 = _res.current.sections["full-image-block_2"].blocks;
+          for(var b=0; b<orders6.length; b++){
+            if(typeof(blocks6[orders6[b]])!=="undefined"){
+              var prodSett6 = blocks6[orders6[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett6.product){
+                  var prodImgSRC = '';
+                  if(prodSett6.image!==""){
+                    prodImgSRC = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett6.image.replace("shopify://shop_images/",""));
+                  }
+                  _html6 += '<section class="Section full-image-block-product-2 hide '+(prodSett6.fullimage==="false"?"Section--spacingNormal":"Section--spacingNone")+'" id="full-image-block-product-2_'+_products[c].id+'">';
+                  	if(prodSett6.fullimage==="true"){
+                      _html6 += '<div class="FlexboxIeFix">';
+                        _html6 += '<div class="ImageHero ImageHero--large" style="background-image:url('+imgProgressive+');">';
+                          _html6 += '<div class="ImageHero__ImageWrapper">';
+                          	_html6 += '<div class="ImageHero__Image Image--zoomOut Image--lazyLoaded" '+(prodImgSRC!==''?'style="background-image:url('+prodImgSRC+');"':'')+'></div>';
+                          _html6 += '</div>';
+                        _html6 += '</div>';
+                      _html6 += '</div>';
+                    }else{
+                      _html6 += '<div class="normal-image">';
+                          _html6 += '<img class="image" src="'+prodImgSRC+'" alt="'+_products[c].title+'">';
+                      _html6 += '</div>';
+                    }
+                  	_html6 += '<div class="collage-container">';
+                  		_html6 += '<div class="container">';
+                  			_html6 += '<header class="SectionHeader">';
+                  				_html6 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett6.title+'</h3>';
+                  			_html6 += '</header>';
+                  			_html6 += '<div class="Rte-collage">'+prodSett6.content+'</div>';
+                  		_html6 += '</div>';
+                  	_html6 += '</div>';
+                  _html6 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_full-image-block-2").innerHTML = _html6;
+        }//end if
+        
+        if(typeof(_res.current.sections["full-image-block_3"])!=="undefined"){
+          var _html7 = '';
+          var orders7 = _res.current.sections["full-image-block_3"].block_order;
+          var blocks7 = _res.current.sections["full-image-block_3"].blocks;
+          for(var b=0; b<orders7.length; b++){
+            if(typeof(blocks7[orders7[b]])!=="undefined"){
+              var prodSett7 = blocks7[orders7[b]].settings;
+              for(var c=0; c<_products.length; c++){//PRODUCTS
+                if(_products[c].handle === prodSett7.product){
+                  var prodImgSRC = '';
+                  if(prodSett7.image!==""){
+                    prodImgSRC = 'https://cdn.shopify.com/s/files/1/0215/8618/2208/files/'+(prodSett7.image.replace("shopify://shop_images/",""));
+                  }
+                  _html7 += '<section class="Section full-image-block-product-3 hide '+(prodSett7.fullimage==="false"?"Section--spacingNormal":"Section--spacingNone")+'" id="full-image-block-product-3_'+_products[c].id+'">';
+                  	if(prodSett7.fullimage==="true"){
+                      _html7 += '<div class="FlexboxIeFix">';
+                        _html7 += '<div class="ImageHero ImageHero--large" style="background-image:url('+imgProgressive+');">';
+                          _html7 += '<div class="ImageHero__ImageWrapper">';
+                          	_html7 += '<div class="ImageHero__Image Image--zoomOut Image--lazyLoaded" '+(prodImgSRC!==''?'style="background-image:url('+prodImgSRC+');"':'')+'></div>';
+                          _html7 += '</div>';
+                        _html7 += '</div>';
+                      _html7 += '</div>';
+                    }else{
+                      _html7 += '<div class="normal-image">';
+                          _html7 += '<img class="image" src="'+prodImgSRC+'" alt="'+_products[c].title+'">';
+                      _html7 += '</div>';
+                    }
+                  	_html7 += '<div class="collage-container">';
+                  		_html7 += '<div class="container">';
+                  			_html7 += '<header class="SectionHeader">';
+                  				_html7 += '<h3 class="SectionHeader__SubHeading Heading u-h3">'+prodSett7.title+'</h3>';
+                  			_html7 += '</header>';
+                  			_html7 += '<div class="Rte-collage">'+prodSett7.content+'</div>';
+                  		_html7 += '</div>';
+                  	_html7 += '</div>';
+                  _html7 += '</section>';
+                }//end if
+              }//end for
+              
+            }//end if
+          }//end for
+          document.getElementById("container_full-image-block-3").innerHTML = _html7;
+        }//end if
+        
+        
+      }//end if
+    }//end if
+  }
+  function ejecutarConfig(_status, _res, _products, _garantias){
+    var _selBloque = [];
+    var _selItems = [];
+    var _selectors = [];
+    var _defaultImage = "";
+    
+    //1.- SELECCIONAR IMAGEN POR DEFECTO
+    for(var a=0; a<_products.length; a++){//PRODUCTS
+      var _prod = _products[a];
+      if(_defaultImage==="")
+        _defaultImage = _prod.featured_image;
+    }
+    if(_defaultImage!==""){
+      document.getElementById("imgProductGroup").setAttribute("src", _defaultImage);
+    }
+    
+    //2.- SELECCIONAR GRUPO DE FILTROS
+    for(var k=0; k<_res.length; k++){//BLOQUES
+      var _bloque = _res[k].bloque;
+
+      if(_bloque!=="GARAN"){
+        for(var m=0; m<_res[k].listado.length; m++){//ITEMS
+          var _item = _res[k].listado[m].id;
+
+          for(var i=0; i<_products.length; i++){//PRODUCTS
+            var currProd = _products[i];
+            for(var j=0; j<currProd.tags.length; j++){//TAGS
+              var currTag = currProd.tags[j];
+              if(currTag===_item && _selItems.indexOf(_item)===-1){
+                _selItems.push(_item);
+                var keySel = _selectors.length;
+                if(_selBloque.indexOf(_bloque)===-1){
+                  _selBloque.push(_bloque);
+                  _selectors.push({
+                    "bloque": _bloque, 
+                    "nombre": _res[k].nombre, 
+                    "titulo": _res[k].titulo, 
+                    "descripcion": _res[k].descripcion, 
+                    "listado": []
+                  });
+                }else{
+                  for(var l=0; l<_selectors.length; l++){
+                    if(_selectors[l].bloque === _bloque)
+                      keySel = l;
+                  }
+                }
+                _selectors[keySel].listado.push(_res[k].listado[m]);
+              }//end if
+            }//end for
+          }//end for
+        }//end for
+      }else{
+        for(var i=0; i<_products.length; i++){//PRODUCTS
+          var currProd = _products[i];
+          for(var j=0; j<currProd.tags.length; j++){//TAGS
+            var currTag = currProd.tags[j];
+            if(currTag.indexOf("GPNG_GARAN_")!==-1){
+              var _parts = currTag.split("_");
+              var keySel = _selectors.length;
+              if(_selBloque.indexOf(_bloque)===-1){
+                _selBloque.push(_bloque);
+                _selectors.push({
+                  "bloque": _bloque, 
+                  "nombre": _res[k].nombre, 
+                  "titulo": _res[k].titulo, 
+                  "descripcion": _res[k].descripcion, 
+                  "listado": []
+                });
+              }else{
+                for(var l=0; l<_selectors.length; l++){
+                  if(_selectors[l].bloque === _bloque)
+                    keySel = l;
+                }
+              }
+              
+              for(var k=0; k<_garantias.length; k++){
+                if(_garantias[k].id===parseInt(_parts[2])){
+                  _selectors[keySel].listado.push({
+                    "alias": _garantias[k].id.toString(),
+                    "id": "GPNG_GARAN_"+_garantias[k].id,
+                    "nombre": _garantias[k].title,
+                    "codigo": "",
+                    "product": _garantias[k]
+                  });
+                }//end if
+              }//end for
+            }//end if
+          }//end for
+        }//end for
+      }
+      
+    }//end for
+    //3.- RENDERIZAR GRUPO DE FILTROS
+    var _htmlGpng = '';
+    var _garantia0 = false;
+    for(var n=0; n<_selectors.length; n++){
+      var bloqueId = 'Item'+n;
+      var nextId = 'Item'+(n+1);
+      var mostrarEnLineaClass = "";
+      if(_selectors[n].bloque==="GARAN"){
+        mostrarEnLineaClass = "garantia-step-filtro";
+        if(!_selectors[n].mostrarEnLinea){
+          isGarantiaInPopUp = true;
+          mostrarEnLineaClass = "garantia-step-filtro garantia-step-filtro-hide";
+          var addToCarts = document.querySelectorAll(".button-add-to-cart");
+          var showGarantias = document.querySelectorAll(".button-show-garantia");
+          for(var x=0; x<addToCarts.length; x++){
+            addToCarts[x].setAttribute("style", "display:none;");
+          }
+          for(var y=0; y<showGarantias.length; y++){
+            showGarantias[y].removeAttribute("style");
+          }
+        }
+      }
+      //mostrarEnLineaClass= "";
+      _htmlGpng += '<div class="step as-dimension-'+bloqueId+' '+mostrarEnLineaClass+'" id="'+bloqueId+'" data-step="'+n+'" data-next="'+nextId+'" data-bloque="'+_selectors[n].bloque+'">';
+      	_htmlGpng += '<div class="as-dimension as-dimension-ishidden as-dimension-count-'+(_selectors[n].listado.length)+' as-dimension-'+_selectors[n].bloque.toLowerCase()+' '+(n>0?'disabled':'')+'">';
+      		_htmlGpng += '<fieldset>';
+      			_htmlGpng += '<legend><h2 class="as-dimension-header">'+_selectors[n].titulo+'</h2></legend>';
+                if(_selectors[n].descripcion!==""){
+                  _htmlGpng += '<div class="rs-accessory-tile-subheading">'+_selectors[n].descripcion+'</div>';
+                }
+      			if(_selectors[n].bloque!=="GARAN"){
+                  _htmlGpng += '<div class="form-selector form-selector-rowwithgutters as-dimension-choices row">';
+                }
+      
+                for(var p=0; p<_selectors[n].listado.length; p++){
+                  var currListado = _selectors[n].listado[p];
+                  
+                  if(_selectors[n].bloque==="GARAN"){
+                    if(!_garantia0){
+                      _garantia0 = true;
+                      _htmlGpng += '<div class="row rs-accessory-option rs-accessory-noneoption" id="GARANTIA_NONE" data-productid="" data-variantid="">';
+                        _htmlGpng += '<div class="column large-12 small-12 form-selector">';
+                          _htmlGpng += '<div class="form-element ">';
+                              _htmlGpng += '<div class="form-choice-selector-label" onclick="selectGarantia(\'GARANTIA_OPTION_NONE\')" data-bloque="'+_selectors[n].bloque+'" data-item="'+currListado.alias+'" data-step="'+bloqueId+'" id="GARANTIA_OPTION_NONE">';
+                                  _htmlGpng += '<label class="form-label">';
+                                      _htmlGpng += '<span class="rs-accessory-option-details">';
+                                          _htmlGpng += '<span class="form-selector-title">Sin '+_selectors[n].nombre+'</span>';
+                                      _htmlGpng += '</span>';
+                                  _htmlGpng += '</label>';
+                              _htmlGpng += '</div>';
+                          _htmlGpng += '</div>';
+                        _htmlGpng += '</div>';
+                      _htmlGpng += '</div>';
+                    }
+                    _htmlGpng += '<div class="row rs-accessory-option hide" id="GARANTIA_'+currListado.id+'" data-productid="'+currListado.product.id+'" data-variantid="'+currListado.product.variants[0].id+'" data-price="'+currListado.product.price+'">';
+                      _htmlGpng += '<div class="column large-12 small-12 form-selector-twocolumns">';
+                        _htmlGpng += '<div class="form-element ">';
+                          _htmlGpng += '<div class="form-choice-selector-label form-choice-selector-label-list" onclick="selectGarantia(\''+currListado.id+'\')" data-bloque="'+_selectors[n].bloque+'" data-item="'+currListado.alias+'" data-step="'+bloqueId+'" id="'+currListado.id+'">';
+                            _htmlGpng += '<label class="form-label">';
+                              _htmlGpng += '<span class="form-choiceselectorlabel-twocol">';
+                                _htmlGpng += '<span class="form-choiceselectorlabel-twocolleft column large-6">';
+                                	_htmlGpng += '<span class="form-selector-title">'+currListado.nombre+'</span>';
+                                _htmlGpng += '</span>';
+                                _htmlGpng += '<span class="form-choiceselectorlabel-twocolright column large-6 rs-accessory-option-price">';
+                                	_htmlGpng += '<span class="as-icondetails-detail"><span class="compare-at-money">'+formatMoney(currListado.product.compare_at_price/100)+'</span><span class="current_price">'+formatMoney(currListado.product.price/100)+'</span></span>';
+                                _htmlGpng += '</span>';
+                              _htmlGpng += '</span>';
+                              _htmlGpng += '<span class="as-form-choiseselectordesc form-choiceselectorlabel-list form-label">';
+                    			_htmlGpng += '<span class="as-form-choiceselectordesc-list">';
+                    				_htmlGpng += '<span class="as-form-choiceselectordesc-listitem">'+currListado.product.description+'</span>';
+                    			_htmlGpng += '</span>';
+                    		  _htmlGpng += '</span>';
+                            _htmlGpng += '</label>';
+                          _htmlGpng += '</div>';
+                        _htmlGpng += '</div>';
+                      _htmlGpng += '</div>';
+                      //popup-container-care
+					  _htmlGpng += '<div class="hide popup-container-care">';
+                      	_htmlGpng += '<div class="row as-accessoryoverlay-container">';
+                        	_htmlGpng += '<div class="row">';
+                            	_htmlGpng += '<div class="column large-centered small-12 as-accessoryoverlay-image">';
+                            		_htmlGpng += '<img src="'+currListado.product.featured_image+'" class="ir" alt="'+currListado.product.title+'" />';
+								_htmlGpng += '</div>';
+							_htmlGpng += '</div>';
+                            _htmlGpng += '<div class="row">';
+                            	_htmlGpng += '<div class="column large-12 small-12">';
+                                	_htmlGpng += '<h2 class="as-accessoryoverlay-heading">'+currListado.product.title+'</h2>';
+								_htmlGpng += '</div>';
+                                _htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-price">';
+                    				_htmlGpng += '<span class="as-icondetails-detail"><span class="compare-at-money">'+formatMoney(currListado.product.compare_at_price/100)+'</span><span class="current_price">'+formatMoney(currListado.product.price/100)+'</span></span>';
+								_htmlGpng += '</div>';
+								_htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-ipttext">'+currListado.product.description+'</div>';
+							_htmlGpng += '</div>';
+							_htmlGpng += '<div class="row as-accessoryoverlay-button">';
+								_htmlGpng += '<div class="column large-12 large-centered small-12 as-purchaseinfo custom-purchase-popup '+(!_selectors[n].mostrarEnLinea?'garantia-popup-v2':'')+'">';
+                                    if(_selectors[n].mostrarEnLinea){
+									_htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-variantid="'+currListado.product.variants[0].id+'" onclick="addGarantiaCart(\'GARANTIA_'+currListado.id+'\')">';
+										_htmlGpng += '<span class="as-addondetails-label">Añadir</span>';
+									_htmlGpng += '</button>';
+                                    }else{
+                                      _htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-addgarantia="1" data-variantid="'+currListado.product.variants[0].id+'" onclick="addGarantiaCartV2(\'GARANTIA_'+currListado.id+'\',1)">';
+                                      _htmlGpng += '<span class="as-addondetails-label">Añadir Garantía</span>';
+                                      _htmlGpng += '</button>';
+                                      _htmlGpng += '<button class="button as-accessoryoverlay-addbutton " data-addgarantia="0" data-variantid="'+currListado.product.variants[0].id+'" onclick="addGarantiaCartV2(\'GARANTIA_'+currListado.id+'\',0)">';
+                                      _htmlGpng += '<span class="as-addondetails-label">No, gracias</span>';
+                                      _htmlGpng += '</button>';
+                                    }
+								_htmlGpng += '</div>';
+							_htmlGpng += '</div>';
+							_htmlGpng += '<div class="row ">';
+								_htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-description">';
+									_htmlGpng += '<div class="pd-overlay-201508-applecare pd-font-16-400 text-center">';
+										_htmlGpng += '<p class="pd-overlay-subcopy">Amplía la garantía de tu electrodoméstico para tenerlo cubierto durante 4 años, incluyendo mano de obra, transporte del servicio técnico y recambios de piezas. Con la ampliación de garantía EVVOCARE contarás con un asesor personalizado y acceso a servicios exclusivos solo para EVVOLOVERS.</p><p class="pd-overlay-subcopy">Sin compromisos ni cuotas, un solo pago y cuatro años de tranquilidad.</p><p class="pd-overlay-subcopy"><br><a href="/products/garantia-evvocare" title="EVVO CARE 2+2">Ver&nbsp;garantía EvvoCare</a></p>';
+									_htmlGpng += '</div>';
+								_htmlGpng += '</div>';
+								_htmlGpng += '<div class="column large-12 small-12 as-accessoryoverlay-learnmore hide">';
+									_htmlGpng += '<p class="pd-overlay-link">';
+										_htmlGpng += '<a href="https://www.apple.com/es/support/products/iphone" class="more" target="_blank">Más información sobre AppleCare+<span class="visuallyhidden">(Se abre en una ventana nueva)</span></a>';
+									_htmlGpng += '</p>';
+								_htmlGpng += '</div>';
+							_htmlGpng += '</div>';
+						_htmlGpng += '</div>';
+                    	//./popup-container-care
+                    _htmlGpng += '</div>';
+                   	_htmlGpng += '</div>';
+                    
+                  }else{
+                    _htmlGpng += '<div class="form-selector-singlecolumn column large-6 small-6 selector-container__filter" data-step="'+n+'" data-id="'+currListado.id+'">';
+                      _htmlGpng += '<div class="form-element form-element-option">';
+                          _htmlGpng += '<div class="form-choice-selector-label as-dimension-label" onclick="selectOption(\''+currListado.id+'\')" data-bloque="'+_selectors[n].bloque+'" data-item="'+currListado.alias+'" data-step="'+bloqueId+'" id="'+currListado.id+'">';
+                              _htmlGpng += '<label id="'+bloqueId+'_'+currListado.alias.toLowerCase()+'_label" for="dimensionColor-white" class="form-label">';
+                                if(_selectors[n].bloque==="COLOR"){
+                                  _htmlGpng += '<span>';
+                                      _htmlGpng += '<em class="click-layer"></em>';
+                                      _htmlGpng += '<div class="effect">';
+                                          _htmlGpng += '<div class="color-ball" style="'+currListado.codigo+'"></div>';
+                                      _htmlGpng += '</div>';
+                                  _htmlGpng += '</span>';
+                                  _htmlGpng += '<span>'+currListado.nombre+'</span>';
+                                }else{
+                                  _htmlGpng += '<span class="form-selector-title">';
+                                      _htmlGpng += currListado.nombre;
+                                  _htmlGpng += '</span>';
+                                }
+                              _htmlGpng += '</label>';
+                          _htmlGpng += '</div>';
+                      _htmlGpng += '</div>';
+                    _htmlGpng += '</div>';
+                  }
+                }//end for
+      		
+      			if(_selectors[n].bloque!=="GARAN"){
+                  _htmlGpng += '</div>';
+                }else{
+                  _htmlGpng += '<div class="rs-modularaccessory-learnmore hide">';
+                  	_htmlGpng += '<button type="button" class="as-buttonlink rs-modular-learnmorelink" id="garantia_mas_info" data-garantiaid="" onclick="glearnmorelink()"><span>Más información</span></button>';
+				  _htmlGpng += '</div>';
+                }
+      		_htmlGpng += '</fieldset>';
+      	_htmlGpng += '</div>';
+      _htmlGpng += '</div>';
+    }
+    document.getElementById("grouping_blocks").innerHTML = _htmlGpng;
+  }
+  function selectOption(id){
+    var stepId = document.getElementById(id).getAttribute("data-step");
+    var nextId = document.getElementById(stepId).getAttribute("data-next");
+    var selecteds = document.querySelectorAll("#"+stepId+" .selected");
+    for(var i=0; i<selecteds.length; i++){
+      selecteds[i].classList.remove("selected");
+    }
+    document.getElementById(id).classList.add("selected");
+    if(document.getElementById(id).getAttribute("data-bloque")==="COLOR"){
+      var _selectedImage = "";
+      var _variants = document.querySelectorAll("#product_variants > option");
+      for(var c=0; c<_variants.length; c++){
+        var _tags = _variants[c].getAttribute("data-tags").split(",");
+        for(var d=0; d<_tags.length; d++){
+          if(_tags[d]===id && _selectedImage===""){
+            _selectedImage = _variants[c].getAttribute("data-featuredimage");
+          }
+        }
+      }
+      if(_selectedImage!==""){
+        document.getElementById("imgProductGroup").setAttribute("src", _selectedImage);
+      }
+    }
+    if(document.getElementById(nextId)){
+      activarFiltrosVisuales(id, stepId, nextId);
+      if(document.querySelector("#"+nextId+" > .disabled"))
+        document.querySelector("#"+nextId+" > .disabled").classList.remove("disabled");
+      
+      $('html, body').animate({
+        scrollTop: $("#"+nextId).offset().top-100
+      }, 800);
+    }
+    var currStep = document.getElementById(stepId).getAttribute("data-step");
+    var allSteps = document.querySelectorAll("#grouping_blocks > .step");
+    var maxStep = allSteps.length-1;
+    if(document.querySelector('div[data-step="'+(allSteps.length-1)+'"]')){
+      if(document.querySelector('div[data-step="'+(allSteps.length-1)+'"]').getAttribute("data-bloque")==="GARAN")
+        maxStep = allSteps.length-2;
+    }
+    if(parseInt(currStep)===maxStep){
+      document.getElementById("status_steps_all").value = "1";
+    }
+    if(document.getElementById("status_steps_all").value==="1"){
+      console.log("CHARGE PRODUCT");
+      var product_id = "", variant_id = "", garant_product_id = "", garant_id = "", data_garantidInButton = "";
+      
+      document.getElementById("variant_a_to_cart").value = "";
+      document.getElementById("variant_a_to_cart").setAttribute("data-productid", "");
+      document.getElementById("variant_b_to_cart").value = "";
+      document.getElementById("variant_b_to_cart").setAttribute("data-productid", "");
+      
+      var variant_options = document.querySelectorAll("#product_variants > option");
+      for(var k=0; k<variant_options.length; k++){
+        var contSel = 0;
+        var currentGarantId = "";
+        var data_tags = variant_options[k].getAttribute("data-tags").split(",");
+        for(var m=0; m<data_tags.length; m++){
+          for(var j=0; j<allSteps.length; j++){
+            var _stepId = allSteps[j].id;
+            if(document.querySelector("#"+_stepId+" .selected")){
+              var _selected = document.querySelector("#"+_stepId+" .selected");
+              if(data_tags[m] === _selected.id){
+                contSel++;
+              }
+            }
+          }//end for
+          if(data_tags[m].indexOf("GPNG_GARAN_")!==-1 && contSel===(maxStep+1)){
+            data_garantidInButton = data_tags[m];
+            currentGarantId = data_tags[m].replace("GPNG_GARAN_", "");
+            garant_id = "GARANTIA_"+data_tags[m];
+          }
+        }//end for
+        if(contSel===(maxStep+1)){
+          product_id = variant_options[k].getAttribute("data-productid");
+          variant_id = variant_options[k].getAttribute("value");
+          garant_product_id = currentGarantId;
+        }
+      }//end for
+      
+      /* RESETEAR GARANTÍAS */
+      var garantia_selecteds = document.querySelectorAll(".garantia-selected");
+      for(var z=0; z<garantia_selecteds.length; z++){
+        var garanId = garantia_selecteds[z].getAttribute("id");
+        document.querySelector("#"+garanId.replace("GARANTIA_", "")).classList.remove("selected");
+        garantia_selecteds[z].classList.add("hide");
+        garantia_selecteds[z].classList.remove("garantia-selected");
+      }
+      document.querySelector("#GARANTIA_NONE .form-choice-selector-label").classList.add("selected");
+      document.querySelector(".rs-modularaccessory-learnmore").classList.add("hide");
+      
+      /* RESETEAR PRODUCTOS */
+      var product_selecteds = document.querySelectorAll(".as-purchaseinfo-product-form");
+      for(var w=0; w<product_selecteds.length; w++){
+        product_selecteds[w].classList.add("hide");
+        product_selecteds[w].classList.remove("product-selected");
+        var currId = product_selecteds[w].id;
+        if(currId !== "DATA_PURCHASE_PROD_NONE"){
+          //button add to cart
+          document.querySelector("#"+currId+" .button-add-to-cart").setAttribute("disabled", "disabled");
+          document.querySelector("#"+currId+" .button-add-to-cart").classList.add("disabled");
+          document.querySelector("#"+currId+" .button-show-garantia").setAttribute("disabled", "disabled");
+          document.querySelector("#"+currId+" .button-show-garantia").classList.add("disabled");
+        }
+      }
+      
+      var procecedButton = true;
+      if(isGarantiaInPopUp){
+        procecedButton = false;
+      }
+      /* MOSTRAR GARANTÍA FILTRADA */
+      if(document.getElementById(garant_id)){
+        document.getElementById(garant_id).classList.add("garantia-selected");
+        document.getElementById(garant_id).classList.remove("hide");
+        document.querySelector(".rs-modularaccessory-learnmore").classList.remove("hide");
+        document.getElementById("garantia_mas_info").setAttribute("data-garantiaid", garant_id.replace("GARANTIA_", ""));
+        
+        if(isGarantiaInPopUp){
+          var btnGarantia = document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-show-garantia");
+          if(btnGarantia){
+            btnGarantia.setAttribute("data-garantid", data_garantidInButton);
+            procecedButton = true;
+          }
+        }
+      }
+      if(!procecedButton){
+        document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-add-to-cart").removeAttr("style");
+        document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-show-garantia").setAttribute("style", "display:none;");
+      }
+      /* MOSTRAR PRODUCTO FILTRADO */
+      if(document.getElementById("DATA_PURCHASE_PROD_"+product_id)){
+        document.getElementById("DATA_PURCHASE_PROD_"+product_id).classList.add("product-selected");
+        document.getElementById("DATA_PURCHASE_PROD_"+product_id).classList.remove("hide");
+        //button add to cart
+        var proAv = document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-add-to-cart").getAttribute("data-available");
+        if(proAv==="1"){
+          document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-add-to-cart").removeAttribute("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-add-to-cart").classList.remove("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-show-garantia").removeAttribute("disabled");
+          document.querySelector("#DATA_PURCHASE_PROD_"+product_id+" .button-show-garantia").classList.remove("disabled");
+        }
+        document.getElementById("variant_b_to_cart").value = variant_id;
+        document.getElementById("variant_b_to_cart").setAttribute("data-productid", product_id);
+        //selected price
+        var sprice = document.getElementById("DATA_PURCHASE_PROD_"+product_id).getAttribute("data-price");
+        var total_price = formatMoney(parseFloat(sprice)/100);
+        document.getElementById("prod_"+product_id).innerHTML = total_price;
+        
+        //PRODUCT DETAILS
+        setTimeout(function(){
+          document.getElementById("container_videos-block").classList.add("hide");
+          document.getElementById("container_text-block").classList.add("hide");
+          document.getElementById("container_full-image-block").classList.add("hide");
+          document.getElementById("container_icon-images-block").classList.add("hide");
+          document.getElementById("container_product-collage-block").classList.add("hide");
+          document.getElementById("container_image-with-icons-block").classList.add("hide");
+          document.getElementById("container_full-image-block-2").classList.add("hide");
+          document.getElementById("container_full-image-block-3").classList.add("hide");
+          document.getElementById("container_product-tabs").classList.add("hide");
+          document.getElementById("container_product-reviews").classList.add("hide");
+          document.getElementById("container_product-feature-image").classList.add("hide");
+          document.getElementById("container_related-products").classList.add("hide");
+          var details_active = document.querySelectorAll(".section__product-details-active");
+          for(var y=0; y<details_active.length; y++){
+            details_active[y].classList.add("hide");
+            details_active[y].classList.remove("section__product-details-active");
+          }
+          var videos_active = document.querySelectorAll(".video-content-play iframe");
+          for(var z=0; z<videos_active.length; z++){
+            var _currSrc = videos_active[z].getAttribute('src');
+            videos_active[z].setAttribute('src', _currSrc.replace('autoplay=1','autoplay=0'));
+          }
+          
+          if(document.getElementById("section-videos_"+product_id)){
+            document.getElementById("container_videos-block").classList.remove("hide");
+            document.getElementById("section-videos_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("section-videos_"+product_id).classList.remove("hide");
+            var currSrc = $('#video-body_'+product_id+' iframe').attr("src");
+            $('#video-body_'+product_id+' iframe').attr("src", currSrc.replace('autoplay=0','autoplay=1'));
+            
+          }
+          if(document.getElementById("main-icons-product_"+product_id)){
+            document.getElementById("main-icons-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("main-icons-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("caracteristicas-product_"+product_id)){
+            document.getElementById("container_text-block").classList.remove("hide");
+            document.getElementById("caracteristicas-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("caracteristicas-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("full-image-block-product_"+product_id)){
+            document.getElementById("container_full-image-block").classList.remove("hide");
+            document.getElementById("full-image-block-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("full-image-block-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("icon-images-product_"+product_id)){
+            document.getElementById("container_icon-images-block").classList.remove("hide");
+            document.getElementById("icon-images-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("icon-images-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("collage-product_"+product_id)){
+            document.getElementById("container_product-collage-block").classList.remove("hide");
+            document.getElementById("collage-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("collage-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("image-icons-product_"+product_id)){
+            document.getElementById("container_image-with-icons-block").classList.remove("hide");
+            document.getElementById("image-icons-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("image-icons-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("full-image-block-product-2_"+product_id)){
+            document.getElementById("container_full-image-block-2").classList.remove("hide");
+            document.getElementById("full-image-block-product-2_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("full-image-block-product-2_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("full-image-block-product-3_"+product_id)){
+            document.getElementById("container_full-image-block-3").classList.remove("hide");
+            document.getElementById("full-image-block-product-3_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("full-image-block-product-3_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("product-tabs_"+product_id)){
+            document.getElementById("container_product-tabs").classList.remove("hide");
+            document.getElementById("product-tabs_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("product-tabs_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("reviews-product_"+product_id)){
+            document.getElementById("container_product-reviews").classList.remove("hide");
+            document.getElementById("reviews-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("reviews-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("feature-image-product_"+product_id)){
+            document.getElementById("container_product-feature-image").classList.remove("hide");
+            document.getElementById("feature-image-product_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("feature-image-product_"+product_id).classList.remove("hide");
+          }
+          if(document.getElementById("related-products_"+product_id)){
+            document.getElementById("container_related-products").classList.remove("hide");
+            document.getElementById("related-products_"+product_id).classList.add("section__product-details-active");
+            document.getElementById("related-products_"+product_id).classList.remove("hide");
+          }
+          if($('#product_slider_'+product_id).length){
+            if(!$('#product_slider_'+product_id).hasClass("flickity-enabled")){
+              $('#product_slider_'+product_id).flickity({
+                cellAlign: 'left',
+                contain: true,
+                draggable: true,
+                freeScroll: true, 
+                wrapAround: true
+              });
+            }
+          }
+          if($('#video-slider-product_'+product_id).length){
+            if(!$('#video-slider-product_'+product_id).hasClass("flickity-enabled")){
+              $('#video-slider-product_'+product_id).flickity({
+                cellAlign: 'left',
+                freeScroll: true,
+                wrapAround: true,
+                draggable: false,
+                groupCells: 3
+              });
+            }
+          }
+          if($('#related-slider-products_'+product_id).length){
+            if(!$('#related-slider-products_'+product_id).hasClass("flickity-enabled")){
+              $('#related-slider-products_'+product_id).flickity({
+                cellAlign: 'left',
+                contain: true,
+                pageDots: false, 
+                prevNextButtons: false
+              });
+            }
+          }
+          
+        }, 500);
+      }
+    }
+  }
+  function selectGarantia(id){
+    var stepId = document.getElementById(id).getAttribute("data-step");
+    var selecteds = document.querySelectorAll("#"+stepId+" .selected");
+    for(var i=0; i<selecteds.length; i++){
+      selecteds[i].classList.remove("selected");
+    }
+    document.getElementById(id).classList.add("selected");
+    if(id!=="GARANTIA_OPTION_NONE"){
+      openModal(id);
+    }else{
+      
+      document.getElementById("variant_a_to_cart").value = "";
+      document.getElementById("variant_a_to_cart").setAttribute("data-productid", "");
+      
+      var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+      var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+      var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+      var total_price = formatMoney(parseFloat(sprice)/100);
+      document.getElementById("prod_"+sproduct_id).innerHTML = total_price;
+      //reloadSequraPaymentScript();
+      
+      $('html, body').animate({
+        scrollTop: $(".product-selected").offset().top-150
+      }, 800);
+    }
+  }
+  function activarFiltrosVisuales(id, stepId, nextId){
+    var currStepNum = parseInt(stepId.replace("Item", ""));
+    var currStepTag = id;
+    var selectorFilters = document.querySelectorAll(".selector-container__filter");
+    var _variants = document.querySelectorAll("#product_variants > option");
+    var _variantFilters = [];
+    for(var b=0; b<_variants.length; b++){
+      var _tags = _variants[b].getAttribute("data-tags").split(",");
+      for(var c=0; c<_tags.length; c++){
+        if(_tags[c]===currStepTag){
+          _variantFilters.push(_variants[b].getAttribute("data-tags"));
+        }
+      }
+    }
+    for(var a=0; a<selectorFilters.length; a++){
+      var evalStepNum = parseInt(selectorFilters[a].getAttribute("data-step"));
+      if(evalStepNum > currStepNum){
+        var evalShow = false;
+        var evalStepTag = selectorFilters[a].getAttribute("data-id");
+        for(var b=0; b<_variantFilters.length; b++){
+          var _tags = _variantFilters[b].split(",");
+          for(var c=0; c<_tags.length; c++){
+            if(_tags[c]===evalStepTag)
+              evalShow = true;
+          }//end for
+        }//end for
+        if(evalShow){
+          selectorFilters[a].classList.remove("hide");
+        }else{
+          selectorFilters[a].classList.add("hide");
+        }
+      }//end if
+    }//end for
+  }
+  function formatMoney(number, decPlaces=2, decSep=",", thouSep="."){
+    decPlaces = isNaN(decPlaces = Math.abs(decPlaces)) ? 2 : decPlaces,
+      decSep = typeof decSep === "undefined" ? "." : decSep;
+    thouSep = typeof thouSep === "undefined" ? "," : thouSep;
+    var sign = number < 0 ? "-" : "";
+    var i = String(parseInt(number = Math.abs(Number(number) || 0).toFixed(decPlaces)));
+    var j = (j = i.length) > 3 ? j % 3 : 0;
+
+    return sign +
+      (j ? i.substr(0, j) + thouSep : "") +
+      i.substr(j).replace(/(\decSep{3})(?=\decSep)/g, "$1" + thouSep) +
+      (decPlaces ? decSep + Math.abs(number - i).toFixed(decPlaces).slice(2) : "") + 
+      "€";
+  }
+  function closeModal(){
+    if(document.getElementById("variant_a_to_cart").value==="")
+    	selectGarantia("GARANTIA_OPTION_NONE");
+    
+    document.getElementById("popupGrouping").classList.remove("show-modal");
+    document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+    
+    $('html, body').animate({
+      scrollTop: $(".product-selected").offset().top-150
+    }, 800);
+  }
+  function openModal(id){
+    var htmlContent = document.querySelector("#GARANTIA_"+id+" > .popup-container-care").innerHTML;
+    document.getElementById("popupGroupingContent").innerHTML = htmlContent;
+    document.getElementsByTagName("body")[0].classList.add("show-modal-bg");
+    document.getElementById("popupGrouping").classList.add("show-modal");
+    if(document.getElementById("variant_a_to_cart").value!==""){
+      document.getElementById("popupGrouping").classList.add("variant-garantia-is-selected");
+    }else{
+      document.getElementById("popupGrouping").classList.remove("variant-garantia-is-selected");
+    }
+  }
+  function glearnmorelink(){
+    var id = document.getElementById("garantia_mas_info").getAttribute("data-garantiaid");
+    if(id!=="")
+      openModal(id);
+  }
+  function addGarantiaCart(garantia_id = ''){
+    var gproduct_id = document.getElementById(garantia_id).getAttribute("data-productid");
+    var gvariant_id = document.getElementById(garantia_id).getAttribute("data-variantid");
+    var gprice = document.getElementById(garantia_id).getAttribute("data-price");
+    if(gproduct_id!=="" && gvariant_id!==""){
+      var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+      var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+      var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+      var total_price = formatMoney((parseFloat(sprice)/100)+(parseFloat(gprice/100)));
+      
+      document.getElementById("prod_"+sproduct_id).innerHTML = total_price;
+      document.getElementById("variant_a_to_cart").value = gvariant_id;
+      document.getElementById("variant_a_to_cart").setAttribute("data-productid", gproduct_id);
+      document.getElementById("GARANTIA_OPTION_NONE").classList.remove("selected");
+      document.getElementById(garantia_id.replace("GARANTIA_", "")).classList.add("selected");
+      document.getElementById("popupGrouping").classList.remove("show-modal");
+      document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+      //reloadSequraPaymentScript();
+      
+      $('html, body').animate({
+        scrollTop: $(".product-selected").offset().top-150
+      }, 800);
+    }
+  }
+  function addToCartJS(){
+    var variant_garantia = document.getElementById("variant_a_to_cart").value;
+    var variant_group = document.getElementById("variant_b_to_cart").value;
+    if(variant_group!==""){
+      var callBackCart = null;
+      if(variant_garantia!==""){
+        callBackCart = function(){
+          ajaxCartJS(variant_garantia, null);
+        };
+      }
+      ajaxCartJS(variant_group, callBackCart);
+    }
+  }
+  function ajaxCartJS(variant_id, _callback){
+    var data = 'id='+ variant_id + '&quantity=1';
+    $.ajax({
+      type: 'POST',
+      url: '/cart/add.js',
+      dataType: 'json',
+      data: data,
+      success: function(res){
+        console.log("ADD_TO_CART SUCCESS ("+variant_id+"):");
+        console.log(res);
+        if(typeof(_callback)==="function"){
+          _callback();
+        }else{
+          window.top.location.href = "/cart"; 
+        }
+      },
+      error: function(d){
+        console.log("ADD_TO_CART ERROR ("+variant_id+"):");
+        console.log(d);
+      }
+    });
+  }
+  function reloadSequraPaymentScript(){
+    if(document.getElementById("sequraPaymentScript"))
+      document.getElementById("sequraPaymentScript").remove();
+    
+    var script = document.createElement("script");
+    script.id = "sequraPaymentScript";
+    script.src = "https://s3-eu-west-1.amazonaws.com/shop-assets.sequrapi.com/base/js/sequrapayment_v2.js";
+    script.async = true;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  }
+  function stickyImage(){
+    // Get the navbar
+    var stickyPic = document.getElementById("stickyPic");
+    var sectionFoot = document.getElementById("shopify-section-footer").offsetTop;
+    var sectionIcons = document.getElementById("container_main-icons").offsetTop;
+    var sectionVideos = document.getElementById("container_videos-block").offsetTop;
+    // Get the offset position of the navbar
+    var posTopRef = 90;
+    var posFooter = sectionFoot/2;
+    //var posBottomRef = posFooter<580?(posFooter-100):(posFooter+400);
+    var posBottomRef = sectionVideos>0?sectionVideos:sectionIcons;
+	// comparative
+    if(window.pageYOffset > posTopRef && (window.pageYOffset+stickyPic.offsetHeight) < posBottomRef){
+      stickyPic.classList.add("sticky-pic");
+      stickyPic.classList.remove("abs-pic");
+    }else if((window.pageYOffset+stickyPic.offsetHeight) > posBottomRef){
+      stickyPic.classList.remove("sticky-pic");
+      stickyPic.classList.add("abs-pic");
+    }else{
+      stickyPic.classList.remove("sticky-pic");
+      stickyPic.classList.remove("abs-pic");
+    }
+  }
+  function renderVideoMain(el){
+    var iframeUrl = $(el).attr("data-iframe");
+    var productId = $(el).attr("data-productid");
+    $('#video-body_'+productId+' iframe').attr("src", iframeUrl);
+  }
+  function closeModalVideo(el){
+    var videoId = $(el).attr("data-videoid");
+    document.getElementById(videoId).classList.remove("video-modal__fixed");
+    document.getElementById(videoId).parentNode.removeAttribute("style");
+    document.getElementById(videoId).setAttribute("data-videosticky", "0");
+  }
+  function stickyVideo(){
+    if($('.section-videos_all.section__product-details-active').length){
+      var productId = $('.section-videos_all.section__product-details-active').attr('data-productid');
+      var sectionHead = document.getElementById("shopify-section-header").offsetHeight;
+      var sectionProd = document.getElementById("shopify-section-grouping-template").offsetHeight;
+      var sectionVide = document.getElementById("video-body_"+productId).offsetHeight;
+      var relativeHgh = sectionHead + sectionProd + (sectionVide/2) - 100;
+      var videoModal = document.getElementById("video-modal_"+productId);
+      if(videoModal.getAttribute("data-videosticky")==="1"){
+        if(window.pageYOffset > relativeHgh){
+          videoModal.classList.add("video-modal__fixed");
+          videoModal.parentNode.setAttribute("style", "height:"+videoModal.offsetHeight+"px");
+        }else{
+          videoModal.classList.remove("video-modal__fixed");
+          videoModal.parentNode.removeAttribute("style");
+        }
+      }//end if
+    }//end if
+  }
+  function preguntarGarantia(el){
+    var garantId = el.getAttribute("data-garantid");
+    selectGarantia(garantId);
+  }
+  function addGarantiaCartV2(garantia_id = '', addGarantia = '0'){
+    var gproduct_id = document.getElementById(garantia_id).getAttribute("data-productid");
+    var gvariant_id = document.getElementById(garantia_id).getAttribute("data-variantid");
+    var gprice = document.getElementById(garantia_id).getAttribute("data-price");
+    if(gproduct_id!=="" && gvariant_id!=="" && parseInt(addGarantia)===1){
+      var sproduct_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-productid");
+      var svariant_id = document.querySelectorAll(".product-selected")[0].getAttribute("data-variantid");
+      var sprice = document.querySelectorAll(".product-selected")[0].getAttribute("data-price");
+      var total_price = formatMoney((parseFloat(sprice)/100)+(parseFloat(gprice/100)));
+      document.getElementById("prod_"+sproduct_id).innerHTML = total_price;
+      document.getElementById("variant_a_to_cart").value = gvariant_id;
+      document.getElementById("variant_a_to_cart").setAttribute("data-productid", gproduct_id);
+      document.getElementById("GARANTIA_OPTION_NONE").classList.remove("selected");
+      document.getElementById(garantia_id.replace("GARANTIA_", "")).classList.add("selected");
+      //document.getElementById("popupGrouping").classList.remove("show-modal");
+      //document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+    }
+    addToCartJS();
+  }
+  
+  /*INICIO*/
+  console.log("ProductGrouping v.1.2.1");
+  let coll_garantias = {{ collections['garantias'].products | t | json }}
+  let coll_products = {{ collection.products | t | json }};
+  let config_url = '{{ 'formatoFiltroGrupo.json' | asset_url }}';
+  let custom_set = '{{ 'custom_settings.json' | asset_url }}';
+  
+  getJSON(config_url, ejecutarConfig, coll_products, coll_garantias);
+  getJSON(custom_set, ejecutarSettings, coll_products, null);
+
+  window.onscroll = function() { if(screen.width>768){ stickyImage(); stickyVideo(); } };
+  
+  var _widgets = [];
+  for(var x=0; x<coll_products.length; x++){
+    _widgets.push({
+      product: 'pp3', //Código de producto para Fracciona tu pago
+      price_src: '#prod_'+coll_products[x].id,
+      dest_sel: '#contprod_'+coll_products[x].id//Selector css del lugar donde se quiera colocar el widget
+    });
+  }
+  sequraConfigParams = {
+    merchant:'evvohome',  //Sustituir el valor USUARIO
+    assetKey:'cWkRkX3xw-',//Sustituir el valor CLAVE-ASSETS
+    decimalSeparator: ',',
+    thousandSeparator: '.',
+    price_src: '', //Si no funciona con este valor, sustituir por el selector css del precio
+    widgets: _widgets
+  };
+  (function(){
+    reloadSequraPaymentScript();
+  })();
+  /*
+  window.onload = function() {
+    $('#product_slider_').flickity({
+      // options
+      cellAlign: 'left',
+      draggable: true,
+      freeScroll: true
+    });
+    setTimeout(function(){
+      $('.Product__Slideshow-x .flickity-viewport').each(function(){
+        var currHeight = 368;
+        $(this).attr('style', 'touch-action:pan-y;height:'+currHeight+'px');
+      });
+    }, 2500);
+  };
+    */
+</script>

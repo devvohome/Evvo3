@@ -1,0 +1,11 @@
+{% assign shopideoMeta = product.metafields.shopideo %}
+{% assign storeMeta = shop.metafields.shopideo %}
+  {% if shopideoMeta.video %}
+  {% unless shopideoMeta.enabled and shopideoMeta.enabled == 'false' %}
+    <script>
+      {% if storeMeta.config %}var shopideoConfig = {{storeMeta.config}};{% endif %}
+      var shopideoMeta = {{shopideoMeta.video}};
+      var shopideoStore = 'od3p191hpRfkVcCY';
+    </script>
+  {% endunless %}
+  {% endif %}

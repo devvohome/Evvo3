@@ -1,0 +1,56 @@
+<section id="section-{{ section.id }}" class="Section Section--spacingNormal" data-section-id="{{ section.id }}" data-section-type="timeline">
+  <div class="Container">
+   <div class="Product__Tabs homeTabs">
+     {%- for block in section.blocks -%}
+     <div class="Collapsible Collapsible--large">
+       <button class="Collapsible__Button Heading u-h4" data-action="toggle-collapsible" aria-expanded="false">
+         {{- block.settings.title -}} <span class="Collapsible__Plus"></span>
+       </button>
+
+       <div class="Collapsible__Inner">
+         <div class="Collapsible__Content">
+           <div class="Rte">
+             {{- block.settings.content -}}
+           </div>
+         </div>
+       </div>
+     </div>
+     {% endfor %}
+   </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Tabs Home",
+    "class": "shopify-section--bordered",
+    "settings": [
+
+    ],
+    "blocks": [
+      {
+        "type": "tab-home",
+        "name": "Tab",
+        "settings": [
+          {
+            "label": "Title",
+            "id": "title",
+            "type": "text"
+          },
+          {
+            "type": "richtext",
+            "id": "content",
+            "label": "Content"
+          }
+
+        ]
+      }
+    ],
+    "presets": [
+      {
+        "name": "Tabs Home",
+        "category": "Custom"
+      }
+    ]
+  }
+{% endschema %}

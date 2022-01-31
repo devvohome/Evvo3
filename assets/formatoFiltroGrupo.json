@@ -1,0 +1,160 @@
+[
+  {
+    "bloque": "COLOR",
+    "tipo": "color",
+    "nombre": "Color",
+    "titulo": "Elige un color.",
+    "descripcion": "",
+    "listado": [
+      {
+        "alias": "BLANCO",
+        "id": "GPNG_COLOR_BLANCO",
+        "nombre": "Blanco",
+        "codigo": "border:1px solid #ececec;background-color:#f9f6ef;"
+      },
+      {
+        "alias": "INOX",
+        "id": "GPNG_COLOR_INOX",
+        "nombre": "Inox",
+        "codigo": "background-color:#acb2b4;"
+      },
+      {
+        "alias": "SEMIINT",
+        "id": "GPNG_COLOR_SEMIINT",
+        "nombre": "Semi Integrable",
+        "codigo": "background-color:#ececec;"
+      },
+      {
+        "alias": "SUP",
+        "id": "GPNG_COLOR_SUP",
+        "nombre": "Carga Superior",
+        "codigo": "background-color:#e0ddad;"
+      },
+      {
+        "alias": "INT",
+        "id": "GPNG_COLOR_INT",
+        "nombre": "Integrable",
+        "codigo": "background-color:#e0adad;"
+      }
+    ]
+  },
+  {
+    "bloque": "ACABD",
+    "tipo": "texto",
+    "nombre": "Acabado",
+    "titulo": "Elige el acabado de la puerta.",
+    "descripcion": "",
+    "listado": [
+      {
+        "alias": "CROMADO",
+        "id": "GPNG_ACABD_CROMADO",
+        "nombre": "Cromado",
+        "codigo": ""
+      },
+      {
+        "alias": "NEGRO",
+        "id": "GPNG_ACABD_NEGRO",
+        "nombre": "Negro",
+        "codigo": ""
+      },
+      {
+        "alias": "BLANCO",
+        "id": "GPNG_ACABD_BLANCO",
+        "nombre": "Blanco",
+        "codigo": ""
+      },
+      {
+        "alias": "GRIS",
+        "id": "GPNG_ACABD_GRIS",
+        "nombre": "Gris",
+        "codigo": ""
+      }
+    ]
+  },
+  {
+    "bloque": "CAPAC",
+    "tipo": "texto",
+    "nombre": "Capacidad",
+    "titulo": "Elige la capacidad.",
+    "descripcion": "",
+    "listado": [
+      {
+        "alias": "8K",
+        "id": "GPNG_CAPAC_8K",
+        "nombre": "8 Kg.",
+        "codigo": ""
+      },
+      {
+        "alias": "9K",
+        "id": "GPNG_CAPAC_9K",
+        "nombre": "9 Kg.",
+        "codigo": ""
+      },
+      {
+        "alias": "10K",
+        "id": "GPNG_CAPAC_10K",
+        "nombre": "10 Kg.",
+        "codigo": ""
+      },
+      {
+        "alias": "12K",
+        "id": "GPNG_CAPAC_12K",
+        "nombre": "12 Kg.",
+        "codigo": ""
+      }
+    ]
+  },
+  {
+    "bloque": "TAMAN",
+    "tipo": "texto",
+    "nombre": "Tamaño",
+    "titulo": "Elige el tamaño.",
+    "descripcion": "",
+    "listado": [
+      {
+        "alias": "45CM",
+        "id": "GPNG_TAMAN_45CM",
+        "nombre": "45cm.",
+        "codigo": ""
+      },
+      {
+        "alias": "60CM",
+        "id": "GPNG_TAMAN_60CM",
+        "nombre": "60cm.",
+        "codigo": ""
+      }
+    ]
+  },
+  {
+    "bloque": "TIPSE",
+    "tipo": "texto",
+    "nombre": "Tipo secado",
+    "titulo": "Elige el tipo de secado.",
+    "descripcion": "",
+    "listado": [
+      {
+        "alias": "COND",
+        "id": "GPNG_TIPSE_COND",
+        "nombre": "Condensación",
+        "codigo": ""
+      },
+      {
+        "alias": "BOMB",
+        "id": "GPNG_TIPSE_BOMB",
+        "nombre": "Bomba de calor",
+        "codigo": ""
+      }
+    ]
+  },
+  {
+    "bloque": "GARAN",
+    "tipo": "texto",
+    "nombre": "EvvoCare+",
+    "titulo": "EXTENSIÓN GARANTIA",
+    "descripcion": "",
+    "mostrarEnLinea": false,
+    "listado": [
+
+    ]
+  }
+]

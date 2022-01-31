@@ -1,0 +1,182 @@
+<div class="row as-product-wrapper as-l-container">
+  <div class="row as-productdecision-headerbox">
+    <div class="column large-5 large-push-7">
+      <div class="as-productdecision-header">
+        <h1 class="fwl">{{ collection.title }}</h1>
+        <div class="as-productdecision-headerprice">
+          {{ collection.description }}
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="column large-6 small-12 as-productdecision-stickybox">
+    <sticky class="as-productdecision-selectionmedia as-productdecision-selectionmedia-isanimating ase-sticky ase-sticky-startpin" id="stickyPic">
+      <div class="as-productdecision-selectionmedia-ambient ipadpro-ambient">
+        <img src="{{ collection.image | img_url: 'master' }}" class="ir" id="imgProductGroup" />
+      </div>
+    </sticky>
+  </div>
+  <div id="primary" class="column large-5 large-offset-1 small-12 small-offset-0 as-productdecision-selectionarea">
+    <select class="hide" id="product_variants">
+      <option value="" data-productid="" data-variantid="" data-option1="" data-option2="" data-option3="" data-featuredimage="" data-tags="">Seleccionar</option>
+      {% for p in collection.products %}
+      	{% for v in p.variants %}
+          <option value="{{ v.id }}" 
+                  data-productid="{{ p.id }}" 
+                  data-variantid="{{ v.id }}" 
+                  data-option1="{{ v.option1 }}" 
+                  data-option2="{{ v.option2 }}" 
+                  data-option3="{{ v.option3 }}" 
+                  data-featuredimage="{{ p.featured_image | img_url: 'master' }}" 
+                  data-tags="{{ p.tags | join: "," }}"
+                  >
+            {{ v.id }}
+          </option>
+      	{% endfor %}
+      {% endfor %}
+    </select>
+    <input type="hidden" id="status_steps_all" value="0"/>
+    <input type="hidden" id="variant_a_to_cart" value="" data-productid=""/>
+    <input type="hidden" id="variant_b_to_cart" value="" data-productid=""/>
+    <hero-selector id="grouping_blocks"></hero-selector>
+    <summary-builder id="summary_blocks">
+      <div class="as-purchaseinfo as-purchaseinfo-product-form" id="DATA_PURCHASE_PROD_NONE" data-productid="" data-variantid="" data-price="">
+        <div class="as-purchaseinfo-details as-purchaseinfo-background">
+          <div class="as-purchaseinfo-actioninfo as-purchaseinfo-submit">
+            <div class="as-purchaseinfo-section as-purchaseinfo-disabled">
+              <button class="button button-block disabled" type="button" disabled="disabled" data-available="0">
+                <span>Continuar</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      {% for prod in collection.products %}
+      <div class="as-purchaseinfo as-purchaseinfo-product-form hide" id="DATA_PURCHASE_PROD_{{ prod.id }}" data-productid="{{ prod.id }}" data-variantid="{{ prod.selected_or_first_available_variant.id }}" data-price="{{ prod.selected_or_first_available_variant.price }}">
+        <div class="as-purchaseinfo-details as-purchaseinfo-background">
+          <div class="ProductMeta">
+            <h1 class="ProductMeta__Title Heading u-h2">{{prod.title}}</h1>
+            <span class="stamped-product-reviews-badge stamped-main-badge" data-id="{{ prod.id }}" style="display: block;">{{ prod.metafields.stamped.badge }}</span>
+          </div>
+          {% assign product = prod %}
+          {% include 'custom-product-images' %}
+          <div class="as-purchaseinfo-actionform as-purchaseinfo-price-section as-l-container-full-small as-price-visible">
+            <div class="as-price as-purchaseinfo-price as-purchaseinfo-price-enabled">
+              <div class="ase-materializer as-price-animation ase-materializer-show">
+                <div id="contprod_{{ prod.id }}" class="as-price-form-product as-icondetails-detail">
+                  {%- if prod.selected_or_first_available_variant.compare_at_price > prod.selected_or_first_available_variant.price -%}
+                  <span class="compare-at-money hide">{{ prod.selected_or_first_available_variant.compare_at_price | money_without_trailing_zeros }}</span>
+                  <span id="prod_{{ prod.id }}" class="as-price-form-product-price current_price">{{ prod.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+                  {%- else -%}
+                  <span id="prod_{{ prod.id }}" class="as-price-form-product-price current_price" data-money-convertible>{{ prod.selected_or_first_available_variant.price | money_without_trailing_zeros }}</span>
+                  {%- endif -%}
+                </div>
+              </div>
+            </div>
+            <div class="as-buyflow-messaging-sectionlink"></div>
+          </div>
+          <div class="as-purchaseinfo-actioninfo as-purchaseinfo-submit">
+            <div class="as-purchaseinfo-section as-purchaseinfo-disabled">
+              <button class="button button-block button-add-to-cart disabled" type="button" disabled="disabled" onclick="addToCartJS()" data-available="{% if prod.available %}1{% else %}0{% endif %}">
+                <span>{% if prod.available %}Añadir al carrito{% else %}Agotado{% endif %}</span>
+              </button>
+              <button data-garantid="" style="display:none;" class="button button-block button-show-garantia disabled" type="button" disabled="disabled" onclick="preguntarGarantia(this)" data-available="{% if product.available %}1{% else %}0{% endif %}">
+                <span>{% if prod.available %}Añadir al carrito{% else %}Agotado{% endif %}</span>
+              </button>
+            </div>
+          </div>
+          <div class="as-purchaseinfo-description">
+            {%- if prod.description != blank -%}
+            <div class="productmeta-description hide">
+              {{ prod.description }}
+            </div>
+            {% assign product = prod %}
+            {% include 'product-description-tabs' %}
+            {%- endif -%}
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </summary-builder>
+  </div>
+</div>
+
+<!--POPUP-->
+<div class="ase-overlay-wrapper ase-overlay-fixed" id="popupGrouping">
+  <div class="ase-overlay ase-overlay-popup" role="dialog" tabindex="-1">
+    <div class="as-overlay-content  as-overlay-contentnopadding ">
+      <div class="as-accessoryoverlay-content">
+        <materializer class="ase-materializer ase-materializer-show" id="popupGroupingContent"></materializer>
+      </div>
+      <div class="as-accessoryoverlay-chat hide">
+        <div class="as-chat">
+          <div class="as-chat-title">Obtén ayuda con tus compras.</div>
+          <div class="as-chat-content">
+            <button role="link" class="as-chat-button active as-buttonlink">
+              Abre un chat
+              <span class="a11y">(Se abre en una ventana nueva)</span>
+            </button>
+            o llama al 900&nbsp;150&nbsp;503.</div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+    <button class="as-overlay-close ase-overlay-close" type="button" onclick="closeModal()">
+      <i class="icon icon-close"></i>
+      <svg width="25px" height="25px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <path d="M12,9.87867966 L5.06066017,2.93933983 C4.47487373,2.35355339 3.52512627,2.35355339 2.93933983,2.93933983 C2.35355339,3.52512627 2.35355339,4.47487373 2.93933983,5.06066017 L9.87867966,12 L2.93933983,18.9393398 C2.35355339,19.5251263 2.35355339,20.4748737 2.93933983,21.0606602 C3.52512627,21.6464466 4.47487373,21.6464466 5.06066017,21.0606602 L12,14.1213203 L18.9393398,21.0606602 C19.5251263,21.6464466 20.4748737,21.6464466 21.0606602,21.0606602 C21.6464466,20.4748737 21.6464466,19.5251263 21.0606602,18.9393398 L14.1213203,12 L21.0606602,5.06066017 C21.6464466,4.47487373 21.6464466,3.52512627 21.0606602,2.93933983 C20.4748737,2.35355339 19.5251263,2.35355339 18.9393398,2.93933983 L12,9.87867966 Z" id="path-1"></path>
+        </defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Icons/Times/Mark" transform="translate(-2.000000, -2.000000)">
+            <mask id="mask-2" fill="white">
+              <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="times" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+            <g id="🌈/Gray/Neutral/_GN-500" mask="url(#mask-2)" fill="#808080" fill-rule="evenodd">
+              <rect id="Tile" x="0" y="0" width="24" height="24"></rect>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span class="a11y">Cerrar</span>
+    </button>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collection group",
+  "class": "shopify-section--bordered",
+  "settings": [], 
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Características",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}

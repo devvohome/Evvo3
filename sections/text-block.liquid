@@ -1,0 +1,47 @@
+
+<section class="Section Section--spacingNone" id="section-{{ section.id }}" data-section-type="image-with-icons" data-section-id="{{ section.id }}">
+  {% for block in section.blocks %}
+    {% if product.handle == block.settings.product %}
+      <div class="collage-container">
+        <div class="container">
+          <header class="SectionHeader">
+              <h3 class="SectionHeader__SubHeading Heading u-h3">{{ block.settings.title }}</h3>
+          </header>
+          <div class="Rte-collage">
+            {{ block.settings.content }}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endfor %}
+</section>
+{% schema %}
+{
+  "name": "Text Block",
+  "class": "shopify-section--bordered",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "Text Block",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

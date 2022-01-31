@@ -1,0 +1,154 @@
+{% assign metafields = shop.metafields.bc_cookie %}
+<script>
+    var BC_JSON_ObjectBypass = {{ metafields['bc_cookie_list'] | json }};
+    window.BC_GDPR_LEGAL_custom_cookies = JSON.parse ( window.localStorage.getItem ( 'GDPR_legal_cookie' ) );
+</script>
+
+<script>
+    /**************************** start custom section *******************************/
+
+    // Declaration of the cookie to be listened to
+
+    /* example start
+
+    var customCookies = {
+
+       "myCookie" : true,
+       "myOtherCookie" : true
+
+    };
+
+    example end */
+
+    var customCookies = {
+
+        "testCookie" : true,
+
+    };
+
+
+    function BC_GDPR_CustomScriptForShop () {
+
+        /* example start
+
+        --------------------------------------------
+        **************   define function   **************
+
+        **************   the name of the function is the cookie name   **************
+
+        function myCookie () {
+            your additional code
+        }
+
+        function myOtherCookie () {
+            your additional code
+        }
+
+        --------------------------------------------
+        example end */
+
+
+        /**************************** End custom section *******************************/
+        /*******************************************************************************/
+        /*******************************************************************************/
+        /*******************************************************************************/
+
+
+        if ( BC_GDPR_LEGAL_custom_cookies === null || BC_GDPR_LEGAL_custom_cookies === undefined ) {
+            window.BC_GDPR_LEGAL_custom_cookies = JSON.parse ( localStorage.getItem ( 'GDPR_legal_cookie' ) );
+        }
+        for ( let key in customCookies ) {
+            try {
+                if ( typeof BC_GDPR_LEGAL_custom_cookies[key] !== "undefined" && customCookies[key] ) {
+                    if ( customCookies[key] && BC_GDPR_LEGAL_custom_cookies[key]['userSetting'] ) {
+
+                        if ( typeof eval ( key ) === "function" ) {
+                            eval ( key ) ();
+                            if ( document.cookie.includes ( key ) === false ) {
+                                if ( document.cookie.includes ( key ) === false ) {
+                                    document.cookie = `${ key }=1`;
+                                }
+                            }
+                            customCookies[key] = false;
+                        }
+
+                    }
+                }
+            } catch ( e ) {
+                if ( !window.bc_consoleLog ) window.bc_consoleLog = [];
+                window.bc_consoleLog.push ( 'Custom scripts: ' + key + ' is not a function' )
+            }
+
+        }
+    }
+
+    var BC_GDPR_2ce3a13160348f524c8cc9 = {
+
+        'google' : [
+            {% assign analytics = metafields['bc_tag_manager']['bc_tagManager_ids']['google_analytics'] | split: "," %}
+            {% assign adWords = metafields['bc_tag_manager']['bc_tagManager_ids']['google_ad_words'] %}
+            {% assign gTag = metafields['bc_tag_manager']['bc_tagManager_ids']['google_tag_manager'] %}
+
+            {% if analytics.size > 0 %}
+            {% for id in analytics %}
+            "{{ id | strip }}",
+            {% endfor %}
+            {% endif %}
+
+            {% if adWords.size > 3 %}
+            "{{ adWords }}",
+            {% endif %}
+
+            {% if gTag.size > 3 %}
+            "{{ gTag }}"
+            {% endif %}
+        ],
+
+        {% assign facebook = metafields['bc_tag_manager']['bc_tagManager_ids']['facebook'] %}
+
+        {% if facebook.size > 3 %}
+        'facebook' : "{{ facebook }}",
+        {% endif %}
+
+        '_bc_c_set' : 'customScript',
+
+        /* Custom Script sources */
+        'customScriptsSRC' : []
+    };
+
+
+    var bc_tagManagerTasks = {
+        "bc_tgm_aw" : "google",
+        "bc_tgm_gtm" : "google",
+        "bc_tgm_ua" : "google",
+        "bc_tgm_fbp" : "facebook",
+        "any" : "any",
+        "_bc_c_set" : "customScript"
+    };
+
+    var bc_tagManagerData = {
+        "google" : {
+            "executeBefore" : {
+                "params" : BC_GDPR_2ce3a13160348f524c8cc9.google || []
+            },
+            "load" : {
+                "params" : BC_GDPR_2ce3a13160348f524c8cc9.google || []
+            },
+            "executeAfter" : {
+                "params" : BC_GDPR_2ce3a13160348f524c8cc9.google || []
+            },
+            "data" : {
+                "googleSRC" : 'https://www.googletagmanager.com/gtag/js?id=',
+                "googleGTM" : "https://www.googletagmanager.com/gtm.js?id="
+            }
+        },
+        "facebook" : {
+            "load" : {
+                "params" : BC_GDPR_2ce3a13160348f524c8cc9.facebook || null,
+            }
+        },
+
+        'customScripts' : BC_GDPR_2ce3a13160348f524c8cc9.customScriptsSRC || [],
+
+    };
+</script>

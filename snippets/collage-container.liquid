@@ -1,0 +1,27 @@
+<div class="Grid__Cell collage-block">
+  <div class="Grid Grid--m Grid--center">
+    <div class="Grid__Cell 1/2--tablet-and-up content-image">
+      {%- if image != blank -%}
+        <div class="FeatureText__ImageWrapper">
+          {%- include 'image-size', sizes: '200,300,400,600,700,800,900,1000', image: product.featured_image -%}
+          <div class="AspectRatio" style="max-width: 700px; --aspect-ratio: {{ image.aspect_ratio }}">
+            {% assign image_url = image | img_url: '1x1' | replace: '_1x1.', '_{width}x.' %}
+            <img class="Image--lazyLoad Image--fadeIn" data-src="{{ image_url }}" data-widths="[{{ supported_sizes }}]" data-sizes="auto" alt="{{ image.alt | escape }}">
+            <span class="Image__Loader"></span>
+            <noscript>
+              <img src="{{ image | img_url: '600x' }}" alt="{{ image.alt | escape }}">
+            </noscript>
+          </div>
+        </div>
+      {%- endif -%}
+    </div>
+    <div class="Grid__Cell 1/2--tablet-and-up content-text Rte">
+      {%- if title != blank -%}
+        <h3 class="collage-title">{{ title }}</h3>
+      {%- endif -%}
+      {%- if content != blank -%}
+        <div class="collage-content">{{ content }}</div>
+      {%- endif -%}
+    </div>
+  </div>
+</div>

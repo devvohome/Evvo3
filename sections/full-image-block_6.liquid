@@ -1,0 +1,54 @@
+{% for block in section.blocks %}
+  {% if product.handle == block.settings.product %}
+    <section class="Section {% if block.settings.fullimage == 'false' %}Section--spacingNormal{% else %} Section--spacingNone{% endif %}" id="section-{{ section.id }}" data-section-type="image-with-icons" data-section-id="{{ section.id }}">
+      {% include 'image-title-text' image: block.settings.image , title: block.settings.title , content: block.settings.content, fullimage : block.settings.fullimage %}
+    </section>
+  {% endif %}
+{% endfor %}
+
+{% schema %}
+{
+  "name": "Full Image Block 6",
+  "class": "shopify-section--bordered",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "image",
+      "name": "Full image block",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image banner",
+          "info": "1500x recommended"
+        },
+        {
+          "type": "radio",
+          "id": "fullimage",
+          "label": "Type Image",
+          "options": [
+            { "value": "true", "label": "Full image" },
+            { "value": "false", "label": "Original" }
+          ],
+          "default": "true"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "content",
+          "label": "Content"
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

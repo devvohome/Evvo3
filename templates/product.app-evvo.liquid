@@ -1,0 +1,221 @@
+{% render 'shogun-products', content: product %}
+{% assign showVideov2 = 'false' %}
+{% for t in product.tags %}
+	{% if t == 'videov2' %}
+		{% assign showVideov2 = 'true' %}
+	{% endif %}
+{% endfor %}
+
+{% include 'shogun-products', content: product %}
+{{product.metafields.shogun.above}}
+{% section 'product-template' %}
+
+{% if showVideov2 == 'true' or settings.video_v2_is_active %}
+	{% section 'product-video-2' %}
+{% else %}
+	{% section 'product-video' %}
+{% endif %}
+
+{% section 'main-icons' %}
+{% section 'text-block' %}
+{% section 'full-image-block' %}
+{% section 'product-icon-images' %}
+{% section 'product-collage' %}
+{% section 'image-with-icons' %}
+{% section 'full-image-block_4' %}
+{% section 'main-icons_2' %}
+{% section 'product-collage_2' %}
+{% section 'full-image-block_2' %}
+{% section 'full-image-block_3' %}
+{% section 'product-tabs' %}
+<!--Start Stamped.io Auto Installation--><div id="stamped-main-widget" class="stamped-main-widget" data-widget-style="standard" data-product-id="{{ product.id }}" data-name="{{ product.title | escape }}" data-url="{{ shop.url }}{{ product.url }}" data-image-url="{{ product.featured_image | product_img_url: "large" |replace: '?', '%3F' | replace: '&','%26'}}" data-description="{{ product.description | escape }}" data-product-sku="{{product.handle}}" data-product-type="{{product.type}}">{{ product.metafields.stamped.reviews }}</div><!--End Stamped.io Auto Installation-->
+{% section 'product-feature-image' %}
+{% section 'related-products' %}
+{% section 'recently-viewed-products' %}
+{% include 'product_infox' %}
+{{product.metafields.shogun.below}}
+
+<script>
+  var otProductCollectionIds = [
+    {% for collection in product.collections %}
+    {{collection.id}}
+    {% if forloop.last != true %}
+    {{','}}
+    {% endif %}
+    {% endfor %}
+  ];
+</script>
+
+{%- assign garant_prod = null -%}
+{%- assign garant_id = '' -%}
+{%- assign _showVariantInBoxes = false -%}
+{% if product.tags.size > 0 %}
+	{% for ctag in product.tags %}
+		{% if ctag == 'VARIANT_BOXES' %}
+			{%- assign _showVariantInBoxes = true -%}
+		{% endif %}
+        {% if ctag contains 'GPNG_GARAN_' %}
+            {%- assign garant_id = ctag | replace: 'GPNG_GARAN_', '' -%}
+        {% endif %}
+	{% endfor %}
+{% endif %}
+{% if _showVariantInBoxes == false and garant_id != '' %}
+	<link rel="stylesheet" href="{{ 'collection-grouping.scss.css' | asset_url }}" />
+	{%- assign _showVariantInBoxes = true -%}
+    {% if collections['garantias'].products.size > 0 %}
+        {% for gprod in collections['garantias'].products %}
+            {% assign gprod_id = gprod.id | append: '' %}
+            {% if gprod_id == garant_id %}
+                {% assign garant_prod = gprod %}
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+	<script>
+      const submitForm = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+      if(submitForm){
+        if(submitForm.getAttribute("disabled")){
+          return false;
+        }
+        const parentDiv = submitForm.parentNode;
+        const newButton = document.createElement("button");
+        newButton.setAttribute("type", "button");
+        newButton.setAttribute("class", "Button Button--primary Button--full");
+        newButton.setAttribute("onclick", "grouping.verGarantia()");
+        newButton.innerHTML = '<span>Añadir al carrito</span>';
+        parentDiv.insertBefore(newButton, submitForm);
+        submitForm.setAttribute("style", "display:none;");
+      }
+      let grouping = {
+        verGarantia: function(){
+          document.getElementsByTagName("body")[0].classList.add("show-modal-bg");
+          document.getElementById("popupGrouping").classList.add("show-modal");
+          document.getElementById("popupGrouping").classList.remove("variant-garantia-is-selected");
+        }, 
+        closeModal: function(){
+          document.getElementById("popupGrouping").classList.remove("show-modal");
+          document.getElementsByTagName("body")[0].classList.remove("show-modal-bg");
+        }, 
+        addGarantiaCartV3: function(variant_id, addToCart){
+          const submitForm = document.querySelector('form[action="/cart/add"] button[type="submit"]');
+          if(parseInt(addToCart)===1){
+            const data = 'id='+ variant_id + '&quantity=1';
+            $.ajax({
+              type: 'POST',
+              url: '/cart/add.js',
+              dataType: 'json',
+              data: data,
+              success: function(res){
+                console.log("ADD_TO_CART SUCCESS ("+variant_id+"):");
+                submitForm.click();
+              },
+              error: function(d){
+                console.log("ADD_TO_CART ERROR ("+variant_id+"):");
+                console.log(d);
+              }
+            });
+          }else{
+            submitForm.click();
+          }
+        }
+      };
+	</script>
+{% endif %}
+{% if _showVariantInBoxes %}
+<!--POPUP-->
+<div class="ase-overlay-wrapper ase-overlay-fixed" id="popupGrouping">
+  <div class="ase-overlay ase-overlay-popup" role="dialog" tabindex="-1">
+    <div class="as-overlay-content  as-overlay-contentnopadding ">
+      <div class="as-accessoryoverlay-content">
+        <materializer class="ase-materializer ase-materializer-show" id="popupGroupingContent">
+          {% if garant_prod %}
+          <div class="row as-accessoryoverlay-container">
+            <div class="row">
+              <div class="column large-centered small-12 as-accessoryoverlay-image">
+                <img src="{{ garant_prod.featured_image | img_url: 'master' }}" class="ir" alt="{{ garant_prod.title }}">
+              </div>
+            </div>
+            <div class="row">
+              <div class="column large-12 small-12">
+                <h2 class="as-accessoryoverlay-heading">{{ garant_prod.title }}</h2>
+              </div>
+              <div class="column large-12 small-12 as-accessoryoverlay-price">
+                <span class="as-icondetails-detail">
+                  <span class="compare-at-money">{{ garant_prod.compare_at_price | money }}</span>
+                  <span class="current_price">{{ garant_prod.price | money }}</span>
+                </span>
+              </div>
+              <div class="column large-12 small-12 as-accessoryoverlay-ipttext">
+                {{ garant_prod.description }}
+              </div>
+            </div>
+            <div class="row as-accessoryoverlay-button">
+              <div class="column large-12 large-centered small-12 as-purchaseinfo custom-purchase-popup garantia-popup-v2">
+                <button class="button as-accessoryoverlay-addbutton " onclick="grouping.addGarantiaCartV3({{ garant_prod.selected_or_first_available_variant.id }},1)">
+                  <span class="as-addondetails-label">Añadir Garantía</span>
+                </button>
+                <button class="button as-accessoryoverlay-addbutton " onclick="grouping.addGarantiaCartV3({{ garant_prod.selected_or_first_available_variant.id }},0)">
+                  <span class="as-addondetails-label">No, gracias</span>
+                </button>
+              </div>
+            </div>
+            <div class="row ">
+              <div class="column large-12 small-12 as-accessoryoverlay-description">
+                <div class="pd-overlay-201508-applecare pd-font-16-400 text-center">
+                  <p class="pd-overlay-subcopy">Amplía la garantía de tu electrodoméstico para tenerlo cubierto durante 4 años, incluyendo mano de obra, transporte del servicio técnico y recambios de piezas. Con la ampliación de garantía EVVOCARE contarás con un asesor personalizado y acceso a servicios exclusivos solo para EVVOLOVERS.</p>
+                  <p class="pd-overlay-subcopy">Sin compromisos ni cuotas, un solo pago y cuatro años de tranquilidad.</p>
+                  <p class="pd-overlay-subcopy">
+                    <br>
+                    <a href="/products/garantia-evvocare" title="EVVO CARE 2+2">Ver&nbsp;garantía EvvoCare</a>
+                  </p>
+                </div>
+              </div>
+              <div class="column large-12 small-12 as-accessoryoverlay-learnmore hide">
+                <p class="pd-overlay-link">
+                  <a href="https://www.apple.com/es/support/products/iphone" class="more" target="_blank">
+                    Más información sobre AppleCare+<span class="visuallyhidden">(Se abre en una ventana nueva)</span>
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        </materializer>
+      </div>
+      <div class="as-accessoryoverlay-chat hide">
+        <div class="as-chat">
+          <div class="as-chat-title">Obtén ayuda con tus compras.</div>
+          <div class="as-chat-content">
+            <button role="link" class="as-chat-button active as-buttonlink">
+              Abre un chat
+              <span class="a11y">(Se abre en una ventana nueva)</span>
+            </button>
+            o llama al 900&nbsp;150&nbsp;503.</div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+    <button class="as-overlay-close ase-overlay-close" type="button" onclick="grouping.closeModal()">
+      <i class="icon icon-close"></i>
+      <svg width="25px" height="25px" viewBox="0 0 20 20" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+        <defs>
+          <path d="M12,9.87867966 L5.06066017,2.93933983 C4.47487373,2.35355339 3.52512627,2.35355339 2.93933983,2.93933983 C2.35355339,3.52512627 2.35355339,4.47487373 2.93933983,5.06066017 L9.87867966,12 L2.93933983,18.9393398 C2.35355339,19.5251263 2.35355339,20.4748737 2.93933983,21.0606602 C3.52512627,21.6464466 4.47487373,21.6464466 5.06066017,21.0606602 L12,14.1213203 L18.9393398,21.0606602 C19.5251263,21.6464466 20.4748737,21.6464466 21.0606602,21.0606602 C21.6464466,20.4748737 21.6464466,19.5251263 21.0606602,18.9393398 L14.1213203,12 L21.0606602,5.06066017 C21.6464466,4.47487373 21.6464466,3.52512627 21.0606602,2.93933983 C20.4748737,2.35355339 19.5251263,2.35355339 18.9393398,2.93933983 L12,9.87867966 Z" id="path-1"></path>
+        </defs>
+        <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+          <g id="Icons/Times/Mark" transform="translate(-2.000000, -2.000000)">
+            <mask id="mask-2" fill="white">
+              <use xlink:href="#path-1"></use>
+            </mask>
+            <use id="times" fill="#000000" fill-rule="nonzero" xlink:href="#path-1"></use>
+            <g id="🌈/Gray/Neutral/_GN-500" mask="url(#mask-2)" fill="#808080" fill-rule="evenodd">
+              <rect id="Tile" x="0" y="0" width="24" height="24"></rect>
+            </g>
+          </g>
+        </g>
+      </svg>
+      <span class="a11y">Cerrar</span>
+    </button>
+  </div>
+</div>
+{% endif %}
+
+{% render 'judgeme_widgets', widget_type: 'judgeme_review_widget', concierge_install: true, auto_install: true, product: product %}

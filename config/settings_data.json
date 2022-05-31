@@ -86,8 +86,8 @@
       "sidebar-menu": {
         "type": "sidebar-menu",
         "settings": {
-          "primary_menu": "sidebar-nav",
-          "secondary_menu": "sidebar-info",
+          "primary_menu": "",
+          "secondary_menu": "",
           "show_social_media": true
         }
       },
@@ -109,11 +109,9 @@
             "type": "mega_menu",
             "settings": {
               "navigation_mega_menu": "LAVADO",
-              "push_1_image": "shopify:\/\/shop_images\/lavadoras-nav-evvohome-2.jpg",
               "push_1_heading": "Lavadoras EVVO",
               "push_1_subheading": "",
               "push_1_url": "shopify:\/\/collections\/lavadoras",
-              "push_2_image": "shopify:\/\/shop_images\/lavadoras-nav-evvohome.jpg",
               "push_2_heading": "Lavadoras Secadoras EVVO",
               "push_2_subheading": "",
               "push_2_url": "shopify:\/\/collections\/lavadoras-secadoras"
@@ -123,11 +121,9 @@
             "type": "mega_menu",
             "settings": {
               "navigation_mega_menu": "TELEVISORES",
-              "push_1_image": "shopify:\/\/shop_images\/smart-tv-chiq-43.png",
               "push_1_heading": "Smart TV Chiq 43*",
               "push_1_subheading": "",
               "push_1_url": "shopify:\/\/products\/evvo-android-43-uhd-4k",
-              "push_2_image": "shopify:\/\/shop_images\/smart-tv-chiq-55.png",
               "push_2_heading": "Smart TV Chiq 55*",
               "push_2_subheading": "",
               "push_2_url": "shopify:\/\/products\/evvo-android-55-uhd-4k"
@@ -137,11 +133,9 @@
             "type": "mega_menu",
             "settings": {
               "navigation_mega_menu": "FRIGORÍFICOS",
-              "push_1_image": "shopify:\/\/shop_images\/nav-destacado-frigorificos-evvo-1.jpg",
               "push_1_heading": "EVVO COMBI DUAL COOLING 201",
               "push_1_subheading": "",
               "push_1_url": "shopify:\/\/products\/frigorifico-evvo-combi-dual-cooling-201",
-              "push_2_image": "shopify:\/\/shop_images\/nav-destacado-frigorificos-evvo-2.jpg",
               "push_2_heading": "EVVO COMBI DUAL COOLING 201X",
               "push_2_subheading": "",
               "push_2_url": "shopify:\/\/products\/frigorifico-evvo-combi-dual-cooling-201x"
@@ -155,7 +149,6 @@
         ],
         "settings": {
           "use_sticky_header": true,
-          "logo": "shopify:\/\/shop_images\/Logotipo-EVVO-CabeceraWEB_2d3ffdb4-b70d-47f4-933c-7a0e3377d70b.png",
           "logo_max_width": 185,
           "mobile_logo_max_width": 130,
           "navigation_menu": "main-menu",
@@ -163,8 +156,7 @@
           "enable_transparent_header": false,
           "enable_transparent_header_collection": false,
           "show_transparent_header_border": false,
-          "transparent_text_color": "#ffffff",
-          "transparent_logo": "shopify:\/\/shop_images\/logo-evvo-blanco-1.png"
+          "transparent_text_color": "#ffffff"
         }
       },
       "footer": {
@@ -187,14 +179,14 @@
           "1549044666052": {
             "type": "links",
             "settings": {
-              "menu": "productos-evvo"
+              "menu": ""
             }
           },
           "d9d90490-9d6f-4b30-8ee1-e94c5a9907c3": {
             "type": "links",
             "disabled": true,
             "settings": {
-              "menu": "blog"
+              "menu": ""
             }
           }
         },
@@ -219,7 +211,6 @@
               "grid_items_count": 30,
               "button_text": "",
               "is_customInit": false,
-              "custom_image": "shopify:\/\/shop_images\/312X_1_400x_d099787c-fa56-4361-a535-9a0f969719a4.png",
               "custom_title": "",
               "custom_label": "",
               "custom_url": "shopify:\/\/collections\/lavadoras"
@@ -419,7 +410,6 @@
           "text_color": "#ffffff",
           "subheading": "",
           "title": "Conócenos",
-          "image": "shopify:\/\/shop_images\/corpo3.jpg",
           "video_url": "https:\/\/youtu.be\/94ZnN7AeSX8"
         }
       },
@@ -489,35 +479,30 @@
           "1549060007856-0": {
             "type": "testimonial",
             "settings": {
-              "logo": "shopify:\/\/shop_images\/logo-elmundo.png",
               "quote": "<p><strong>El Mundo<\/strong>: En 2016 nacía EVVO, la nueva marca española de electrodomésticos con base en Salamanca y Madrid y venta exclusiva online a todo el territorio nacional. <a href=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0215\/8618\/2208\/files\/Reportaje-EVVO-El-Mundo.pdf?6704172185651097431\" title=\"https:\/\/cdn.shopify.com\/s\/files\/1\/0215\/8618\/2208\/files\/Reportaje-EVVO-El-Mundo.pdf?6704172185651097431\"><strong>Leer artículo.<\/strong><\/a><\/p>"
             }
           },
           "1549060007856-1": {
             "type": "testimonial",
             "settings": {
-              "logo": "shopify:\/\/shop_images\/logo-equipares.png",
               "quote": "<p><strong>Equipar.es<\/strong>: Esta marca, que es española, se esmeró al incorporar 16 programas de lavado diferentes con los que podréis darle un trato especial a cada tipo de ropa. <a href=\"https:\/\/www.equipar.es\/mejor-lavadora-de-ropa-barata\/\" title=\"https:\/\/www.equipar.es\/mejor-lavadora-de-ropa-barata\/\"><strong>Leer artículo.<\/strong><\/a><\/p>"
             }
           },
           "1549060007856-2": {
             "type": "testimonial",
             "settings": {
-              "logo": "shopify:\/\/shop_images\/topes_de_gama_logo.png",
               "quote": "<p><strong>Topes de gama<\/strong><a href=\"https:\/\/www.youtube.com\/watch?v=6FAK32XIb7A&amp;t=34s\" title=\"https:\/\/www.youtube.com\/watch?v=6FAK32XIb7A&amp;t=34s\">:<\/a> Siendo el patinete eléctrico el medio de transporte del presente, el EVVO Urban Wild es, sin duda, el patinete revelación del 2019<em>.<\/em> <a href=\"https:\/\/www.youtube.com\/watch?v=6FAK32XIb7A&amp;t=34s\" title=\"https:\/\/www.youtube.com\/watch?v=6FAK32XIb7A&amp;t=34s\"><strong>Ver vídeo<\/strong><\/a><strong>.<\/strong><\/p>"
             }
           },
           "1580404433221": {
             "type": "testimonial",
             "settings": {
-              "logo": "shopify:\/\/shop_images\/europapress.jpg",
               "quote": "<p><strong>Europa press<\/strong>:<strong> EVVO se une con MediaMarkt <\/strong>para vender electrodomésticos a través de su página web. <a href=\"https:\/\/www.europapress.es\/comunicados\/empresas-00908\/noticia-comunicado-evvo-une-mediamarkt-vender-electrodomesticos-traves-pagina-web-20211015163933.html\" target=\"_blank\" title=\"https:\/\/www.europapress.es\/comunicados\/empresas-00908\/noticia-comunicado-evvo-une-mediamarkt-vender-electrodomesticos-traves-pagina-web-20211015163933.html\"><strong>Leer artículo<\/strong><\/a><strong>.<\/strong><\/p>"
             }
           },
           "a935dca0-1104-47c3-8f6a-d6c6c03e4e42": {
             "type": "testimonial",
             "settings": {
-              "logo": "shopify:\/\/shop_images\/WhatsApp_Image_2021-09-20_at_17.22.56.jpg",
               "quote": "<p><strong>EL NORTE DE CASTILLA<\/strong>: La empresa salmantina EVVO refuerza su compromiso con el medio ambiente. <a href=\"https:\/\/www.elnortedecastilla.es\/salamanca\/empresa-salmantina-evvo-20210918212409-nt.html\" target=\"_blank\" title=\"https:\/\/www.elnortedecastilla.es\/salamanca\/empresa-salmantina-evvo-20210918212409-nt.html\"><strong>Leer el artículo.<\/strong><\/a><\/p>"
             }
           }
@@ -594,7 +579,6 @@
               "title": "FINANCIA EN 3,6 O 10 MESES",
               "content": "Ahora puedes pagar fácilmente, financiando  tu compra con un solo click, en el momento y sin papeleos.",
               "icon_link": "shopify:\/\/pages\/fracciona-tu-pago",
-              "image": "shopify:\/\/shop_images\/Financia_V3_ee84acb9-5af9-4428-8986-d909863a3d54.png",
               "icon_svg": "",
               "height": 125
             }
@@ -605,7 +589,6 @@
               "title": "4 AÑOS DE GARANTÍA",
               "content": "Amplía la duración de la garantía contratando EVVO CARE. Contacta con nuestros asesores para atender tus dudas.",
               "icon_link": "shopify:\/\/products\/garantia-evvocare",
-              "image": "shopify:\/\/shop_images\/Evocare_V3_23b0a7ec-dcb2-4253-9363-8e0db0b79b5c.png",
               "icon_svg": "",
               "height": 125
             }
@@ -616,7 +599,6 @@
               "title": "GASTOS DE ENVÍO GRATUITOS",
               "content": "Envío gratuito a Península. Si necesitas que lo instalemos y nos llevemos el anterior selecciona la opción al realizar la compra.",
               "icon_link": "https:\/\/evvohome.com\/pages\/informacion-de-envio",
-              "image": "shopify:\/\/shop_images\/envio_V3_3511e74f-59d4-4bef-ba30-060d78fe3a18.png",
               "icon_svg": "",
               "height": 125
             }
@@ -9813,7 +9795,6 @@
       "1580399374893": {
         "type": "image-with-text-block",
         "settings": {
-          "image": "shopify:\/\/shop_images\/jachan-devol-xY_6ZENqcfo-unsplash.jpg",
           "background": "#ffffff",
           "text_color": "#1c1b1b",
           "block_size": "small",
@@ -11373,8 +11354,6 @@
           "91e59d39-210c-479b-9794-f01fb077a5ca": {
             "type": "image",
             "settings": {
-              "image": "shopify:\/\/shop_images\/banner-navidad-WEB.jpg",
-              "mobile_image": "shopify:\/\/shop_images\/Banner_navidad_MVL.jpg",
               "apply_overlay": false,
               "content_position": "bottomLeft",
               "subheading": "",
@@ -11389,8 +11368,6 @@
             "type": "image",
             "disabled": true,
             "settings": {
-              "image": "shopify:\/\/shop_images\/Valeria-version-web-version-redweek.jpg",
-              "mobile_image": "shopify:\/\/shop_images\/Valeria-version-mvl-version-redweek.jpg",
               "apply_overlay": false,
               "content_position": "bottomLeft",
               "subheading": "",
@@ -11405,8 +11382,6 @@
             "type": "image",
             "disabled": true,
             "settings": {
-              "image": "shopify:\/\/shop_images\/Fuimos-canciones-version-web-version-redweek.jpg",
-              "mobile_image": "shopify:\/\/shop_images\/Fuimos-canciones-version-mvl-version-redweek.jpg",
               "apply_overlay": false,
               "content_position": "bottomLeft",
               "subheading": "",
@@ -11421,8 +11396,6 @@
             "type": "image",
             "disabled": true,
             "settings": {
-              "image": "shopify:\/\/shop_images\/Cuentame.jpg",
-              "mobile_image": "shopify:\/\/shop_images\/Cuentame-mvl.jpg",
               "apply_overlay": false,
               "content_position": "bottomLeft",
               "subheading": "",
@@ -11436,8 +11409,6 @@
           "f1e7b37f-cfe8-4462-a9b5-e6e2d62e3ce7": {
             "type": "image",
             "settings": {
-              "image": "shopify:\/\/shop_images\/para_after_0-00-00-00.jpg",
-              "mobile_image": "shopify:\/\/shop_images\/Banner_RIO_mvl_UH.jpg",
               "apply_overlay": true,
               "content_position": "middleCenter",
               "subheading": "",
@@ -12631,6 +12602,36 @@
           "link_text": "",
           "link_url": ""
         }
+      },
+      "1653989553fef96c4d": {
+        "type": "featured-collections-pt",
+        "blocks": {
+          "1653989553fef96c4d-0": {
+            "type": "collection",
+            "settings": {
+              "collection": "lavavajillas",
+              "title": "",
+              "grid_items_count": 8,
+              "button_text": "View all products",
+              "is_customInit": false,
+              "custom_title": "",
+              "custom_label": "",
+              "custom_url": ""
+            }
+          }
+        },
+        "block_order": [
+          "1653989553fef96c4d-0"
+        ],
+        "settings": {
+          "title": "Featured collection",
+          "layout_mode": "grid",
+          "show_product_info": true,
+          "show_vendor": false,
+          "show_color_swatch": false,
+          "grid_mobile_items_per_row": "2",
+          "grid_desktop_items_per_row": 4
+        }
       }
     },
     "content_for_index": [
@@ -12657,7 +12658,8 @@
       "1552497454073",
       "1549060007856",
       "1580399374893",
-      "1600254313292"
+      "1600254313292",
+      "1653989553fef96c4d"
     ]
   },
   "presets": {

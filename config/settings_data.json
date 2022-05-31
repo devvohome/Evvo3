@@ -343,66 +343,6 @@
           "apparition_delay": 7
         }
       },
-      "1549047510470": {
-        "type": "featured-collections",
-        "blocks": {
-          "1549047510470-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "lavadoras-secadoras",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1549047510470-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 3
-        }
-      },
-      "1549048006468": {
-        "type": "featured-collections",
-        "blocks": {
-          "1549048006468-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "frigorificos",
-              "title": "",
-              "grid_items_count": 50,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1549048006468-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 3
-        }
-      },
       "1549049349925": {
         "type": "featured-video",
         "settings": {
@@ -411,66 +351,6 @@
           "subheading": "",
           "title": "Conócenos",
           "video_url": "https:\/\/youtu.be\/94ZnN7AeSX8"
-        }
-      },
-      "1549054657997": {
-        "type": "featured-collections",
-        "blocks": {
-          "1549054657997-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "secadoras",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1549054657997-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 3
-        }
-      },
-      "1549054787203": {
-        "type": "featured-collections",
-        "blocks": {
-          "1549054787203-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "lavavajillas",
-              "title": "",
-              "grid_items_count": 15,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1549054787203-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 3
         }
       },
       "1549060007856": {
@@ -9684,66 +9564,6 @@
         "settings": {
         }
       },
-      "1571157761622": {
-        "type": "featured-collections",
-        "blocks": {
-          "1571157761622-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "aspiradores",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1571157761622-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 4
-        }
-      },
-      "1571825831004": {
-        "type": "featured-collections",
-        "blocks": {
-          "1571825831004-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "patinetes",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1571825831004-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
       "1574707323416": {
         "type": "featured-collections",
         "blocks": {
@@ -9813,36 +9633,6 @@
           "html": "",
           "url": "",
           "label": ""
-        }
-      },
-      "1589557328190": {
-        "type": "featured-collections",
-        "blocks": {
-          "1589557328190-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "placas-de-cocina",
-              "title": "",
-              "grid_items_count": 50,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1589557328190-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "1",
-          "grid_desktop_items_per_row": 4
         }
       },
       "grouping-template": {
@@ -11168,126 +10958,6 @@
           "label": ""
         }
       },
-      "1606814631301": {
-        "type": "featured-collections",
-        "blocks": {
-          "1606814631301-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "electrodomesticos-mini",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1606814631301-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
-      "1606814750497": {
-        "type": "featured-collections",
-        "blocks": {
-          "1606814750497-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "microondas",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1606814750497-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
-      "1606814794911": {
-        "type": "featured-collections",
-        "blocks": {
-          "1606814794911-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "tratamiento-de-aire",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1606814794911-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
-      "1611244569851": {
-        "type": "featured-collections",
-        "blocks": {
-          "1611244569851-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "hornos",
-              "title": "",
-              "grid_items_count": 8,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1611244569851-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
       "1611244768046": {
         "type": "featured-collections",
         "blocks": {
@@ -11307,36 +10977,6 @@
         },
         "block_order": [
           "1611244768046-0"
-        ],
-        "settings": {
-          "title": "",
-          "layout_mode": "carousel",
-          "show_product_info": true,
-          "show_vendor": false,
-          "show_color_swatch": false,
-          "grid_mobile_items_per_row": "2",
-          "grid_desktop_items_per_row": 4
-        }
-      },
-      "1612177767017": {
-        "type": "featured-collections",
-        "blocks": {
-          "1612177767017-0": {
-            "type": "collection",
-            "settings": {
-              "collection": "congeladores-verticales",
-              "title": "",
-              "grid_items_count": 50,
-              "button_text": "",
-              "is_customInit": false,
-              "custom_title": "",
-              "custom_label": "",
-              "custom_url": ""
-            }
-          }
-        },
-        "block_order": [
-          "1612177767017-0"
         ],
         "settings": {
           "title": "",
@@ -12638,21 +12278,8 @@
       "slideshow",
       "16376106781297c83f",
       "1552304388339",
-      "1549054657997",
-      "featured-collections",
-      "1549047510470",
-      "1549054787203",
-      "1606814631301",
-      "1549048006468",
-      "1612177767017",
       "1574707323416",
-      "1571157761622",
       "1611244768046",
-      "1589557328190",
-      "1611244569851",
-      "1606814750497",
-      "1571825831004",
-      "1606814794911",
       "blog-posts",
       "1549049349925",
       "1552497454073",
